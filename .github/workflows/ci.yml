@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+    tags: '*'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 8
+
+      - name: Cache dependencies
+        uses: actions/cache@v2.1.5
+        with:
+          path: |
+            ~/.m2/repository
+            scripts/node_modules
+          key: ${{ runner.os }}-maven-node-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-node-
+
+      - name: Build with Maven
+        run: mvn package jacoco:report
+
+      - name: Upload Codecov report
+        uses: codecov/codecov-action@v1.5.0
+        with:
+          directory: .

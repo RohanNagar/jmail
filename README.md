@@ -36,7 +36,7 @@ following reasons:
 4. JMail is **_modern_**. It is built for Java 8+, and provides many
    [useful methods and data accessors](#usage).
 
-[Click here for a full report](results/results.md) of the differences in correctness and speed
+[Click here for a full report](results) of the differences in correctness and speed
 between JMail and other libraries.
 
 > While JMail is more correct than other libraries, I cannot guarantee
