@@ -29,7 +29,8 @@ following reasons:
 1. JMail is **_more correct_** than other libraries. For example, both
    Apache Commons and Java Mail consider `first@last@iana.org` as a valid
    email address! It clearly is not, as it has two `@` characters. JMail correctly
-   considers this address invalid.
+   considers this address invalid. You can
+   [see a full comparison of correctness here](results).
    
 2. JMail is **_faster_** than other libraries by, on average, at least
    27%.

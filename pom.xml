@@ -244,6 +244,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.github.bbottema</groupId>
+      <artifactId>emailaddress-rfc2822</artifactId>
+      <version>2.3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.sun.mail</groupId>
       <artifactId>javax.mail</artifactId>
       <version>1.6.2</version>

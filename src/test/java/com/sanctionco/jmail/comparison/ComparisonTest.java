@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 import javax.mail.internet.InternetAddress;
 
+import org.hazlewood.connor.bottema.emailaddress.EmailAddressCriteria;
+import org.hazlewood.connor.bottema.emailaddress.EmailAddressValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -46,6 +48,9 @@ class ComparisonTest {
     return true;
   });
 
+  private final Implementation rfc2822Impl = new Implementation(
+      s -> EmailAddressValidator.isValid(s, EmailAddressCriteria.RFC_COMPLIANT));
+
   @BeforeAll
   @SuppressWarnings({"unused", "BeforeOrAfterWithIncorrectSignature"})
   void setupFile() throws Exception {
@@ -53,11 +58,11 @@ class ComparisonTest {
         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
     Files.write(resultsFile,
-        "| Address | Expected | JMail | Apache Commons | Javax Mail |\n"
+        "| Email Address | Expected | JMail | Apache Commons | Javax Mail | email-rfc2822 |\n"
             .getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.APPEND);
     Files.write(resultsFile,
-        "| --- | :---: | :---: | :---: | :---: |\n".getBytes(StandardCharsets.UTF_8),
+        "| --- | :---: | :---: | :---: | :---: | :---: |\n".getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.APPEND);
   }
 
@@ -71,7 +76,9 @@ class ComparisonTest {
         + apacheImpl.successes + "/" + totalTests + "</br>"
         + "Average Time: " + apacheImpl.average() + " ns" + " | "
         + javaMailImpl.successes + "/" + totalTests + "</br>"
-        + "Average Time: " + javaMailImpl.average() + " ns" + " |\n";
+        + "Average Time: " + javaMailImpl.average() + " ns" + " | "
+        + rfc2822Impl.successes + "/" + totalTests + "</br>"
+        + "Average Time: " + rfc2822Impl.average() + " ns" + " |\n";
 
     Files.write(resultsFile, s.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
   }
@@ -96,6 +103,7 @@ class ComparisonTest {
     String jmail = testImplementation(jmailImpl, email, expected);
     String apache = testImplementation(apacheImpl, email, expected);
     String javaMail = testImplementation(javaMailImpl, email, expected);
+    String rfc2822 = testImplementation(rfc2822Impl, email, expected);
 
     if (email.contains("|")) email = email.replaceAll("\\|", "&#124;");
 
@@ -105,7 +113,7 @@ class ComparisonTest {
     String expectedResult = expected ? "Valid" : "Invalid";
 
     String s = "| " + email + " | " + expectedResult + " | "
-        + jmail + " | " + apache + " | " + javaMail + " |\n";
+        + jmail + " | " + apache + " | " + javaMail + " | " + rfc2822 + " |\n";
 
     Files.write(resultsFile, s.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
   }
