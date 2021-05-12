@@ -87,4 +87,16 @@ class JMailTest {
         () -> assertEquals(Arrays.asList("example", "com"), parsed.get().domainParts()),
         () -> assertEquals(TopLevelDomain.DOT_COM, parsed.get().topLevelDomain()));
   }
+
+  @Test
+  void strictValidatorRejects() {
+    String dotlessEmail = "test@example";
+    String ipEmail = "test@[1.2.3.4]";
+    String acceptedEmail = "test@example.com";
+
+    assertAll("Strict validator works correctly",
+        () -> assertTrue(JMail.strictValidator().isValid(acceptedEmail)),
+        () -> assertFalse(JMail.strictValidator().isValid(dotlessEmail)),
+        () -> assertFalse(JMail.strictValidator().isValid(ipEmail)));
+  }
 }

@@ -59,7 +59,7 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
@@ -100,14 +100,16 @@ additional [common validation rules](#additional-validation-rules),
 or supply your own. For example:
 
 ```java
-EmailValidator validator = JMail.validator()
-    // Require that the domain has a top-level domain
-    .requireTopLevelDomain()
+// In general, you should use JMail.strictValidator()
+EmailValidator validator = JMail.strictValidator()
+    // Require that the top-level-domain is ".com"
+    .requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM)
     // Require that the local-part starts with "allowed"
     .withRule(email -> email.localPart().startsWith("allowed"));
 
 boolean valid = validator.isValid("allowed-email@test.com");
 boolean invalidWithoutTld = validator.isValid("allowed@test");
+boolean invalidWithoutDotCom = validator.isValid("allowed@test.net");
 boolean invalidWithoutAllowed = validator.isValid("invalid@test.com");
 ```
 

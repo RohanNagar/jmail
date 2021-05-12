@@ -14,12 +14,31 @@ import java.util.stream.Collectors;
 public class JMail {
 
   /**
-   * Returns a new instance of {@link EmailValidator}.
+   * Returns a new instance of {@link EmailValidator}. In general,
+   * you should favor using {@link #strictValidator()} instead of this method,
+   * as this method will allow IP address domains and dotless domains
+   * unless configured separately.
    *
    * @return the new {@link EmailValidator} instance
    */
   public static EmailValidator validator() {
     return new EmailValidator();
+  }
+
+  /**
+   * Returns a new instance of {@link EmailValidator} with stricter rules.
+   *
+   * <ul>
+   *   <li>The email cannot have an IP Address domain
+   *   <li>The email cannot have a dotless domain
+   * </ul>
+   *
+   * @return the new {@link EmailValidator} instance
+   */
+  public static EmailValidator strictValidator() {
+    return new EmailValidator()
+        .disallowIpDomain()
+        .requireTopLevelDomain();
   }
 
   /**
