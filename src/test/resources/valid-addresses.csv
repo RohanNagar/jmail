@@ -112,4 +112,3 @@ first.(")middle.last(")@test.org,first.(")middle.last("),test.org
 first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com,first.last,x(1234567890123456789012345678901234567890123456789012345678901234567890).com
 user%uucp!path@berkeley.edu,user%uucp!path,berkeley.edu
 first().last@test.org,first().last,test.org
-

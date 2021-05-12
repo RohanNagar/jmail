@@ -33,7 +33,7 @@ following reasons:
    [see a full comparison of correctness here](results).
    
 2. JMail is **_faster_** than other libraries by, on average, at least
-   27%.
+   27%, thanks in part to lack of regex.
    
 3. JMail has **_zero dependencies_** and is very lightweight.
 
