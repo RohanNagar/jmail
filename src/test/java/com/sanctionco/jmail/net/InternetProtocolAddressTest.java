@@ -28,7 +28,8 @@ class InternetProtocolAddressTest {
 
   @ParameterizedTest(name = "{0}")
   @ValueSource(strings = {
-      "1.2.3", "1.2.3.", "1.2.3.4.5", "256.255.255.255", "255.4.6.256", "notanip", "1234.1.2.3"})
+      "1.2.3", "1.2.3.", "1.2.3.4.5", "256.255.255.255", "255.4.6.256", "notanip", "1234.1.2.3",
+      "-1.2.3.4"})
   void testInvalidIpv4Address(String ip) {
     Optional<String> result = InternetProtocolAddress.validate(ip);
 
@@ -72,6 +73,7 @@ class InternetProtocolAddressTest {
       "IPv6:AAAG::2001",
       "IPv5:::1234:5678:1.2.3.4",
       "IPv6:::1234:5678:1.2.3.256",
+      "IPv6:2001:db8:3333:4444:5555:6666:7777:888J",
       "IPv6:2001:db8:::",
       "notanip"
   })
