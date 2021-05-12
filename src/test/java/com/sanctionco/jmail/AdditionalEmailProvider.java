@@ -1,8 +1,8 @@
 package com.sanctionco.jmail;
 
-import org.junit.jupiter.params.provider.Arguments;
-
 import java.util.stream.Stream;
+
+import org.junit.jupiter.params.provider.Arguments;
 
 @SuppressWarnings("unused")
 public class AdditionalEmailProvider {

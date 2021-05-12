@@ -301,7 +301,7 @@ public class JMail {
       }
 
       if (c == '"' && !previousBackslash) {
-        if (inQuotes) requireAtDotOrComment = true; // closing quote, make sure next char is dot or @
+        if (inQuotes) requireAtDotOrComment = true; // closing quote, make sure next char is . or @
 
         // if we opened and closed quotes without anything inside, fail
         if (previousQuote) return Optional.empty();

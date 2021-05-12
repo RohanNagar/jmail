@@ -53,7 +53,8 @@ class ComparisonTest {
         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
     Files.write(resultsFile,
-        "| Address | Expected | JMail | Apache Commons | Javax Mail |\n".getBytes(StandardCharsets.UTF_8),
+        "| Address | Expected | JMail | Apache Commons | Javax Mail |\n"
+            .getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.APPEND);
     Files.write(resultsFile,
         "| --- | :---: | :---: | :---: | :---: |\n".getBytes(StandardCharsets.UTF_8),
@@ -115,8 +116,7 @@ class ComparisonTest {
     if (result == expected) {
       str.append("✅");
       impl.successes++;
-    }
-    else str.append("❌");
+    } else str.append("❌");
 
     str.append("</br>");
 
