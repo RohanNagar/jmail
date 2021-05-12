@@ -96,7 +96,7 @@ class ComparisonTest {
 
     if (email.contains("|")) email = email.replaceAll("\\|", "&#124;");
 
-    email = splitEqually(email, 64).stream().map(s -> s + "</br>")
+    email = splitEqually(email, 40).stream().map(s -> s + "</br>")
         .collect(Collectors.joining());
 
     String s = "| " + email + " | Invalid | " + jmail + " | " + apache + " | " + javaMail + " |\n";
