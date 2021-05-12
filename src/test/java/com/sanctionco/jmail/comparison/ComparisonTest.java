@@ -100,7 +100,11 @@ class ComparisonTest {
     email = splitEqually(email, 40).stream().map(s -> s + "</br>")
         .collect(Collectors.joining());
 
-    String s = "| " + email + " | Invalid | " + jmail + " | " + apache + " | " + javaMail + " |\n";
+    String expectedResult = expected ? "Valid" : "Invalid";
+
+    String s = "| " + email + " | " + expectedResult + " | "
+        + jmail + " | " + apache + " | " + javaMail + " |\n";
+
     Files.write(resultsFile, s.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
   }
 
