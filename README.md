@@ -6,6 +6,9 @@
 <a href="http://javadoc.io/doc/com.sanctionco.jmail/jmail">
   <img src="http://javadoc.io/badge/com.sanctionco.jmail/jmail.svg" alt="Javadoc">
 </a>
+<a href="https://codecov.io/gh/RohanNagar/jmail">
+  <img src="https://codecov.io/gh/RohanNagar/jmail/branch/master/graph/badge.svg" alt="Coverage Status">
+</a>
 
 A modern, fast, zero-dependency library for working with emails
 and performing email validation in Java.

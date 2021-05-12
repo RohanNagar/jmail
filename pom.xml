@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
 
   <name>jmail</name>
-  <description>A modern and lightweight library for working with emails in Java</description>
+  <description>A modern, fast, zero-dependency library for working with emails in Java</description>
   <url>https://github.com/RohanNagar/jmail</url>
 
   <scm>
