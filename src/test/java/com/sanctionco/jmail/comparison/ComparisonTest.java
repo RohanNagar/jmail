@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 @Disabled
 class ComparisonTest {
-  private final Path resultsFile = Paths.get(".", "results", "results.md").toAbsolutePath();
+  private final Path resultsFile = Paths.get(".", "results", "README.md").toAbsolutePath();
 
   private int totalTests = 0;
 
