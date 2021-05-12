@@ -77,12 +77,14 @@ class ComparisonTest {
   }
 
   @ParameterizedTest(name = "{0}")
+  @MethodSource("com.sanctionco.jmail.AdditionalEmailProvider#provideValidEmails")
   @CsvFileSource(resources = "/valid-addresses.csv", numLinesToSkip = 1)
   void compareValid(String email) throws Exception {
     runTest(email, true);
   }
 
   @ParameterizedTest(name = "{0}")
+  @MethodSource("com.sanctionco.jmail.AdditionalEmailProvider#provideInvalidEmails")
   @CsvFileSource(resources = "/invalid-addresses.csv", delimiter = '\u007F')
   void compareInvalid(String email) throws Exception {
     runTest(email, false);

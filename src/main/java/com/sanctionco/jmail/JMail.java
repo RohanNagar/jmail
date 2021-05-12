@@ -11,6 +11,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Provides static methods to validate an email address
+ * using standard validation, or to create a new {@link EmailValidator}.
+ */
 public class JMail {
 
   /**
