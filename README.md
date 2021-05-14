@@ -32,8 +32,7 @@ following reasons:
    Apache Commons and Java Mail consider `first@last@iana.org` as a valid
    email address! It clearly is not, as it has two `@` characters. JMail correctly
    considers this address invalid. You can
-   [see a full comparison of correctness here](results), or you can
-   [try it out for yourself online](https://www.rohannagar.com/jmail/).
+   [see a full comparison of correctness and try it out for yourself online](https://www.rohannagar.com/jmail/).
    
 2. JMail is **_faster_** than other libraries by, on average, at least
    27%, thanks in part to lack of regex.
@@ -43,8 +42,8 @@ following reasons:
 4. JMail is **_modern_**. It is built for Java 8+, and provides many
    [useful methods and data accessors](#usage).
 
-[Click here for a full report](results) of the differences in correctness and speed
-between JMail and other libraries.
+[Click here for a full report](https://www.rohannagar.com/jmail/)
+of the differences in correctness and speed between JMail and other libraries.
 
 > While JMail is more correct than other libraries, I cannot guarantee
 that it is 100% correct. Email RFCs are long and complex, and I have
