@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Online Email Validation</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+          crossorigin="anonymous">
+
+    <style>
+        .validation-success {
+            display:none;
+        }
+
+        .validation-failure {
+            display:none;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white">
+
+<div class="container-fluid text-center px-4 py-5">
+    <h1 class="display-5 fw-bold">JMail Email Validation</h1>
+</div>
+
+<div class="container-fluid text-center px-4 py-3">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            <input class="form-control" id="email" placeholder="name@example.com">
+            </br>
+            <button class="w-50 btn btn-lg btn-success" type="submit" id="validate">Validate
+            </button>
+        </div>
+        <div class="col"></div>
+    </div>
+    <div class="row py-3">
+        <div class="col"></div>
+        <div class="col">
+            <div id="result">
+                <div id="res-success" class="alert alert-success validation-success" role="alert">
+                    The email address is valid!
+                </div>
+                <div id="res-failure" class="alert alert-danger validation-failure" role="alert">
+                    The email address is invalid.
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+</div>
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+<script src="./jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+    $('#validate').on('click', function(event) {
+        var email = $('#email').val();
+
+        $.get({
+            'url': "https://jmail-api.herokuapp.com/app/validate?address=" + email,
+            'dataType': "jsonp",
+            'complete': function(response) {
+                if (response.status === 200) {
+                    $('.validation-failure').hide();
+                    $('.validation-success').show();
+                } else {
+                    $('.validation-success').hide();
+                    $('.validation-failure').show();
+                }
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>
