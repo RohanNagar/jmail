@@ -15,6 +15,8 @@ and performing email validation in Java.
 
 Built for Java 8 and up.
 
+[Try out the algorithm online!](https://www.rohannagar.com/jmail/)
+
 [Why JMail?](#why-jmail) • [Installation](#installation) • [Usage](#usage) •
 [IP Validation](#bonus-ip-address-validation) • [Contributing](#contributing)
 
@@ -30,7 +32,8 @@ following reasons:
    Apache Commons and Java Mail consider `first@last@iana.org` as a valid
    email address! It clearly is not, as it has two `@` characters. JMail correctly
    considers this address invalid. You can
-   [see a full comparison of correctness here](results).
+   [see a full comparison of correctness here](results), or you can
+   [try it out for yourself online](https://www.rohannagar.com/jmail/).
    
 2. JMail is **_faster_** than other libraries by, on average, at least
    27%, thanks in part to lack of regex.
