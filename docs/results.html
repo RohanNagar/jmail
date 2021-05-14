@@ -1,0 +1,2509 @@
+<table class="table table-dark table-borderless">
+  <thead>
+    <tr>
+      <th scope="col">Email Address</th>
+      <th scope="col">Expected</th>
+      <th scope="col">JMail</th>
+      <th scope="col">Apache Commons</th>
+      <th scope="col">Javax Mail</th>
+      <th scope="col">email-rfc2822</th>
+    </tr>
+  </thead>
+  <tbody>    <tr>
+      <th scope="row" valign="middle">"qu@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 8312.78 ns</td>
+      <td valign="middle">Invalid</br>in 16318.51 ns</td>
+      <td valign="middle">Invalid</br>in 16710.09 ns</td>
+      <td valign="middle">Invalid</br>in 81138.29 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">ote"@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2716.67 ns</td>
+      <td valign="middle">Invalid</br>in 16658.38 ns</td>
+      <td valign="middle">Invalid</br>in 27548.04 ns</td>
+      <td valign="middle">Invalid</br>in 31783.05 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"(),:;<>[\]@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 8186.28 ns</td>
+      <td valign="middle">Invalid</br>in 5374.8 ns</td>
+      <td valign="middle">Invalid</br>in 36150.23 ns</td>
+      <td valign="middle">Invalid</br>in 45970.59 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"""@iana.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 4535.45 ns</td>
+      <td valign="middle">Invalid</br>in 4422.13 ns</td>
+      <td valign="middle">Invalid</br>in 34554.52 ns</td>
+      <td valign="middle">Invalid</br>in 12063.22 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Abc.example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 4172.97 ns</td>
+      <td valign="middle">Invalid</br>in 1851.87 ns</td>
+      <td valign="middle">Invalid</br>in 48515.17 ns</td>
+      <td valign="middle">Invalid</br>in 41742.69 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">A@b@c@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2036.19 ns</td>
+      <td valign="middle">Invalid</br>in 4004.58 ns</td>
+      <td valign="middle">Invalid</br>in 27125.06 ns</td>
+      <td valign="middle">Invalid</br>in 23554.31 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a"b(c)d,e:f;g<h>i[j\k]l@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 948.39 ns</td>
+      <td valign="middle">Invalid</br>in 7712.95 ns</td>
+      <td valign="middle">Invalid</br>in 30345.37 ns</td>
+      <td valign="middle">Invalid</br>in 24043.44 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">just"not"right@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1209.02 ns</td>
+      <td valign="middle">Invalid</br>in 8551.14 ns</td>
+      <td valign="middle">Invalid</br>in 45249.03 ns</td>
+      <td valign="middle">Invalid</br>in 39404.82 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">this is"not\allowed@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1612.61 ns</td>
+      <td valign="middle">Invalid</br>in 9907.79 ns</td>
+      <td valign="middle">Invalid</br>in 28292.07 ns</td>
+      <td valign="middle">Invalid</br>in 40450.74 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">this\ still\"not\\allowed@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1402.81 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 26592.05 ns</td>
+      <td valign="middle">Invalid</br>in 20234.05 ns</td>
+      <td valign="middle">Invalid</br>in 35657.23 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">1234567890123456789012345678901234567890</br>123456789012345678901234+x@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 14089.12 ns</td>
+      <td valign="middle">Invalid</br>in 9324.54 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 12217.37 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 130472.61 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">i_like_underscore@but_its_not_allowed_in</br>_this_part.example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 46689.6 ns</td>
+      <td valign="middle">Invalid</br>in 41110.15 ns</td>
+      <td valign="middle">Invalid</br>in 17532.25 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 30468.7 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">QA[icon]CHOCOLATE[icon]@test.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 771.65 ns</td>
+      <td valign="middle">Invalid</br>in 6273.78 ns</td>
+      <td valign="middle">Invalid</br>in 135318.45 ns</td>
+      <td valign="middle">Invalid</br>in 30010.67 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">plainaddress</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2265.82 ns</td>
+      <td valign="middle">Invalid</br>in 659.36 ns</td>
+      <td valign="middle">Invalid</br>in 30628.12 ns</td>
+      <td valign="middle">Invalid</br>in 23334.68 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3323.17 ns</td>
+      <td valign="middle">Invalid</br>in 1032.87 ns</td>
+      <td valign="middle">Invalid</br>in 24503.25 ns</td>
+      <td valign="middle">Invalid</br>in 5691.71 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">@NotAnEmail</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2153.35 ns</td>
+      <td valign="middle">Invalid</br>in 997.75 ns</td>
+      <td valign="middle">Invalid</br>in 23208.41 ns</td>
+      <td valign="middle">Invalid</br>in 7891.85 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Joe Smith <email@example.com></br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1492.56 ns</td>
+      <td valign="middle">Invalid</br>in 4438.98 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3980.45 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 22557.55 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email.example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2018.1 ns</td>
+      <td valign="middle">Invalid</br>in 1014.56 ns</td>
+      <td valign="middle">Invalid</br>in 16734.12 ns</td>
+      <td valign="middle">Invalid</br>in 29190.99 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@example@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2284.16 ns</td>
+      <td valign="middle">Invalid</br>in 2840.62 ns</td>
+      <td valign="middle">Invalid</br>in 30175.63 ns</td>
+      <td valign="middle">Invalid</br>in 15776.35 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">.email@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 151.67 ns</td>
+      <td valign="middle">Invalid</br>in 1762.44 ns</td>
+      <td valign="middle">Invalid</br>in 20303.92 ns</td>
+      <td valign="middle">Invalid</br>in 8275.99 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email.@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 8022.74 ns</td>
+      <td valign="middle">Invalid</br>in 2961.84 ns</td>
+      <td valign="middle">Invalid</br>in 23387.29 ns</td>
+      <td valign="middle">Invalid</br>in 15449.55 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email..email@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1128.75 ns</td>
+      <td valign="middle">Invalid</br>in 3220.5 ns</td>
+      <td valign="middle">Invalid</br>in 18376.32 ns</td>
+      <td valign="middle">Invalid</br>in 19013.02 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@-example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2047.42 ns</td>
+      <td valign="middle">Invalid</br>in 25970.13 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6613.88 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 10006.06 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@111.222.333.44444</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 16321.17 ns</td>
+      <td valign="middle">Invalid</br>in 8298.88 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3021.42 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 10506.12 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@example..com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1512.47 ns</td>
+      <td valign="middle">Invalid</br>in 4936.74 ns</td>
+      <td valign="middle">Invalid</br>in 23642.65 ns</td>
+      <td valign="middle">Invalid</br>in 18074.41 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Abc..123@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 621.77 ns</td>
+      <td valign="middle">Invalid</br>in 2443.76 ns</td>
+      <td valign="middle">Invalid</br>in 26729.06 ns</td>
+      <td valign="middle">Invalid</br>in 13260.97 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">just"not"right@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1175.06 ns</td>
+      <td valign="middle">Invalid</br>in 2805.06 ns</td>
+      <td valign="middle">Invalid</br>in 27889.42 ns</td>
+      <td valign="middle">Invalid</br>in 9934.37 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">this\ is"really"not\allowed@example.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1792.92 ns</td>
+      <td valign="middle">Invalid</br>in 3625.8 ns</td>
+      <td valign="middle">Invalid</br>in 23853.9 ns</td>
+      <td valign="middle">Invalid</br>in 9479.42 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@sub.do,com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 16029.43 ns</td>
+      <td valign="middle">Invalid</br>in 6989.86 ns</td>
+      <td valign="middle">Invalid</br>in 18204.17 ns</td>
+      <td valign="middle">Invalid</br>in 14480.57 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first\@last@iana.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 783.14 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 5102.64 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2263.58 ns</td>
+      <td valign="middle">Invalid</br>in 8269.09 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@[12.34.44.56</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1339.22 ns</td>
+      <td valign="middle">Invalid</br>in 6192.0 ns</td>
+      <td valign="middle">Invalid</br>in 17559.74 ns</td>
+      <td valign="middle">Invalid</br>in 639807.34 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@14.44.56.34]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 13463.78 ns</td>
+      <td valign="middle">Invalid</br>in 4121.23 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 4291.52 ns</td>
+      <td valign="middle">Invalid</br>in 17838.21 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@[1.1.23.5f]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 7342.8 ns</td>
+      <td valign="middle">Invalid</br>in 9467.46 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2481.5 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 14276.8 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@[3.256.255.23]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 4406.5 ns</td>
+      <td valign="middle">Invalid</br>in 17872.34 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1584.27 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 19853.51 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1784.57 ns</td>
+      <td valign="middle">Invalid</br>in 721.1 ns</td>
+      <td valign="middle">Invalid</br>in 34470.49 ns</td>
+      <td valign="middle">Invalid</br>in 17991.12 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">1234567890123456789012345678901234567890</br>1234567890123456789012345@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 11312.46 ns</td>
+      <td valign="middle">Invalid</br>in 3085.48 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 10424.72 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 84736.85 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">.first.last@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 116.57 ns</td>
+      <td valign="middle">Invalid</br>in 1687.63 ns</td>
+      <td valign="middle">Invalid</br>in 23970.03 ns</td>
+      <td valign="middle">Invalid</br>in 22841.13 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last.@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 6118.61 ns</td>
+      <td valign="middle">Invalid</br>in 3760.69 ns</td>
+      <td valign="middle">Invalid</br>in 17591.22 ns</td>
+      <td valign="middle">Invalid</br>in 19614.99 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first..last@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1234.0 ns</td>
+      <td valign="middle">Invalid</br>in 3375.1 ns</td>
+      <td valign="middle">Invalid</br>in 19460.01 ns</td>
+      <td valign="middle">Invalid</br>in 16972.11 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first"last"@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1413.3 ns</td>
+      <td valign="middle">Invalid</br>in 1903.59 ns</td>
+      <td valign="middle">Invalid</br>in 26223.8 ns</td>
+      <td valign="middle">Invalid</br>in 15586.9 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[.12.34.56.78]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 63717.45 ns</td>
+      <td valign="middle">Invalid</br>in 8592.28 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2474.92 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 14937.89 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[12.34.56.789]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 4605.73 ns</td>
+      <td valign="middle">Invalid</br>in 11872.2 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2117.45 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 17181.42 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[::12.34.56.78]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1864.31 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 25356.37 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 728.24 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 20571.03 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">x@x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 28408.19 ns</td>
+      <td valign="middle">Invalid</br>in 16551.43 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 5775.56 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 30614.07 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"\"@iana.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 4016.96 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 5386.02 ns</td>
+      <td valign="middle">Invalid</br>in 17206.06 ns</td>
+      <td valign="middle">Invalid</br>in 10627.84 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first\\@last@iana.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1262.05 ns</td>
+      <td valign="middle">Invalid</br>in 2256.55 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 590.4 ns</td>
+      <td valign="middle">Invalid</br>in 13184.67 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1219.88 ns</td>
+      <td valign="middle">Invalid</br>in 635.89 ns</td>
+      <td valign="middle">Invalid</br>in 48712.22 ns</td>
+      <td valign="middle">Invalid</br>in 31632.48 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@example.com&#10;</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 36921.35 ns</td>
+      <td valign="middle">Invalid</br>in 24880.74 ns</td>
+      <td valign="middle">Invalid</br>in 28234.37 ns</td>
+      <td valign="middle">Invalid</br>in 17872.67 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333:4444:555</br>5:6666:7777]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 9808.94 ns</td>
+      <td valign="middle">Invalid</br>in 40118.62 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 13977.33 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 22039.53 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333:4444:555</br>5:6666:7777:8888:9999]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 9586.48 ns</td>
+      <td valign="middle">Invalid</br>in 11850.55 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3811.29 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 21173.73 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222::3333::4444:5</br>555:6666]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 4331.67 ns</td>
+      <td valign="middle">Invalid</br>in 10016.67 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3300.33 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 26526.97 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:333x::4444:55</br>55]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 5724.33 ns</td>
+      <td valign="middle">Invalid</br>in 55968.86 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3207.49 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 16130.99 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:33333::4444:5</br>555]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3941.34 ns</td>
+      <td valign="middle">Invalid</br>in 31616.11 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3607.8 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 18627.59 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2020.59 ns</td>
+      <td valign="middle">Invalid</br>in 34416.65 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2002.54 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 17482.29 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::::]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2294.2 ns</td>
+      <td valign="middle">Invalid</br>in 4569.49 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2180.03 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 15280.99 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::b4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2084.93 ns</td>
+      <td valign="middle">Invalid</br>in 26103.55 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1991.33 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 32861.35 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::::b4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2183.92 ns</td>
+      <td valign="middle">Invalid</br>in 4722.76 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2004.57 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 16005.72 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::b3:b4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2072.46 ns</td>
+      <td valign="middle">Invalid</br>in 46078.27 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2543.82 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 16404.44 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::::b3:b4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2258.25 ns</td>
+      <td valign="middle">Invalid</br>in 5109.01 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2471.92 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 19594.53 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:::b4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 6199.36 ns</td>
+      <td valign="middle">Invalid</br>in 5516.89 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 652.11 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 22944.58 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1856.3 ns</td>
+      <td valign="middle">Invalid</br>in 4401.96 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 664.71 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 14823.22 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:::]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2563.13 ns</td>
+      <td valign="middle">Invalid</br>in 4904.01 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 677.99 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 32821.1 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2:]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2088.02 ns</td>
+      <td valign="middle">Invalid</br>in 5040.76 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 694.35 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 16899.75 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2:::]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2709.88 ns</td>
+      <td valign="middle">Invalid</br>in 4541.81 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 537.53 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 15922.29 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::b3:]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2237.32 ns</td>
+      <td valign="middle">Invalid</br>in 4175.15 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 737.61 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 15892.61 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::a2::b4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1887.82 ns</td>
+      <td valign="middle">Invalid</br>in 5649.69 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 676.82 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 16382.37 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2111.77 ns</td>
+      <td valign="middle">Invalid</br>in 6607.42 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 822.75 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 19923.28 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 14739.22 ns</td>
+      <td valign="middle">Invalid</br>in 10773.02 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 720.56 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 19012.85 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b</br>4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 6480.7 ns</td>
+      <td valign="middle">Invalid</br>in 13038.47 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 799.96 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 26156.03 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::11.22.33.44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 85514.5 ns</td>
+      <td valign="middle">Invalid</br>in 43849.76 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 707.75 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 25201.89 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6::::11.22.33.44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 5009.48 ns</td>
+      <td valign="middle">Invalid</br>in 5874.86 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 916.2 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 19855.67 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:11.22.33.44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 6966.36 ns</td>
+      <td valign="middle">Invalid</br>in 31189.83 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1151.33 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 26866.44 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:::11.22.33.44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2459.22 ns</td>
+      <td valign="middle">Invalid</br>in 5712.62 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 702.89 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 16367.94 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2:::11.22.33.44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2764.5 ns</td>
+      <td valign="middle">Invalid</br>in 6850.68 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 843.74 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 17731.45 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:0123:4567:89ab:cdef::11</br>.22.33.xx]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 6157.1 ns</td>
+      <td valign="middle">Invalid</br>in 49692.16 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 950.85 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 23309.64 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv5:::12.34.56.78]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2074.14 ns</td>
+      <td valign="middle">Invalid</br>in 5764.37 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 556.19 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 17408.39 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333:4444:555</br>5:12.34.56.78]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 5200.51 ns</td>
+      <td valign="middle">Invalid</br>in 32266.69 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1625.7 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 18903.67 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333:4444:555</br>5:6666:7777:12.34.56.78]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 5309.84 ns</td>
+      <td valign="middle">Invalid</br>in 13869.29 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1183.42 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 39178.78 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333:4444:555</br>5:6666:12.34.567.89]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 5605.51 ns</td>
+      <td valign="middle">Invalid</br>in 24651.68 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 793.23 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 15564.02 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">aaa@[123.123.123.123]a</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 758.09 ns</td>
+      <td valign="middle">Invalid</br>in 4593.98 ns</td>
+      <td valign="middle">Invalid</br>in 29485.35 ns</td>
+      <td valign="middle">Invalid</br>in 1.186626478E7 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">aaa@[123.123.123.333]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1929.47 ns</td>
+      <td valign="middle">Invalid</br>in 6809.07 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 5436.9 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 14082.83 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:0123:4567:89ab:CDEFF::1</br>1.22.33.44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2726.88 ns</td>
+      <td valign="middle">Invalid</br>in 55633.07 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 4223.75 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 28877.62 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::a4:b1::b4:11.22.33.</br>44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2344.8 ns</td>
+      <td valign="middle">Invalid</br>in 8535.52 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6269.77 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 21450.47 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::11.22.33]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 9016.85 ns</td>
+      <td valign="middle">Invalid</br>in 24730.16 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2238.91 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 13430.27 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::11.22.33.44.55]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 7601.31 ns</td>
+      <td valign="middle">Invalid</br>in 34774.27 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3204.43 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 21385.82 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::b211.22.33.44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 4697.95 ns</td>
+      <td valign="middle">Invalid</br>in 30203.74 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2107.46 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 18171.38 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::b2::11.22.33.44]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3346.68 ns</td>
+      <td valign="middle">Invalid</br>in 5656.89 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3416.06 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 24696.85 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">abc\@def@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 996.26 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 4664.13 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2359.92 ns</td>
+      <td valign="middle">Invalid</br>in 8905.18 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a@-b.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 645.28 ns</td>
+      <td valign="middle">Invalid</br>in 1784.74 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 906.77 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 5077.04 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a@b-.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1072.03 ns</td>
+      <td valign="middle">Invalid</br>in 3680.14 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1972.66 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 7176.37 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">-@..com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 498.86 ns</td>
+      <td valign="middle">Invalid</br>in 4285.68 ns</td>
+      <td valign="middle">Invalid</br>in 19080.11 ns</td>
+      <td valign="middle">Invalid</br>in 7805.85 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">-@a..com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 688.11 ns</td>
+      <td valign="middle">Invalid</br>in 4120.76 ns</td>
+      <td valign="middle">Invalid</br>in 16748.51 ns</td>
+      <td valign="middle">Invalid</br>in 5511.33 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">invalid@about.museum-</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 130.91 ns</td>
+      <td valign="middle">Invalid</br>in 7814.53 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2146.47 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 15501.36 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@...........com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1252.24 ns</td>
+      <td valign="middle">Invalid</br>in 3317.08 ns</td>
+      <td valign="middle">Invalid</br>in 28695.48 ns</td>
+      <td valign="middle">Invalid</br>in 13198.81 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@-xample.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3189.33 ns</td>
+      <td valign="middle">Invalid</br>in 3788.1 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2684.16 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 16708.97 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@exampl-.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3537.46 ns</td>
+      <td valign="middle">Invalid</br>in 7394.47 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3549.67 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 22110.58 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@x2345678901234567890123456789</br>01234567890123456789012345678901234.test</br>.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 165707.44 ns</td>
+      <td valign="middle">Invalid</br>in 15168.81 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 7532.21 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 18124.92 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">abc\\@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 977.97 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 4370.67 ns</td>
+      <td valign="middle">Invalid</br>in 15524.45 ns</td>
+      <td valign="middle">Invalid</br>in 5755.81 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">abc@def@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 812.46 ns</td>
+      <td valign="middle">Invalid</br>in 1557.34 ns</td>
+      <td valign="middle">Invalid</br>in 22722.33 ns</td>
+      <td valign="middle">Invalid</br>in 12767.67 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">abc\\@def@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 871.37 ns</td>
+      <td valign="middle">Invalid</br>in 1742.75 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1098.39 ns</td>
+      <td valign="middle">Invalid</br>in 5656.51 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">abc\@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 568.31 ns</td>
+      <td valign="middle">Invalid</br>in 1389.72 ns</td>
+      <td valign="middle">Invalid</br>in 12372.52 ns</td>
+      <td valign="middle">Invalid</br>in 5815.89 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1934.05 ns</td>
+      <td valign="middle">Invalid</br>in 508.56 ns</td>
+      <td valign="middle">Invalid</br>in 23659.63 ns</td>
+      <td valign="middle">Invalid</br>in 6018.62 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">doug@</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1019.85 ns</td>
+      <td valign="middle">Invalid</br>in 474.91 ns</td>
+      <td valign="middle">Invalid</br>in 17795.89 ns</td>
+      <td valign="middle">Invalid</br>in 13513.81 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">.dot@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 89.15 ns</td>
+      <td valign="middle">Invalid</br>in 1173.28 ns</td>
+      <td valign="middle">Invalid</br>in 26337.59 ns</td>
+      <td valign="middle">Invalid</br>in 10677.6 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">dot.@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2340.01 ns</td>
+      <td valign="middle">Invalid</br>in 1763.57 ns</td>
+      <td valign="middle">Invalid</br>in 19703.36 ns</td>
+      <td valign="middle">Invalid</br>in 11918.71 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">two..dot@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1278.18 ns</td>
+      <td valign="middle">Invalid</br>in 3105.83 ns</td>
+      <td valign="middle">Invalid</br>in 25860.59 ns</td>
+      <td valign="middle">Invalid</br>in 12188.68 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Doug "Ace" L."@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1757.43 ns</td>
+      <td valign="middle">Invalid</br>in 3066.9 ns</td>
+      <td valign="middle">Invalid</br>in 28901.05 ns</td>
+      <td valign="middle">Invalid</br>in 10109.67 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Doug\ \"Ace\"\ L\.@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1059.04 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6354.31 ns</td>
+      <td valign="middle">Invalid</br>in 29621.1 ns</td>
+      <td valign="middle">Invalid</br>in 12118.27 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">hello world@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1549.15 ns</td>
+      <td valign="middle">Invalid</br>in 3348.47 ns</td>
+      <td valign="middle">Invalid</br>in 27520.07 ns</td>
+      <td valign="middle">Invalid</br>in 15915.77 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">gatsby@f.sc.ot.t.f.i.tzg.era.l.d.</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 94.62 ns</td>
+      <td valign="middle">Invalid</br>in 77.92 ns</td>
+      <td valign="middle">Invalid</br>in 36643.66 ns</td>
+      <td valign="middle">Invalid</br>in 36154.56 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">.@</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 76.88 ns</td>
+      <td valign="middle">Invalid</br>in 326.72 ns</td>
+      <td valign="middle">Invalid</br>in 37349.41 ns</td>
+      <td valign="middle">Invalid</br>in 7804.7 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">@bar.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1099.56 ns</td>
+      <td valign="middle">Invalid</br>in 507.54 ns</td>
+      <td valign="middle">Invalid</br>in 19834.43 ns</td>
+      <td valign="middle">Invalid</br>in 5153.66 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">@@bar.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 343.93 ns</td>
+      <td valign="middle">Invalid</br>in 1402.55 ns</td>
+      <td valign="middle">Invalid</br>in 19183.74 ns</td>
+      <td valign="middle">Invalid</br>in 4210.45 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">aaa.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 955.73 ns</td>
+      <td valign="middle">Invalid</br>in 433.13 ns</td>
+      <td valign="middle">Invalid</br>in 15487.69 ns</td>
+      <td valign="middle">Invalid</br>in 9840.13 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">aaa@.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 583.6 ns</td>
+      <td valign="middle">Invalid</br>in 1550.49 ns</td>
+      <td valign="middle">Invalid</br>in 13630.8 ns</td>
+      <td valign="middle">Invalid</br>in 9593.09 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">aaa@.123</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 582.04 ns</td>
+      <td valign="middle">Invalid</br>in 1464.67 ns</td>
+      <td valign="middle">Invalid</br>in 15117.06 ns</td>
+      <td valign="middle">Invalid</br>in 7579.58 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a@bar.com.</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 132.41 ns</td>
+      <td valign="middle">Invalid</br>in 146.64 ns</td>
+      <td valign="middle">Invalid</br>in 21129.77 ns</td>
+      <td valign="middle">Invalid</br>in 9652.29 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">{^c\@**Dog^}@cartoon.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 662.61 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 5983.47 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2062.55 ns</td>
+      <td valign="middle">Invalid</br>in 11172.5 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">cal(foo(bar)@iamcal.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 4641.75 ns</td>
+      <td valign="middle">Invalid</br>in 2082.56 ns</td>
+      <td valign="middle">Invalid</br>in 19949.18 ns</td>
+      <td valign="middle">Invalid</br>in 27213.16 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">cal(foo)bar)@iamcal.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3805.8 ns</td>
+      <td valign="middle">Invalid</br>in 3350.69 ns</td>
+      <td valign="middle">Invalid</br>in 35603.35 ns</td>
+      <td valign="middle">Invalid</br>in 17680.04 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">cal(foo\)@iamcal.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3006.82 ns</td>
+      <td valign="middle">Invalid</br>in 3246.97 ns</td>
+      <td valign="middle">Invalid</br>in 14225.72 ns</td>
+      <td valign="middle">Invalid</br>in 29414.18 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first(1234567890123456789012345678901234</br>5678901234567890)last@(12345678901234567</br>8901234567890123456789012345678901234567</br>8901234567890123456789012345678901234567</br>8901234567890123456789012345678901234567</br>8901234567890123456789012345678901234567</br>8901234567890123456789012345678901234567</br>890123456789012345678901234567890)test.o</br>rg</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 93.82 ns</td>
+      <td valign="middle">Invalid</br>in 24443.6 ns</td>
+      <td valign="middle">Invalid</br>in 48613.84 ns</td>
+      <td valign="middle">Invalid</br>in 109728.98 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a(a(b(c)d(e(f))g)(h(i)j)@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3809.89 ns</td>
+      <td valign="middle">Invalid</br>in 2672.92 ns</td>
+      <td valign="middle">Invalid</br>in 34727.54 ns</td>
+      <td valign="middle">Invalid</br>in 10555.98 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Doug\ \"Ace\"\ Lovell@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1407.52 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 8399.32 ns</td>
+      <td valign="middle">Invalid</br>in 18779.97 ns</td>
+      <td valign="middle">Invalid</br>in 14149.88 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test.test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3076.41 ns</td>
+      <td valign="middle">Invalid</br>in 931.22 ns</td>
+      <td valign="middle">Invalid</br>in 27852.57 ns</td>
+      <td valign="middle">Invalid</br>in 23411.77 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test.@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2626.85 ns</td>
+      <td valign="middle">Invalid</br>in 1724.22 ns</td>
+      <td valign="middle">Invalid</br>in 23380.57 ns</td>
+      <td valign="middle">Invalid</br>in 13403.23 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test..test@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1339.1 ns</td>
+      <td valign="middle">Invalid</br>in 2858.84 ns</td>
+      <td valign="middle">Invalid</br>in 20021.54 ns</td>
+      <td valign="middle">Invalid</br>in 14932.7 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">.test@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 91.99 ns</td>
+      <td valign="middle">Invalid</br>in 1369.67 ns</td>
+      <td valign="middle">Invalid</br>in 18651.14 ns</td>
+      <td valign="middle">Invalid</br>in 8428.42 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@test@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3178.19 ns</td>
+      <td valign="middle">Invalid</br>in 2645.33 ns</td>
+      <td valign="middle">Invalid</br>in 36053.48 ns</td>
+      <td valign="middle">Invalid</br>in 16746.24 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 816.08 ns</td>
+      <td valign="middle">Invalid</br>in 1893.75 ns</td>
+      <td valign="middle">Invalid</br>in 36251.11 ns</td>
+      <td valign="middle">Invalid</br>in 10815.14 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">-- test --@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 896.38 ns</td>
+      <td valign="middle">Invalid</br>in 1719.86 ns</td>
+      <td valign="middle">Invalid</br>in 33638.41 ns</td>
+      <td valign="middle">Invalid</br>in 24918.16 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">[test]@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 308.59 ns</td>
+      <td valign="middle">Invalid</br>in 1243.12 ns</td>
+      <td valign="middle">Invalid</br>in 22536.27 ns</td>
+      <td valign="middle">Invalid</br>in 11607.98 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test"test"@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1399.63 ns</td>
+      <td valign="middle">Invalid</br>in 2648.28 ns</td>
+      <td valign="middle">Invalid</br>in 23187.22 ns</td>
+      <td valign="middle">Invalid</br>in 6986.25 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">()[]\;:,><@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1897.15 ns</td>
+      <td valign="middle">Invalid</br>in 1759.49 ns</td>
+      <td valign="middle">Invalid</br>in 18393.67 ns</td>
+      <td valign="middle">Invalid</br>in 11120.13 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@.</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 95.06 ns</td>
+      <td valign="middle">Invalid</br>in 75.19 ns</td>
+      <td valign="middle">Invalid</br>in 18864.32 ns</td>
+      <td valign="middle">Invalid</br>in 10054.83 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@example.</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 166.88 ns</td>
+      <td valign="middle">Invalid</br>in 75.41 ns</td>
+      <td valign="middle">Invalid</br>in 27114.36 ns</td>
+      <td valign="middle">Invalid</br>in 17551.23 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 735.52 ns</td>
+      <td valign="middle">Invalid</br>in 2040.5 ns</td>
+      <td valign="middle">Invalid</br>in 28692.47 ns</td>
+      <td valign="middle">Invalid</br>in 16926.3 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@12345678901234567890123456789012345</br>6789012345678901234567890123456789012345</br>6789012345678901234567890123456789012345</br>6789012345678901234567890123456789012345</br>6789012345678901234567890123456789012345</br>6789012345678901234567890123456789012345</br>67890123456789012.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 44050.4 ns</td>
+      <td valign="middle">Invalid</br>in 38301.06 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 33644.28 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 37573.35 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">.wooly@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 86.81 ns</td>
+      <td valign="middle">Invalid</br>in 1220.29 ns</td>
+      <td valign="middle">Invalid</br>in 27885.74 ns</td>
+      <td valign="middle">Invalid</br>in 6618.96 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">wo..oly@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 569.11 ns</td>
+      <td valign="middle">Invalid</br>in 1528.77 ns</td>
+      <td valign="middle">Invalid</br>in 13805.82 ns</td>
+      <td valign="middle">Invalid</br>in 8009.48 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">pootieshoe.@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3051.33 ns</td>
+      <td valign="middle">Invalid</br>in 2602.6 ns</td>
+      <td valign="middle">Invalid</br>in 14743.18 ns</td>
+      <td valign="middle">Invalid</br>in 16979.98 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">.@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 82.36 ns</td>
+      <td valign="middle">Invalid</br>in 1259.01 ns</td>
+      <td valign="middle">Invalid</br>in 18134.86 ns</td>
+      <td valign="middle">Invalid</br>in 3043.43 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Ima Fool@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 933.5 ns</td>
+      <td valign="middle">Invalid</br>in 1578.58 ns</td>
+      <td valign="middle">Invalid</br>in 19283.23 ns</td>
+      <td valign="middle">Invalid</br>in 11897.73 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">phil.h\@\@ck@haacked.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1167.04 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6611.27 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6685.52 ns</td>
+      <td valign="middle">Invalid</br>in 16453.1 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first\\"last"@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2025.06 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 5477.98 ns</td>
+      <td valign="middle">Invalid</br>in 21269.02 ns</td>
+      <td valign="middle">Invalid</br>in 11015.37 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">foo@[\1.2.3.4]</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2413.96 ns</td>
+      <td valign="middle">Invalid</br>in 4854.24 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1737.47 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 10699.0 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first\last@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 965.45 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3692.03 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2271.72 ns</td>
+      <td valign="middle">Invalid</br>in 16228.73 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Abc\@def@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1420.24 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6349.8 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 2926.24 ns</td>
+      <td valign="middle">Invalid</br>in 11601.51 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Fred\ Bloggs@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1292.4 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6997.11 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 4395.52 ns</td>
+      <td valign="middle">Invalid</br>in 13150.55 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Joe.\\Blow@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1313.38 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6245.41 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 3502.89 ns</td>
+      <td valign="middle">Invalid</br>in 7973.86 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first(abc("def".ghi).mno)middle(abc("def</br>".ghi).mno).last@(abc("def".ghi).mno)exa</br>mple(abc("def".ghi).mno).(abc("def".ghi)</br>.mno)com(abc("def".ghi).mno)</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 2244.94 ns</td>
+      <td valign="middle">Invalid</br>in 6821.67 ns</td>
+      <td valign="middle">Invalid</br>in 15764.18 ns</td>
+      <td valign="middle">Invalid</br>in 13755.0 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first(middle)last@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1338.64 ns</td>
+      <td valign="middle">Invalid</br>in 1937.12 ns</td>
+      <td valign="middle">Invalid</br>in 22372.2 ns</td>
+      <td valign="middle">Invalid</br>in 27576.68 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Unicode NULL ␀"@char.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 3010.04 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 13831.7 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 4544.19 ns</td>
+      <td valign="middle">Invalid</br>in 76748.94 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Unicode NULL \␀@char.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1955.23 ns</td>
+      <td valign="middle">Invalid</br>in 4515.27 ns</td>
+      <td valign="middle">Invalid</br>in 64805.74 ns</td>
+      <td valign="middle">Invalid</br>in 27179.99 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test"test@test.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1392.79 ns</td>
+      <td valign="middle">Invalid</br>in 3121.29 ns</td>
+      <td valign="middle">Invalid</br>in 25401.4 ns</td>
+      <td valign="middle">Invalid</br>in 10213.36 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first."".last@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1435.38 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 6137.69 ns</td>
+      <td valign="middle">Invalid</br>in 22464.62 ns</td>
+      <td valign="middle">Invalid</br>in 14820.13 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">""@test.org</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 690.45 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 4102.64 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 1908.69 ns</td>
+      <td style="background-color:#815355" valign="middle">Valid</br>in 9720.73 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">()@test.com</br></th>
+      <td valign="middle">Invalid</td>
+      <td style="background-color:#56666B" valign="middle">Invalid</br>in 1995.13 ns</td>
+      <td valign="middle">Invalid</br>in 1512.37 ns</td>
+      <td valign="middle">Invalid</br>in 20438.52 ns</td>
+      <td valign="middle">Invalid</br>in 10269.72 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">" "@example.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9428.63 ns</td>
+      <td valign="middle">Valid</br>in 4580.36 ns</td>
+      <td valign="middle">Valid</br>in 2086.87 ns</td>
+      <td valign="middle">Valid</br>in 11648.54 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"john..doe"@example.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7076.79 ns</td>
+      <td valign="middle">Valid</br>in 5752.11 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 35671.2 ns</td>
+      <td valign="middle">Valid</br>in 15843.21 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"email"@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7592.05 ns</td>
+      <td valign="middle">Valid</br>in 8455.15 ns</td>
+      <td valign="middle">Valid</br>in 3114.37 ns</td>
+      <td valign="middle">Valid</br>in 19160.54 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first@last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8532.11 ns</td>
+      <td valign="middle">Valid</br>in 4360.2 ns</td>
+      <td valign="middle">Valid</br>in 2318.75 ns</td>
+      <td valign="middle">Valid</br>in 15180.33 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">very.unusual."@".unusual.com@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7693.64 ns</td>
+      <td valign="middle">Valid</br>in 12990.85 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 33405.21 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 33117.03 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first\"last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 4650.31 ns</td>
+      <td valign="middle">Valid</br>in 3408.84 ns</td>
+      <td valign="middle">Valid</br>in 1665.74 ns</td>
+      <td valign="middle">Valid</br>in 13342.75 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">much."more\ unusual"@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8811.77 ns</td>
+      <td valign="middle">Valid</br>in 6856.57 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 22725.08 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 10395.72 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first\\last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 4528.18 ns</td>
+      <td valign="middle">Valid</br>in 3235.25 ns</td>
+      <td valign="middle">Valid</br>in 1514.4 ns</td>
+      <td valign="middle">Valid</br>in 13464.34 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Abc\@def"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6736.23 ns</td>
+      <td valign="middle">Valid</br>in 4452.2 ns</td>
+      <td valign="middle">Valid</br>in 2153.92 ns</td>
+      <td valign="middle">Valid</br>in 14113.44 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Fred\ Bloggs"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8391.02 ns</td>
+      <td valign="middle">Valid</br>in 5483.34 ns</td>
+      <td valign="middle">Valid</br>in 2154.01 ns</td>
+      <td valign="middle">Valid</br>in 23726.51 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Joe.\\Blow"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9537.35 ns</td>
+      <td valign="middle">Valid</br>in 5567.74 ns</td>
+      <td valign="middle">Valid</br>in 1871.05 ns</td>
+      <td valign="middle">Valid</br>in 15270.49 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Abc@def"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7321.66 ns</td>
+      <td valign="middle">Valid</br>in 5693.44 ns</td>
+      <td valign="middle">Valid</br>in 2380.23 ns</td>
+      <td valign="middle">Valid</br>in 18368.91 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Fred Bloggs"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11395.32 ns</td>
+      <td valign="middle">Valid</br>in 5517.62 ns</td>
+      <td valign="middle">Valid</br>in 3184.78 ns</td>
+      <td valign="middle">Valid</br>in 37239.98 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first\last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9227.14 ns</td>
+      <td valign="middle">Valid</br>in 7037.96 ns</td>
+      <td valign="middle">Valid</br>in 2307.51 ns</td>
+      <td valign="middle">Valid</br>in 28656.65 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Doug \"Ace\" L."@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10312.27 ns</td>
+      <td valign="middle">Valid</br>in 6308.32 ns</td>
+      <td valign="middle">Valid</br>in 3002.8 ns</td>
+      <td valign="middle">Valid</br>in 18232.8 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"[[ test ]]"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8468.32 ns</td>
+      <td valign="middle">Valid</br>in 6496.2 ns</td>
+      <td valign="middle">Valid</br>in 3237.08 ns</td>
+      <td valign="middle">Valid</br>in 20464.65 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test.test"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 4752.51 ns</td>
+      <td valign="middle">Valid</br>in 3015.2 ns</td>
+      <td valign="middle">Valid</br>in 1496.99 ns</td>
+      <td valign="middle">Valid</br>in 10865.19 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test."test"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7134.51 ns</td>
+      <td valign="middle">Valid</br>in 5998.86 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 24734.93 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 11828.32 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test@test"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6777.1 ns</td>
+      <td valign="middle">Valid</br>in 6542.28 ns</td>
+      <td valign="middle">Valid</br>in 1630.71 ns</td>
+      <td valign="middle">Valid</br>in 17826.96 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test\test"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7212.15 ns</td>
+      <td valign="middle">Valid</br>in 4062.0 ns</td>
+      <td valign="middle">Valid</br>in 2074.5 ns</td>
+      <td valign="middle">Valid</br>in 11922.55 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first"."last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 4584.82 ns</td>
+      <td valign="middle">Valid</br>in 4791.15 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 19302.33 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 13030.99 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first".middle."last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6563.49 ns</td>
+      <td valign="middle">Valid</br>in 5245.41 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 23453.65 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 11577.12 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first".last@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 4382.08 ns</td>
+      <td valign="middle">Valid</br>in 3819.48 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 13993.49 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 11719.14 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first."last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8765.88 ns</td>
+      <td valign="middle">Valid</br>in 6039.8 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 25173.01 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 14505.06 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first"."middle"."last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6199.22 ns</td>
+      <td valign="middle">Valid</br>in 8552.34 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 28337.6 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 106254.05 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first.middle"."last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6729.37 ns</td>
+      <td valign="middle">Valid</br>in 7620.0 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 31053.26 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 19793.17 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first.middle.last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7428.73 ns</td>
+      <td valign="middle">Valid</br>in 7050.87 ns</td>
+      <td valign="middle">Valid</br>in 3590.23 ns</td>
+      <td valign="middle">Valid</br>in 27401.7 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first..last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9381.31 ns</td>
+      <td valign="middle">Valid</br>in 7077.11 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 39798.42 ns</td>
+      <td valign="middle">Valid</br>in 19824.79 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Unicode NULL \␀"@char.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10838.08 ns</td>
+      <td valign="middle">Valid</br>in 8035.56 ns</td>
+      <td valign="middle">Valid</br>in 3236.17 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 25241.4 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test\\blah"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9892.2 ns</td>
+      <td valign="middle">Valid</br>in 8863.85 ns</td>
+      <td valign="middle">Valid</br>in 2018.24 ns</td>
+      <td valign="middle">Valid</br>in 17081.46 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test\blah"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8920.94 ns</td>
+      <td valign="middle">Valid</br>in 10280.65 ns</td>
+      <td valign="middle">Valid</br>in 3470.28 ns</td>
+      <td valign="middle">Valid</br>in 24377.92 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test\"blah"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6318.18 ns</td>
+      <td valign="middle">Valid</br>in 5555.71 ns</td>
+      <td valign="middle">Valid</br>in 3194.83 ns</td>
+      <td valign="middle">Valid</br>in 25675.49 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"first\\\"last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10751.63 ns</td>
+      <td valign="middle">Valid</br>in 7426.93 ns</td>
+      <td valign="middle">Valid</br>in 2361.73 ns</td>
+      <td valign="middle">Valid</br>in 25045.28 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first."mid\dle"."last"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13769.56 ns</td>
+      <td valign="middle">Valid</br>in 6740.13 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 31768.92 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 16563.22 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"Test \"Fail\" Ing"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 17689.64 ns</td>
+      <td valign="middle">Valid</br>in 10791.85 ns</td>
+      <td valign="middle">Valid</br>in 5263.82 ns</td>
+      <td valign="middle">Valid</br>in 33020.54 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">"test&#13;&#10; blah"@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11134.62 ns</td>
+      <td valign="middle">Valid</br>in 5778.75 ns</td>
+      <td valign="middle">Valid</br>in 2587.16 ns</td>
+      <td valign="middle">Valid</br>in 28324.43 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last @test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7267.46 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3817.46 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 22009.77 ns</td>
+      <td valign="middle">Valid</br>in 28432.5 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last  @test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5896.53 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3691.04 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 32743.24 ns</td>
+      <td valign="middle">Valid</br>in 39455.89 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first .last  @test .org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9781.57 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 1784.1 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 32556.38 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 46135.89 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">jdoe@machine(comment).  example</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 14674.03 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3147.74 ns</td>
+      <td valign="middle">Valid</br>in 2216.99 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 34043.85 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">simple@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8150.37 ns</td>
+      <td valign="middle">Valid</br>in 9142.74 ns</td>
+      <td valign="middle">Valid</br>in 3128.61 ns</td>
+      <td valign="middle">Valid</br>in 17631.9 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">very.common@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9016.16 ns</td>
+      <td valign="middle">Valid</br>in 9442.75 ns</td>
+      <td valign="middle">Valid</br>in 6131.29 ns</td>
+      <td valign="middle">Valid</br>in 31105.56 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">very.common@example.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9469.03 ns</td>
+      <td valign="middle">Valid</br>in 7577.17 ns</td>
+      <td valign="middle">Valid</br>in 5029.72 ns</td>
+      <td valign="middle">Valid</br>in 32267.57 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">disposable.style.email.with+symbol@examp</br>le.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 15728.17 ns</td>
+      <td valign="middle">Valid</br>in 12239.51 ns</td>
+      <td valign="middle">Valid</br>in 5537.78 ns</td>
+      <td valign="middle">Valid</br>in 64200.01 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">other.email-with-hyphen@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 14537.08 ns</td>
+      <td valign="middle">Valid</br>in 10125.71 ns</td>
+      <td valign="middle">Valid</br>in 5097.0 ns</td>
+      <td valign="middle">Valid</br>in 50262.81 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">fully-qualified-domain@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10921.01 ns</td>
+      <td valign="middle">Valid</br>in 10547.01 ns</td>
+      <td valign="middle">Valid</br>in 4619.1 ns</td>
+      <td valign="middle">Valid</br>in 42551.28 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">user.name+tag+sorting@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 20887.57 ns</td>
+      <td valign="middle">Valid</br>in 20371.62 ns</td>
+      <td valign="middle">Valid</br>in 8865.68 ns</td>
+      <td valign="middle">Valid</br>in 74289.44 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">x@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 23799.95 ns</td>
+      <td valign="middle">Valid</br>in 9702.15 ns</td>
+      <td valign="middle">Valid</br>in 2545.78 ns</td>
+      <td valign="middle">Valid</br>in 21898.44 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">example-indeed@strange-example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13904.98 ns</td>
+      <td valign="middle">Valid</br>in 10473.27 ns</td>
+      <td valign="middle">Valid</br>in 7559.07 ns</td>
+      <td valign="middle">Valid</br>in 46186.19 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test/test@test.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13735.56 ns</td>
+      <td valign="middle">Valid</br>in 8148.82 ns</td>
+      <td valign="middle">Valid</br>in 5068.85 ns</td>
+      <td valign="middle">Valid</br>in 32378.29 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">admin@mailserver1</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7510.99 ns</td>
+      <td valign="middle">Valid</br>in 6332.51 ns</td>
+      <td valign="middle">Valid</br>in 3347.61 ns</td>
+      <td valign="middle">Valid</br>in 23546.33 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">example@s.example</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7293.93 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 9558.64 ns</td>
+      <td valign="middle">Valid</br>in 3560.24 ns</td>
+      <td valign="middle">Valid</br>in 24230.95 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">mailhost!username@example.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9627.29 ns</td>
+      <td valign="middle">Valid</br>in 9437.99 ns</td>
+      <td valign="middle">Valid</br>in 3971.49 ns</td>
+      <td valign="middle">Valid</br>in 53380.16 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">user%example.com@example.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13320.52 ns</td>
+      <td valign="middle">Valid</br>in 8954.42 ns</td>
+      <td valign="middle">Valid</br>in 4312.81 ns</td>
+      <td valign="middle">Valid</br>in 36152.54 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">user-@example.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9305.64 ns</td>
+      <td valign="middle">Valid</br>in 6977.28 ns</td>
+      <td valign="middle">Valid</br>in 3752.72 ns</td>
+      <td valign="middle">Valid</br>in 18638.3 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6241.91 ns</td>
+      <td valign="middle">Valid</br>in 7035.15 ns</td>
+      <td valign="middle">Valid</br>in 3340.05 ns</td>
+      <td valign="middle">Valid</br>in 20676.0 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">firstname.lastname@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11454.99 ns</td>
+      <td valign="middle">Valid</br>in 15881.16 ns</td>
+      <td valign="middle">Valid</br>in 6387.99 ns</td>
+      <td valign="middle">Valid</br>in 49585.6 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@subdomain.example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 14242.9 ns</td>
+      <td valign="middle">Valid</br>in 8175.73 ns</td>
+      <td valign="middle">Valid</br>in 4363.53 ns</td>
+      <td valign="middle">Valid</br>in 24484.61 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">firstname+lastname@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11518.05 ns</td>
+      <td valign="middle">Valid</br>in 10421.35 ns</td>
+      <td valign="middle">Valid</br>in 4787.94 ns</td>
+      <td valign="middle">Valid</br>in 39849.03 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">1234567890@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12936.36 ns</td>
+      <td valign="middle">Valid</br>in 7755.27 ns</td>
+      <td valign="middle">Valid</br>in 6344.17 ns</td>
+      <td valign="middle">Valid</br>in 36203.5 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@example-one.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12145.74 ns</td>
+      <td valign="middle">Valid</br>in 10236.46 ns</td>
+      <td valign="middle">Valid</br>in 4847.76 ns</td>
+      <td valign="middle">Valid</br>in 21065.32 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">_______@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8941.09 ns</td>
+      <td valign="middle">Valid</br>in 11820.87 ns</td>
+      <td valign="middle">Valid</br>in 4392.15 ns</td>
+      <td valign="middle">Valid</br>in 23489.18 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@example.name</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10286.74 ns</td>
+      <td valign="middle">Valid</br>in 6105.79 ns</td>
+      <td valign="middle">Valid</br>in 2814.68 ns</td>
+      <td valign="middle">Valid</br>in 18753.35 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@example.museum</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9015.5 ns</td>
+      <td valign="middle">Valid</br>in 5415.59 ns</td>
+      <td valign="middle">Valid</br>in 4890.23 ns</td>
+      <td valign="middle">Valid</br>in 23970.88 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@example.co.jp</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8312.94 ns</td>
+      <td valign="middle">Valid</br>in 7525.78 ns</td>
+      <td valign="middle">Valid</br>in 4006.17 ns</td>
+      <td valign="middle">Valid</br>in 26046.49 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">firstname-lastname@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8676.07 ns</td>
+      <td valign="middle">Valid</br>in 7297.31 ns</td>
+      <td valign="middle">Valid</br>in 4366.74 ns</td>
+      <td valign="middle">Valid</br>in 40595.64 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">x@x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x23456789.x23456789.x2345678</br>9.x23456789.x2</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 87405.92 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 56287.67 ns</td>
+      <td valign="middle">Valid</br>in 28463.31 ns</td>
+      <td valign="middle">Valid</br>in 48236.85 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">1234567890123456789012345678901234567890</br>123456789012345678@123456789012345678901</br>23456789012345678901234567890123456789.1</br>2345678901234567890123456789012345678901</br>234567890123456789.123456789012345678901</br>2345678901234567890123456789012345678901</br>23.test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 70073.23 ns</td>
+      <td valign="middle">Valid</br>in 41679.68 ns</td>
+      <td valign="middle">Valid</br>in 32398.87 ns</td>
+      <td valign="middle">Valid</br>in 84924.69 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@3com.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5256.29 ns</td>
+      <td valign="middle">Valid</br>in 3805.53 ns</td>
+      <td valign="middle">Valid</br>in 3430.09 ns</td>
+      <td valign="middle">Valid</br>in 26345.45 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@123.test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12790.58 ns</td>
+      <td valign="middle">Valid</br>in 8518.7 ns</td>
+      <td valign="middle">Valid</br>in 3253.81 ns</td>
+      <td valign="middle">Valid</br>in 19904.81 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@x2345678901234567890123456789</br>0123456789012345678901234567890123.test.</br>org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 19363.13 ns</td>
+      <td valign="middle">Valid</br>in 15610.05 ns</td>
+      <td valign="middle">Valid</br>in 10939.82 ns</td>
+      <td valign="middle">Valid</br>in 35325.31 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">1234567890123456789012345678901234567890</br>123456789012345678901234@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8312.35 ns</td>
+      <td valign="middle">Valid</br>in 22700.46 ns</td>
+      <td valign="middle">Valid</br>in 14694.86 ns</td>
+      <td valign="middle">Valid</br>in 93242.04 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@[123.123.123.123]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 16058.05 ns</td>
+      <td valign="middle">Valid</br>in 7499.3 ns</td>
+      <td valign="middle">Valid</br>in 2220.67 ns</td>
+      <td valign="middle">Valid</br>in 19388.63 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[12.34.56.78]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 20627.02 ns</td>
+      <td valign="middle">Valid</br>in 9648.27 ns</td>
+      <td valign="middle">Valid</br>in 4640.05 ns</td>
+      <td valign="middle">Valid</br>in 26510.98 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">user+mailbox@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 29848.69 ns</td>
+      <td valign="middle">Valid</br>in 8910.31 ns</td>
+      <td valign="middle">Valid</br>in 6782.36 ns</td>
+      <td valign="middle">Valid</br>in 33611.58 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">customer/department=shipping@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 21716.23 ns</td>
+      <td valign="middle">Valid</br>in 15468.47 ns</td>
+      <td valign="middle">Valid</br>in 8458.67 ns</td>
+      <td valign="middle">Valid</br>in 45696.35 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">$A12345@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5774.85 ns</td>
+      <td valign="middle">Valid</br>in 6203.15 ns</td>
+      <td valign="middle">Valid</br>in 3642.69 ns</td>
+      <td valign="middle">Valid</br>in 16457.32 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">!def!xyz%abc@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6248.18 ns</td>
+      <td valign="middle">Valid</br>in 5117.19 ns</td>
+      <td valign="middle">Valid</br>in 3325.37 ns</td>
+      <td valign="middle">Valid</br>in 28880.83 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">_somename@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6071.21 ns</td>
+      <td valign="middle">Valid</br>in 7871.79 ns</td>
+      <td valign="middle">Valid</br>in 3972.5 ns</td>
+      <td valign="middle">Valid</br>in 30261.18 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">dclo@us.ibm.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5673.52 ns</td>
+      <td valign="middle">Valid</br>in 7192.34 ns</td>
+      <td valign="middle">Valid</br>in 3756.8 ns</td>
+      <td valign="middle">Valid</br>in 20877.66 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@xn--example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8509.46 ns</td>
+      <td valign="middle">Valid</br>in 4361.37 ns</td>
+      <td valign="middle">Valid</br>in 4437.23 ns</td>
+      <td valign="middle">Valid</br>in 29010.85 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333:4444:555</br>5:6666:7777:8888]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8325.36 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 21704.8 ns</td>
+      <td valign="middle">Valid</br>in 8612.95 ns</td>
+      <td valign="middle">Valid</br>in 33197.59 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333::4444:55</br>55:6666:7777]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13993.27 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 18179.61 ns</td>
+      <td valign="middle">Valid</br>in 11462.88 ns</td>
+      <td valign="middle">Valid</br>in 38974.02 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:::1111:2222:3333:4444:5</br>555:6666]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10086.45 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 14809.9 ns</td>
+      <td valign="middle">Valid</br>in 2666.4 ns</td>
+      <td valign="middle">Valid</br>in 36568.28 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333::4444:55</br>55:6666]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7085.54 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 61471.45 ns</td>
+      <td valign="middle">Valid</br>in 1490.84 ns</td>
+      <td valign="middle">Valid</br>in 33551.19 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333:4444:555</br>5:6666::]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11173.44 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 64168.98 ns</td>
+      <td valign="middle">Valid</br>in 2134.56 ns</td>
+      <td valign="middle">Valid</br>in 41913.52 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:::a2:a3:a4:b1:b2:b3:b4]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6906.22 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 12795.74 ns</td>
+      <td valign="middle">Valid</br>in 2516.67 ns</td>
+      <td valign="middle">Valid</br>in 31790.16 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3::]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9720.55 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 19336.29 ns</td>
+      <td valign="middle">Valid</br>in 2196.12 ns</td>
+      <td valign="middle">Valid</br>in 27622.77 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:::]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5317.22 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 7659.13 ns</td>
+      <td valign="middle">Valid</br>in 1412.6 ns</td>
+      <td valign="middle">Valid</br>in 30303.36 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:::b4]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5677.69 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 7237.46 ns</td>
+      <td valign="middle">Valid</br>in 1214.61 ns</td>
+      <td valign="middle">Valid</br>in 34577.11 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:::b3:b4]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7207.19 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 9008.05 ns</td>
+      <td valign="middle">Valid</br>in 1505.8 ns</td>
+      <td valign="middle">Valid</br>in 38923.13 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::b4]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10067.77 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 70946.39 ns</td>
+      <td valign="middle">Valid</br>in 1710.91 ns</td>
+      <td valign="middle">Valid</br>in 36954.27 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7777.42 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 76877.95 ns</td>
+      <td valign="middle">Valid</br>in 1511.21 ns</td>
+      <td valign="middle">Valid</br>in 37583.66 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2::]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8101.6 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 88004.81 ns</td>
+      <td valign="middle">Valid</br>in 1617.31 ns</td>
+      <td valign="middle">Valid</br>in 42304.17 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:0123:4567:89ab:cdef::]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8368.43 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 72567.44 ns</td>
+      <td valign="middle">Valid</br>in 2098.28 ns</td>
+      <td valign="middle">Valid</br>in 37936.24 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:0123:4567:89ab:CDEF::]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8903.8 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 68629.73 ns</td>
+      <td valign="middle">Valid</br>in 1456.18 ns</td>
+      <td valign="middle">Valid</br>in 34277.29 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:::12.34.56.78]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8694.07 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 9627.97 ns</td>
+      <td valign="middle">Valid</br>in 1585.86 ns</td>
+      <td valign="middle">Valid</br>in 43327.78 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333::4444:12</br>.34.56.78]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 19599.59 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 87257.68 ns</td>
+      <td valign="middle">Valid</br>in 2217.22 ns</td>
+      <td valign="middle">Valid</br>in 148504.42 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333:4444:555</br>5:6666:12.34.56.78]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12799.07 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 72256.85 ns</td>
+      <td valign="middle">Valid</br>in 1791.25 ns</td>
+      <td valign="middle">Valid</br>in 32023.55 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:1111:2222:3333::4444:55</br>55:12.34.56.78]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 15791.55 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 68925.97 ns</td>
+      <td valign="middle">Valid</br>in 1218.21 ns</td>
+      <td valign="middle">Valid</br>in 37016.16 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">aaa@[123.123.123.123]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5721.57 ns</td>
+      <td valign="middle">Valid</br>in 5558.29 ns</td>
+      <td valign="middle">Valid</br>in 616.33 ns</td>
+      <td valign="middle">Valid</br>in 22359.39 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:::a3:a4:b1:ffff:11.22.3</br>3.44]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10465.98 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 9030.37 ns</td>
+      <td valign="middle">Valid</br>in 844.17 ns</td>
+      <td valign="middle">Valid</br>in 34634.07 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:::a2:a3:a4:b1:ffff:11.2</br>2.33.44]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11460.55 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 17290.99 ns</td>
+      <td valign="middle">Valid</br>in 1088.36 ns</td>
+      <td valign="middle">Valid</br>in 37727.58 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2:a3:a4::11.22.33.4</br>4]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 16404.98 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 59024.9 ns</td>
+      <td valign="middle">Valid</br>in 945.74 ns</td>
+      <td valign="middle">Valid</br>in 31998.88 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2:a3:a4:b1::11.22.3</br>3.44]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12407.44 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 83998.28 ns</td>
+      <td valign="middle">Valid</br>in 878.21 ns</td>
+      <td valign="middle">Valid</br>in 32557.83 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::11.22.33.44]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11492.33 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 58035.34 ns</td>
+      <td valign="middle">Valid</br>in 812.5 ns</td>
+      <td valign="middle">Valid</br>in 27599.39 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1:a2::11.22.33.44]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11663.39 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 63065.88 ns</td>
+      <td valign="middle">Valid</br>in 855.49 ns</td>
+      <td valign="middle">Valid</br>in 25839.66 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:0123:4567:89ab:cdef::11</br>.22.33.44]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 15443.41 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 56050.3 ns</td>
+      <td valign="middle">Valid</br>in 1115.51 ns</td>
+      <td valign="middle">Valid</br>in 39988.31 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:0123:4567:89ab:CDEF::11</br>.22.33.44]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9489.23 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 53671.26 ns</td>
+      <td valign="middle">Valid</br>in 936.52 ns</td>
+      <td valign="middle">Valid</br>in 35056.63 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@[IPv6:a1::b2:11.22.33.44]</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 17471.92 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 61956.43 ns</td>
+      <td valign="middle">Valid</br>in 794.52 ns</td>
+      <td valign="middle">Valid</br>in 30839.18 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">+@b.c</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 3603.27 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3276.28 ns</td>
+      <td valign="middle">Valid</br>in 326.19 ns</td>
+      <td valign="middle">Valid</br>in 8795.35 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">TEST@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8577.48 ns</td>
+      <td valign="middle">Valid</br>in 5419.79 ns</td>
+      <td valign="middle">Valid</br>in 589.81 ns</td>
+      <td valign="middle">Valid</br>in 15396.07 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">1234567890@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11590.16 ns</td>
+      <td valign="middle">Valid</br>in 10038.26 ns</td>
+      <td valign="middle">Valid</br>in 876.58 ns</td>
+      <td valign="middle">Valid</br>in 27729.37 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test-test@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9660.98 ns</td>
+      <td valign="middle">Valid</br>in 9978.07 ns</td>
+      <td valign="middle">Valid</br>in 1063.6 ns</td>
+      <td valign="middle">Valid</br>in 30481.68 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">t*est@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13215.38 ns</td>
+      <td valign="middle">Valid</br>in 7148.55 ns</td>
+      <td valign="middle">Valid</br>in 823.93 ns</td>
+      <td valign="middle">Valid</br>in 15974.72 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">+1~1+@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8647.14 ns</td>
+      <td valign="middle">Valid</br>in 5678.86 ns</td>
+      <td valign="middle">Valid</br>in 712.87 ns</td>
+      <td valign="middle">Valid</br>in 20425.55 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">{_test_}@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 9896.8 ns</td>
+      <td valign="middle">Valid</br>in 9889.25 ns</td>
+      <td valign="middle">Valid</br>in 761.68 ns</td>
+      <td valign="middle">Valid</br>in 22370.92 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@123.123.123.x123</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 15950.1 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 9393.8 ns</td>
+      <td valign="middle">Valid</br>in 1337.82 ns</td>
+      <td valign="middle">Valid</br>in 16426.67 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">cdburgess+!#$%&'*-/=?+_{}|~test@gmail.co</br>m</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12170.58 ns</td>
+      <td valign="middle">Valid</br>in 13781.97 ns</td>
+      <td valign="middle">Valid</br>in 1357.38 ns</td>
+      <td valign="middle">Valid</br>in 68426.04 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">valid@about.museum</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10480.32 ns</td>
+      <td valign="middle">Valid</br>in 7080.7 ns</td>
+      <td valign="middle">Valid</br>in 755.59 ns</td>
+      <td valign="middle">Valid</br>in 15150.87 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a@bar</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 4737.22 ns</td>
+      <td valign="middle">Valid</br>in 2999.25 ns</td>
+      <td valign="middle">Valid</br>in 415.66 ns</td>
+      <td valign="middle">Valid</br>in 7526.2 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a-b@bar.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10222.79 ns</td>
+      <td valign="middle">Valid</br>in 4512.54 ns</td>
+      <td valign="middle">Valid</br>in 532.35 ns</td>
+      <td valign="middle">Valid</br>in 12192.71 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">+@b.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8636.64 ns</td>
+      <td valign="middle">Valid</br>in 3681.19 ns</td>
+      <td valign="middle">Valid</br>in 436.12 ns</td>
+      <td valign="middle">Valid</br>in 15731.75 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">cal(foo\@bar)@iamcal.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12357.02 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3344.19 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 52578.62 ns</td>
+      <td valign="middle">Valid</br>in 51777.86 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">(comment)test@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 19589.96 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 1679.7 ns</td>
+      <td valign="middle">Valid</br>in 767.58 ns</td>
+      <td valign="middle">Valid</br>in 62367.25 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">(foo)cal(bar)@(baz)iamcal.com(quux)</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12638.04 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 4540.14 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 35796.36 ns</td>
+      <td valign="middle">Valid</br>in 64384.45 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">cal(foo\)bar)@iamcal.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12112.57 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3243.97 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 40039.47 ns</td>
+      <td valign="middle">Valid</br>in 35355.12 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">cal(woo(yay)hoopla)@iamcal.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13068.11 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 4128.91 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 42356.62 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 32559.33 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first(Welcome to&#13;&#10; the ("wonderf</br>ul" (!)) world&#13;&#10; of email)@test.</br>org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10300.85 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 2602.91 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 41161.2 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 112358.27 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">pete(his account)@silly.test(his host)</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11876.66 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 4168.74 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 29844.59 ns</td>
+      <td valign="middle">Valid</br>in 70447.74 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first(abc\(def)@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 14461.8 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3687.9 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 27572.43 ns</td>
+      <td valign="middle">Valid</br>in 45304.46 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a(a(b(c)d(e(f))g)h(i)j)@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10925.96 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 2537.16 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 41541.02 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 17883.68 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">c@(Chris's host.)public.example</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 7042.78 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 1722.85 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 30485.71 ns</td>
+      <td valign="middle">Valid</br>in 18251.09 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">a@b.co-foo.uk</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8551.64 ns</td>
+      <td valign="middle">Valid</br>in 4545.14 ns</td>
+      <td valign="middle">Valid</br>in 1505.65 ns</td>
+      <td valign="middle">Valid</br>in 11559.43 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">_Yosemite.Sam@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 11922.18 ns</td>
+      <td valign="middle">Valid</br>in 9936.08 ns</td>
+      <td valign="middle">Valid</br>in 726.9 ns</td>
+      <td valign="middle">Valid</br>in 25182.87 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">~@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 12143.93 ns</td>
+      <td valign="middle">Valid</br>in 5655.41 ns</td>
+      <td valign="middle">Valid</br>in 587.89 ns</td>
+      <td valign="middle">Valid</br>in 10205.27 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Iinsist@(that comments are allowed)this.</br>is.ok</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 10362.96 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 4355.26 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 32447.19 ns</td>
+      <td valign="middle">Valid</br>in 42570.5 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">test@Bücher.ch</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 39965.13 ns</td>
+      <td valign="middle">Valid</br>in 30911.41 ns</td>
+      <td valign="middle">Valid</br>in 496.75 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 9890.01 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">あいうえお@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 4045.97 ns</td>
+      <td valign="middle">Valid</br>in 6423.97 ns</td>
+      <td valign="middle">Valid</br>in 515.09 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 6523.19 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">Pelé@example.com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6244.3 ns</td>
+      <td valign="middle">Valid</br>in 5678.82 ns</td>
+      <td valign="middle">Valid</br>in 437.81 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 11489.6 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">δοκιμή@παράδειγμα.δοκιμή</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 63018.18 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 179969.07 ns</td>
+      <td valign="middle">Valid</br>in 23611.68 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3526.5 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">我買@屋企.香港</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 14460.4 ns</td>
+      <td valign="middle">Valid</br>in 13190.84 ns</td>
+      <td valign="middle">Valid</br>in 2957.55 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 2704.15 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">二ノ宮@黒川.日本</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13243.65 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 82243.57 ns</td>
+      <td valign="middle">Valid</br>in 2856.73 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 4646.76 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">медведь@с-балалайкой.рф</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 36612.28 ns</td>
+      <td valign="middle">Valid</br>in 30353.24 ns</td>
+      <td valign="middle">Valid</br>in 5351.24 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 2153.93 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">संपर्क@डाटामेल.भारत</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 13619.53 ns</td>
+      <td valign="middle">Valid</br>in 20031.97 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 27443.4 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 4854.33 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">email@example.com (Joe Smith)</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8892.98 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 2948.38 ns</td>
+      <td valign="middle">Valid</br>in 7072.91 ns</td>
+      <td valign="middle">Valid</br>in 20242.09 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">cal@iamcal(woo).(yay)com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 6975.26 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 8378.28 ns</td>
+      <td valign="middle">Valid</br>in 4180.93 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 17219.21 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first(abc.def).last@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5714.42 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 2862.78 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 22386.64 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 28817.14 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first(a"bc.def).last@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 8181.97 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 4417.2 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 32259.35 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 31346.08 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.(")middle.last(")@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 14363.01 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 8555.41 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 24948.44 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 29951.18 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first.last@x(123456789012345678901234567</br>8901234567890123456789012345678901234567</br>890).com</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 15107.19 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 29562.17 ns</td>
+      <td valign="middle">Valid</br>in 6964.42 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 66621.72 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">user%uucp!path@berkeley.edu</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 5066.94 ns</td>
+      <td valign="middle">Valid</br>in 11153.92 ns</td>
+      <td valign="middle">Valid</br>in 590.19 ns</td>
+      <td valign="middle">Valid</br>in 14240.35 ns</td>
+    </tr>
+    <tr>
+      <th scope="row" valign="middle">first().last@test.org</br></th>
+      <td valign="middle">Valid</td>
+      <td style="background-color:#56666B" valign="middle">Valid</br>in 4428.33 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 3975.59 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 18278.45 ns</td>
+      <td style="background-color:#815355" valign="middle">Invalid</br>in 11083.36 ns</td>
+    </tr>
+    <tr>
+      <th scope="row">Totals</th>
+      <td>311/311</td>
+      <td>311/311</br>Average Time: 8764.982861736335 ns</td>
+      <td>237/311</br>Average Time: 12925.33800643087 ns</td>
+      <td>211/311</br>Average Time: 12598.906398713827 ns</td>
+      <td>222/311</br>Average Time: 65032.289067524114 ns</td>
+    </tr>
+  </tbody>
+</table>

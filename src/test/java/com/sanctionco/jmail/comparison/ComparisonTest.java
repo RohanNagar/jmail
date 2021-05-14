@@ -28,7 +28,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  */
 @Disabled
 class ComparisonTest {
-  private final Path resultsFile = Paths.get(".", "results", "README.md").toAbsolutePath();
+  private final Path htmlFile = Paths.get(".", "docs", "results.html").toAbsolutePath();
 
   private int totalTests = 0;
 
@@ -54,33 +54,52 @@ class ComparisonTest {
   @BeforeAll
   @SuppressWarnings({"unused", "BeforeOrAfterWithIncorrectSignature"})
   void setupFile() throws Exception {
-    Files.write(resultsFile, "".getBytes(StandardCharsets.UTF_8),
+    Files.write(htmlFile, "".getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-    Files.write(resultsFile,
-        "| Email Address | Expected | JMail | Apache Commons | Javax Mail | email-rfc2822 |\n"
+    Files.write(htmlFile,
+        ("<table class=\"table table-dark table-borderless\">\n"
+            + "  <thead>\n"
+            + "    <tr>\n"
+            + "      <th scope=\"col\">Email Address</th>\n"
+            + "      <th scope=\"col\">Expected</th>\n"
+            + "      <th scope=\"col\">JMail</th>\n"
+            + "      <th scope=\"col\">Apache Commons</th>\n"
+            + "      <th scope=\"col\">Javax Mail</th>\n"
+            + "      <th scope=\"col\">email-rfc2822</th>\n"
+            + "    </tr>\n"
+            + "  </thead>\n"
+            + "  <tbody>")
             .getBytes(StandardCharsets.UTF_8),
-        StandardOpenOption.APPEND);
-    Files.write(resultsFile,
-        "| --- | :---: | :---: | :---: | :---: | :---: |\n".getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.APPEND);
   }
 
   @AfterAll
   @SuppressWarnings({"unused", "BeforeOrAfterWithIncorrectSignature"})
   void addTotals() throws Exception {
-    String s = "| Totals | "
-        + totalTests + "/" + totalTests + " | "
-        + jmailImpl.successes + "/" + totalTests + "</br>"
-        + "Average Time: " + jmailImpl.average() + " ns" + " | "
-        + apacheImpl.successes + "/" + totalTests + "</br>"
-        + "Average Time: " + apacheImpl.average() + " ns" + " | "
-        + javaMailImpl.successes + "/" + totalTests + "</br>"
-        + "Average Time: " + javaMailImpl.average() + " ns" + " | "
-        + rfc2822Impl.successes + "/" + totalTests + "</br>"
-        + "Average Time: " + rfc2822Impl.average() + " ns" + " |\n";
+    String html = String.format("    <tr>\n"
+        + "      <th scope=\"row\">Totals</th>\n"
+        + "      <td>%s</td>\n"
+        + "      <td>%s</td>\n"
+        + "      <td>%s</td>\n"
+        + "      <td>%s</td>\n"
+        + "      <td>%s</td>\n"
+        + "    </tr>\n",
+        totalTests + "/" + totalTests,
+        jmailImpl.successes + "/" + totalTests + "</br>"
+            + "Average Time: " + jmailImpl.average() + " ns",
+        apacheImpl.successes + "/" + totalTests + "</br>"
+            + "Average Time: " + apacheImpl.average() + " ns",
+        javaMailImpl.successes + "/" + totalTests + "</br>"
+            + "Average Time: " + javaMailImpl.average() + " ns",
+        rfc2822Impl.successes + "/" + totalTests + "</br>"
+            + "Average Time: " + rfc2822Impl.average() + " ns");
 
-    Files.write(resultsFile, s.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+    Files.write(htmlFile, html.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+
+    Files.write(htmlFile,
+        ("  </tbody>\n</table>").getBytes(StandardCharsets.UTF_8),
+        StandardOpenOption.APPEND);
   }
 
   @ParameterizedTest(name = "{0}")
@@ -100,37 +119,54 @@ class ComparisonTest {
   private void runTest(String email, boolean expected) throws Exception {
     totalTests++;
 
-    String jmail = testImplementation(jmailImpl, email, expected);
+    String jmail = testImplementation(jmailImpl, email, expected, true);
     String apache = testImplementation(apacheImpl, email, expected);
     String javaMail = testImplementation(javaMailImpl, email, expected);
     String rfc2822 = testImplementation(rfc2822Impl, email, expected);
 
-    if (email.contains("|")) email = email.replaceAll("\\|", "&#124;");
-
     email = splitEqually(email, 40).stream().map(s -> s + "</br>")
         .collect(Collectors.joining());
 
-    String expectedResult = expected ? "Valid" : "Invalid";
+    String expectedResult = expected
+        ? "<td valign=\"middle\">Valid</td>"
+        : "<td valign=\"middle\">Invalid</td>";
 
-    String s = "| " + email + " | " + expectedResult + " | "
-        + jmail + " | " + apache + " | " + javaMail + " | " + rfc2822 + " |\n";
+    String html = String.format("    <tr>\n"
+        + "      <th scope=\"row\" valign=\"middle\">%s</th>\n"
+        + "      %s\n"
+        + "      %s\n"
+        + "      %s\n"
+        + "      %s\n"
+        + "      %s\n"
+        + "    </tr>\n", email, expectedResult, jmail, apache, javaMail, rfc2822);
 
-    Files.write(resultsFile, s.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+    Files.write(htmlFile, html.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
   }
 
   private String testImplementation(Implementation impl,
                                     String email,
                                     boolean expected) {
-    Predicate<String> predicate = impl.predicate;
+    return testImplementation(impl, email, expected, false);
+  }
 
-    boolean result = predicate.test(email);
+  private String testImplementation(Implementation impl,
+                                    String email,
+                                    boolean expected, boolean jmail) {
+    Predicate<String> predicate = impl.predicate;
 
     StringBuilder str = new StringBuilder();
 
-    if (result == expected) {
-      str.append("✅");
+    if (predicate.test(email) == expected) {
+      String successString = expected ? "Valid" : "Invalid";
+      String dataString = jmail
+          ? "<td style=\"background-color:#56666B\" valign=\"middle\">"
+          : "<td valign=\"middle\">";
+      str.append(dataString).append(successString);
       impl.successes++;
-    } else str.append("❌");
+    } else {
+      String failureString = expected ? "Invalid" : "Valid";
+      str.append("<td style=\"background-color:#815355\" valign=\"middle\">").append(failureString);
+    }
 
     str.append("</br>");
 
@@ -150,7 +186,7 @@ class ComparisonTest {
 
     str.append("in ");
     str.append(avg);
-    str.append(" ns");
+    str.append(" ns</td>");
 
     impl.times.add(avg);
 
