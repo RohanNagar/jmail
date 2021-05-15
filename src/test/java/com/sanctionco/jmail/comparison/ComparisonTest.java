@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -32,13 +33,13 @@ class ComparisonTest {
 
   private int totalTests = 0;
 
-  private final Implementation jmailImpl = new Implementation(JMail::isValid);
+  private final Implementation jmailImpl = new Implementation("JMail", JMail::isValid);
 
-  private final Implementation apacheImpl = new Implementation(
+  private final Implementation apacheImpl = new Implementation("Apache Commons",
       org.apache.commons.validator.routines.EmailValidator
           .getInstance(true, true)::isValid);
 
-  private final Implementation javaMailImpl = new Implementation(s -> {
+  private final Implementation javaMailImpl = new Implementation("Javax Mail", s -> {
     try {
       new InternetAddress(s).validate();
     } catch (Exception e) {
@@ -48,8 +49,11 @@ class ComparisonTest {
     return true;
   });
 
-  private final Implementation rfc2822Impl = new Implementation(
+  private final Implementation rfc2822Impl = new Implementation("email-rfc2822",
       s -> EmailAddressValidator.isValid(s, EmailAddressCriteria.RFC_COMPLIANT));
+
+  private final List<Implementation> implementations = Arrays
+      .asList(jmailImpl, apacheImpl, javaMailImpl, rfc2822Impl);
 
   @BeforeAll
   @SuppressWarnings({"unused", "BeforeOrAfterWithIncorrectSignature"})
@@ -57,20 +61,23 @@ class ComparisonTest {
     Files.write(htmlFile, "".getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-    Files.write(htmlFile,
-        ("<table class=\"table table-dark table-borderless\">\n"
+    StringBuilder heading = new StringBuilder()
+        .append("<table class=\"table table-dark table-borderless\">\n"
             + "  <thead>\n"
             + "    <tr>\n"
             + "      <th scope=\"col\">Email Address</th>\n"
-            + "      <th scope=\"col\">Expected</th>\n"
-            + "      <th scope=\"col\">JMail</th>\n"
-            + "      <th scope=\"col\">Apache Commons</th>\n"
-            + "      <th scope=\"col\">Javax Mail</th>\n"
-            + "      <th scope=\"col\">email-rfc2822</th>\n"
-            + "    </tr>\n"
-            + "  </thead>\n"
-            + "  <tbody>")
-            .getBytes(StandardCharsets.UTF_8),
+            + "      <th scope=\"col\">Expected</th>\n");
+
+    implementations.stream()
+        .map(Implementation::getHeading)
+        .forEach(heading::append);
+
+    heading.append("    </tr>\n"
+        + "  </thead>\n"
+        + "  <tbody>");
+
+    Files.write(htmlFile,
+        heading.toString().getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.APPEND);
   }
 
@@ -205,12 +212,18 @@ class ComparisonTest {
   }
 
   private static final class Implementation {
+    private final String name;
     private final Predicate<String> predicate;
     private final List<Double> times = new ArrayList<>();
     private int successes = 0;
 
-    public Implementation(Predicate<String> predicate) {
+    public Implementation(String name, Predicate<String> predicate) {
+      this.name = name;
       this.predicate = predicate;
+    }
+
+    String getHeading() {
+      return "      <th scope=\"col\">" + name + "</th>\n";
     }
 
     private Double average() {
