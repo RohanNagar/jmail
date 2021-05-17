@@ -33,13 +33,16 @@ class ComparisonTest {
 
   private int totalTests = 0;
 
-  private final Implementation jmailImpl = new Implementation("JMail", JMail::isValid);
+  private final Implementation jmailImpl = new Implementation("JMail",
+      "https://www.rohannagar.com/jmail/", JMail::isValid);
 
   private final Implementation apacheImpl = new Implementation("Apache Commons",
+      "https://commons.apache.org/proper/commons-validator/",
       org.apache.commons.validator.routines.EmailValidator
           .getInstance(true, true)::isValid);
 
-  private final Implementation javaMailImpl = new Implementation("Javax Mail", s -> {
+  private final Implementation javaMailImpl = new Implementation("Javax Mail",
+      "https://javaee.github.io/javamail/", s -> {
     try {
       new InternetAddress(s).validate();
     } catch (Exception e) {
@@ -50,6 +53,7 @@ class ComparisonTest {
   });
 
   private final Implementation rfc2822Impl = new Implementation("email-rfc2822",
+      "https://github.com/bbottema/email-rfc2822-validator",
       s -> EmailAddressValidator.isValid(s, EmailAddressCriteria.RFC_COMPLIANT));
 
   private final List<Implementation> implementations = Arrays
@@ -84,28 +88,21 @@ class ComparisonTest {
   @AfterAll
   @SuppressWarnings({"unused", "BeforeOrAfterWithIncorrectSignature"})
   void addTotals() throws Exception {
-    String html = String.format("    <tr>\n"
-        + "      <th scope=\"row\">Totals</th>\n"
-        + "      <td>%s</td>\n"
-        + "      <td>%s</td>\n"
-        + "      <td>%s</td>\n"
-        + "      <td>%s</td>\n"
-        + "      <td>%s</td>\n"
-        + "    </tr>\n",
-        totalTests + "/" + totalTests,
-        jmailImpl.successes + "/" + totalTests + "</br>"
-            + "Average Time: " + jmailImpl.average() + " ns",
-        apacheImpl.successes + "/" + totalTests + "</br>"
-            + "Average Time: " + apacheImpl.average() + " ns",
-        javaMailImpl.successes + "/" + totalTests + "</br>"
-            + "Average Time: " + javaMailImpl.average() + " ns",
-        rfc2822Impl.successes + "/" + totalTests + "</br>"
-            + "Average Time: " + rfc2822Impl.average() + " ns");
+    StringBuilder totals = new StringBuilder().append("    <tr>\n"
+        + "      <th scope=\"row\">Totals</th>\n");
 
-    Files.write(htmlFile, html.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+    totals.append("      <td>").append(totalTests).append('/').append(totalTests).append("</td>\n");
+
+    implementations.stream()
+        .map(impl -> impl.getTotal(totalTests))
+        .forEach(totals::append);
 
     Files.write(htmlFile,
-        ("  </tbody>\n</table>").getBytes(StandardCharsets.UTF_8),
+        totals.toString().getBytes(StandardCharsets.UTF_8),
+        StandardOpenOption.APPEND);
+
+    Files.write(htmlFile,
+        "  </tbody>\n</table>".getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.APPEND);
   }
 
@@ -126,37 +123,29 @@ class ComparisonTest {
   private void runTest(String email, boolean expected) throws Exception {
     totalTests++;
 
-    String jmail = testImplementation(jmailImpl, email, expected, true);
-    String apache = testImplementation(apacheImpl, email, expected);
-    String javaMail = testImplementation(javaMailImpl, email, expected);
-    String rfc2822 = testImplementation(rfc2822Impl, email, expected);
-
-    email = splitEqually(email, 40).stream().map(s -> s + "</br>")
-        .collect(Collectors.joining());
-
     String expectedResult = expected
         ? "<td valign=\"middle\">Valid</td>"
         : "<td valign=\"middle\">Invalid</td>";
 
-    String html = String.format("    <tr>\n"
-        + "      <th scope=\"row\" valign=\"middle\">%s</th>\n"
-        + "      %s\n"
-        + "      %s\n"
-        + "      %s\n"
-        + "      %s\n"
-        + "      %s\n"
-        + "    </tr>\n", email, expectedResult, jmail, apache, javaMail, rfc2822);
+    StringBuilder result = new StringBuilder()
+        .append("    <tr>\n      <th scope=\"row\" valign=\"middle\">")
+        .append(splitEqually(email, 40).stream().map(s -> s + "</br>")
+            .collect(Collectors.joining()))
+        .append("</th>\n")
+        .append("      ").append(expectedResult).append("\n");
 
-    Files.write(htmlFile, html.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+    implementations.forEach(impl -> {
+      String implRes = impl.runTest(email, expected);
+
+      result.append("      ").append(implRes).append("\n");
+    });
+
+    Files.write(htmlFile,
+        result.toString().getBytes(StandardCharsets.UTF_8),
+        StandardOpenOption.APPEND);
   }
 
-  private String testImplementation(Implementation impl,
-                                    String email,
-                                    boolean expected) {
-    return testImplementation(impl, email, expected, false);
-  }
-
-  private String testImplementation(Implementation impl,
+  private static String testImplementation(Implementation impl,
                                     String email,
                                     boolean expected, boolean jmail) {
     Predicate<String> predicate = impl.predicate;
@@ -213,17 +202,32 @@ class ComparisonTest {
 
   private static final class Implementation {
     private final String name;
+    private final String url;
     private final Predicate<String> predicate;
     private final List<Double> times = new ArrayList<>();
     private int successes = 0;
 
-    public Implementation(String name, Predicate<String> predicate) {
+    public Implementation(String name, String url, Predicate<String> predicate) {
       this.name = name;
+      this.url = url;
       this.predicate = predicate;
     }
 
     String getHeading() {
-      return "      <th scope=\"col\">" + name + "</th>\n";
+      return "      <th scope=\"col\"><a href=\"" + url + "\">" + name + "</a></th>\n";
+    }
+
+    String getTotal(int totalTests) {
+      return "      <td>" + successes + "/" + totalTests
+          + "</br>Average Time: " + average() + " ns</td>\n";
+    }
+
+    String runTest(String email, boolean expected) {
+      if (name.equals("JMail")) {
+        return ComparisonTest.testImplementation(this, email, expected, true);
+      }
+
+      return ComparisonTest.testImplementation(this, email, expected, false);
     }
 
     private Double average() {
