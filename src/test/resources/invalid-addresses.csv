@@ -153,3 +153,6 @@ Unicode NULL \␀@char.com
 first."".last@test.org
 ""@test.org
 ()@test.com
+test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames
+test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com
+invalid@[1]
