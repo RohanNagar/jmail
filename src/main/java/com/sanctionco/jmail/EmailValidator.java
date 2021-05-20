@@ -1,8 +1,7 @@
 package com.sanctionco.jmail;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -26,14 +25,21 @@ import java.util.stream.Collectors;
  * </pre>
  */
 public class EmailValidator {
-  private final List<Predicate<Email>> validationPredicates;
+  // Define some predicates here so that when adding them to the set of validation
+  // predicates we protect against adding them multiple times.
+  private static final Predicate<Email> DISALLOW_IP_DOMAIN_PREDICATE
+      = ValidationRules::disallowIpDomain;
+  private static final Predicate<Email> REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE
+      = ValidationRules::requireTopLevelDomain;
 
-  EmailValidator(List<Predicate<Email>> validationPredicates) {
+  private final Set<Predicate<Email>> validationPredicates;
+
+  EmailValidator(Set<Predicate<Email>> validationPredicates) {
     this.validationPredicates = validationPredicates;
   }
 
   EmailValidator() {
-    this(new ArrayList<>());
+    this(new HashSet<>());
   }
 
   /**
@@ -61,7 +67,7 @@ public class EmailValidator {
    * @return this, for chaining
    */
   public EmailValidator disallowIpDomain() {
-    validationPredicates.add(ValidationRules::disallowIpDomain);
+    validationPredicates.add(DISALLOW_IP_DOMAIN_PREDICATE);
     return this;
   }
 
@@ -72,7 +78,7 @@ public class EmailValidator {
    * @return this, for chaining
    */
   public EmailValidator requireTopLevelDomain() {
-    validationPredicates.add(ValidationRules::requireTopLevelDomain);
+    validationPredicates.add(REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE);
     return this;
   }
 
@@ -138,6 +144,12 @@ public class EmailValidator {
     return Optional.empty();
   }
 
+  /**
+   * Test the given email against all configured validation predicates.
+   *
+   * @param email the email to test
+   * @return true if it passes the predicates, false otherwise
+   */
   private boolean passesPredicates(Email email) {
     return validationPredicates.stream()
         .allMatch(rule -> rule.test(email));

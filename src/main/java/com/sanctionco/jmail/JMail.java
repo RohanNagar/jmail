@@ -30,7 +30,9 @@ public class JMail {
   }
 
   /**
-   * Returns a new instance of {@link EmailValidator} with stricter rules.
+   * Returns a new instance of {@link EmailValidator} with stricter rules applied
+   * to the validator. The following rules are applied and do not need to be
+   * added:
    *
    * <ul>
    *   <li>The email cannot have an IP Address domain
@@ -102,9 +104,6 @@ public class JMail {
    * <li>Quoted strings in the local-part either start at the beginning or are preceded by a '.'
    * <li>Ensures that any comments only exist in allowed locations
    * </ol>
-   *
-   * <p>Note: Internationalized domain names are supported. Domains are converted to punycode
-   *    before checking their characters.
    *
    * @param email the email to parse
    * @return an {@link Optional} containing the parsed {@link Email}, or empty if the email
