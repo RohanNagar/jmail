@@ -101,9 +101,10 @@
 
     $('#validate').on('click', function(event) {
         var email = $('#email').val();
+        var encoded = encodeURIComponent(email);
 
         $.get({
-            'url': "https://jmail-api.herokuapp.com/app/validate?address=" + email,
+            'url': "https://jmail-api.herokuapp.com/app/validate?address=" + encoded,
             'dataType': "jsonp",
             'complete': function(response) {
                 if (response.status === 200) {
