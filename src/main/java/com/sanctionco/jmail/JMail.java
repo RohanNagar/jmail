@@ -268,8 +268,9 @@ public class JMail {
 
         if (c != '"' && !inQuotes && !previousBackslash && mustBeQuoted) return Optional.empty();
 
-        if (!inQuotes && previousBackslash && !mustBeQuoted && c != ' ' && c != '\\')
+        if (!inQuotes && previousBackslash && !mustBeQuoted && c != ' ' && c != '\\') {
           return Optional.empty();
+        }
 
         if (inQuotes) {
           // if we are in quotes, we need to make sure that if the character requires
