@@ -24,7 +24,6 @@ Abc..123@example.com
 just"not"right@example.com
 this\ is"really"not\allowed@example.com
 first.last@sub.do,com
-first\@last@iana.org
 email@[12.34.44.56
 email@14.44.56.34]
 email@[1.1.23.5f]
@@ -82,7 +81,6 @@ first.last@[IPv6:a1::11.22.33]
 first.last@[IPv6:a1::11.22.33.44.55]
 first.last@[IPv6:a1::b211.22.33.44]
 first.last@[IPv6:a1::b2::11.22.33.44]
-abc\@def@test.org
 a@-b.com
 a@b-.com
 -@..com
@@ -92,7 +90,6 @@ test@...........com
 first.last@-xample.com
 first.last@exampl-.com
 first.last@x234567890123456789012345678901234567890123456789012345678901234.test.org
-abc\\@test.org
 abc@def@test.org
 abc\\@def@test.org
 abc\@test.org
@@ -112,7 +109,6 @@ aaa.com
 aaa@.com
 aaa@.123
 a@bar.com.
-{^c\@**Dog^}@cartoon.com
 cal(foo(bar)@iamcal.com
 cal(foo)bar)@iamcal.com
 cal(foo\)@iamcal.com
@@ -138,13 +134,9 @@ wo..oly@test.org
 pootieshoe.@test.org
 .@test.org
 Ima Fool@test.org
-phil.h\@\@ck@haacked.com
 "first\\"last"@test.org
 foo@[\1.2.3.4]
 first\last@test.org
-Abc\@def@test.org
-Fred\ Bloggs@test.org
-Joe.\\Blow@test.org
 first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno).(abc("def".ghi).mno)com(abc("def".ghi).mno)
 first(middle)last@test.org
 "Unicode NULL ␀"@char.com

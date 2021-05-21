@@ -175,7 +175,7 @@ public class JMail {
     for (int i = 0; i < size; i++) {
       char c = email.charAt(i);
 
-      if (c == '@' && !inQuotes) {
+      if (c == '@' && !inQuotes && !previousBackslash) {
         // If we already found an @ outside of quotes, fail
         if (atFound) return Optional.empty();
 
@@ -264,9 +264,12 @@ public class JMail {
 
         // If we are not in quotes, and this character is not the quote, make sure the
         // character is allowed
-        if (c != '"'
-            && !inQuotes
-            && JMail.DISALLOWED_UNQUOTED_CHARACTERS.contains(c)) return Optional.empty();
+        boolean mustBeQuoted = JMail.DISALLOWED_UNQUOTED_CHARACTERS.contains(c);
+
+        if (c != '"' && !inQuotes && !previousBackslash && mustBeQuoted) return Optional.empty();
+
+        if (!inQuotes && previousBackslash && !mustBeQuoted && c != ' ' && c != '\\')
+          return Optional.empty();
 
         if (inQuotes) {
           // if we are in quotes, we need to make sure that if the character requires
@@ -334,7 +337,7 @@ public class JMail {
         previousQuote = false;
       }
 
-      whitespace = isWhitespace(c) && !inQuotes;
+      whitespace = isWhitespace(c) && !inQuotes && !previousBackslash;
 
       if (!whitespace) {
         previousDot = c == '.';
@@ -420,7 +423,7 @@ public class JMail {
   // Set of characters that are not allowed in the local-part outside of quotes
   private static final Set<Character> DISALLOWED_UNQUOTED_CHARACTERS = Arrays
       .stream(new Character[]{
-          '\t', '(', ')', ',', ':', ';', '<', '>', '@', '[', ']', '"', '\\'
+          '\t', '(', ')', ',', ':', ';', '<', '>', '@', '[', ']', '"'
       })
       .collect(Collectors.toCollection(HashSet::new));
 

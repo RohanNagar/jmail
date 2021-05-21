@@ -112,3 +112,10 @@ first.(")middle.last(")@test.org,first.(")middle.last("),test.org
 first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com,first.last,x(1234567890123456789012345678901234567890123456789012345678901234567890).com
 user%uucp!path@berkeley.edu,user%uucp!path,berkeley.edu
 first().last@test.org,first().last,test.org
+mymail\@hello@hotmail.com,mymail\@hello,hotmail.com
+Abc\@def@test.org,Abc\@def,test.org
+Fred\ Bloggs@test.org,Fred\ Bloggs,test.org
+Joe.\\Blow@test.org,Joe.\\Blow,test.org
+{^c\@**Dog^}@cartoon.com,{^c\@**Dog^},cartoon.com
+phil.h\@\@ck@haacked.com,phil.h\@\@ck,haacked.com
+abc\\@test.org,abc\\,test.org
