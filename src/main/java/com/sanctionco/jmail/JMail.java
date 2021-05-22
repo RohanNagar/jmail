@@ -368,6 +368,12 @@ public final class JMail {
     // Check that local-part does not end with '.'
     if (localPart.charAt(localPart.length() - 1) == '.') return Optional.empty();
 
+    // Check that the final domain part does not start or end with '-'
+    if (currentDomainPart.charAt(0) == '-'
+        || currentDomainPart.charAt(currentDomainPart.length() - 1) == '-') {
+      return Optional.empty();
+    }
+
     // Ensure the last domain part (TLD) is not all numeric
     if (currentDomainPart.toString().chars().allMatch(Character::isDigit)) {
       return Optional.empty();
