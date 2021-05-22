@@ -368,9 +368,9 @@ public final class JMail {
     // Check that local-part does not end with '.'
     if (localPart.charAt(localPart.length() - 1) == '.') return Optional.empty();
 
-    // Check that the final domain part does not start or end with '-'
-    if (currentDomainPart.charAt(0) == '-'
-        || currentDomainPart.charAt(currentDomainPart.length() - 1) == '-') {
+    // Check that the final domain part does not start with '-'
+    // We already checked to make sure it doesn't end with '-'
+    if (currentDomainPart.charAt(0) == '-') {
       return Optional.empty();
     }
 
