@@ -176,6 +176,8 @@ emails with an IP address in the domain:
 JMail.validator().disallowIpDomain();
 ```
 
+> Note: `JMail.strictValidator()` includes this rule automatically.
+
 #### Require a Top Level Domain
 
 Although an email address can be a local domain name with no TLD,
@@ -184,6 +186,20 @@ your `EmailValidator` reject all emails without a TLD:
 
 ```java
 JMail.validator().requireTopLevelDomain();
+```
+
+> Note: `JMail.strictValidator()` includes this rule automatically.
+
+#### Disallow Reserved Domains
+
+As specified in [RFC 2606](https://datatracker.ietf.org/doc/html/rfc2606),
+some domains are reserved and should not be resolvable. Mail addressed to
+mailboxes in those reserved domains (and their subdomains) should be non-deliverable.
+You can require that your `EmailValidator` reject
+all emails that have a reserved domain:
+
+```java
+JMail.validator().disallowReservedDomains();
 ```
 
 #### Require a specific common Top Level Domain

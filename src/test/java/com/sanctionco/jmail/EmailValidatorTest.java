@@ -113,6 +113,28 @@ class EmailValidatorTest {
     assertTrue(validator.tryParse(email).isPresent());
   }
 
+  @ParameterizedTest(name = "{0}")
+  @ValueSource(strings = {
+      "test@domain.test", "test@domain.example", "test@domain.invalid", "test@domain.localhost",
+      "test@example.com", "test@example.org", "test@example.net", "test@sub.example.com"})
+  void disallowReservedDomainsRejects(String email) {
+    EmailValidator validator = JMail.validator().disallowReservedDomains();
+
+    assertFalse(validator.isValid(email));
+    assertFalse(validator.tryParse(email).isPresent());
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @ValueSource(strings = {
+      "test@domain.test.org", "test@domain.exmple.com", "test@domain.invalid.net",
+      "test@domain.localhost.hi", "test@sub.example.muesum", "test@example.co"})
+  void disallowReservedDomainsAllows(String email) {
+    EmailValidator validator = JMail.validator().disallowReservedDomains();
+
+    assertTrue(validator.isValid(email));
+    assertTrue(validator.tryParse(email).isPresent());
+  }
+
   @Test
   void customRuleWorks() {
     EmailValidator validator = JMail.validator()

@@ -1,5 +1,8 @@
 package com.sanctionco.jmail;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -7,6 +10,15 @@ import java.util.Set;
  * {@link EmailValidator}.
  */
 public class ValidationRules {
+  // Set of reserved TLDs according to RFC 2606, section 2
+  // https://datatracker.ietf.org/doc/html/rfc2606
+  private static final Set<String> reservedTopLevelDomains = new HashSet<>(
+      Arrays.asList("test", "invalid", "example", "localhost"));
+
+  // Set of reserved second level domains according to RFC 2606, section 3
+  // Reserved second level domains are all "example.*" The values for * are defined here.
+  private static final Set<TopLevelDomain> reservedExampleTlds = new HashSet<>(
+      Arrays.asList(TopLevelDomain.DOT_COM, TopLevelDomain.DOT_NET, TopLevelDomain.DOT_ORG));
 
   /**
    * Rejects an email that has an IP address as the domain. For example, the address
@@ -41,5 +53,42 @@ public class ValidationRules {
    */
   public static boolean requireOnlyTopLevelDomains(Email email, Set<TopLevelDomain> allowed) {
     return allowed.contains(email.topLevelDomain());
+  }
+
+  /**
+   * Rejects an email that has a reserved domain according to
+   * <a href="https://datatracker.ietf.org/doc/html/rfc2606">RFC 2606</a>. The reserved domains
+   * are:
+   *
+   * <ul>
+   *   <li>{@code .test}
+   *   <li>{@code .example}
+   *   <li>{@code .invalid}
+   *   <li>{@code .localhost}
+   *   <li>{@code example.com}
+   *   <li>{@code example.org}
+   *   <li>{@code example.net}
+   * </ul>
+   *
+   * @param email the email to validate
+   * @return true if this email does not have a reserved domain, or false if it does
+   */
+  public static boolean disallowReservedDomains(Email email) {
+    List<String> domainParts = email.domainParts();
+
+    // Check the top level domain to see if it is reserved, if so return false
+    if (reservedTopLevelDomains.contains(domainParts.get(domainParts.size() - 1))) {
+      return false;
+    }
+
+    // Check the second level domain to see if it is example.*, where * is contained in
+    // the reservedExampleTlds set
+    if (domainParts.size() > 1
+        && "example".equals(domainParts.get(domainParts.size() - 2))
+        && reservedExampleTlds.contains(email.topLevelDomain())) {
+      return false;
+    }
+
+    return true;
   }
 }

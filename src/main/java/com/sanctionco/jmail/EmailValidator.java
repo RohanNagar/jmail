@@ -31,6 +31,8 @@ public class EmailValidator {
       = ValidationRules::disallowIpDomain;
   private static final Predicate<Email> REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE
       = ValidationRules::requireTopLevelDomain;
+  private static final Predicate<Email> DISALLOW_RESERVED_DOMAINS_PREDICATE
+      = ValidationRules::disallowReservedDomains;
 
   private final Set<Predicate<Email>> validationPredicates;
 
@@ -79,6 +81,17 @@ public class EmailValidator {
    */
   public EmailValidator requireTopLevelDomain() {
     validationPredicates.add(REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE);
+    return this;
+  }
+
+  /**
+   * Add the {@link ValidationRules#disallowReservedDomains(Email)} rule to this validator.
+   * Email addresses that have a reserved domain according to RFC 2606 will fail validation.
+   *
+   * @return this, for chaining
+   */
+  public EmailValidator disallowReservedDomains() {
+    validationPredicates.add(DISALLOW_RESERVED_DOMAINS_PREDICATE);
     return this;
   }
 
