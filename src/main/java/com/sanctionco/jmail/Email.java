@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Represents an email address.
  */
-public class Email {
+public final class Email {
   private final String localPart;
   private final String localPartWithoutComments;
   private final String domain;
@@ -136,7 +136,7 @@ public class Email {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (!(o instanceof Email)) return false;
     Email email = (Email) o;
     return localPart.equals(email.localPart)
         && domain.equals(email.domain);

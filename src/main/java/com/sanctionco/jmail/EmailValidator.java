@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  *     .tryParse("test@test.com");
  * </pre>
  */
-public class EmailValidator {
+public final class EmailValidator {
   // Define some predicates here so that when adding them to the set of validation
   // predicates we protect against adding them multiple times.
   private static final Predicate<Email> DISALLOW_IP_DOMAIN_PREDICATE

@@ -9,7 +9,9 @@ import java.util.Set;
  * Provides common email validation rules that can be added to an
  * {@link EmailValidator}.
  */
-public class ValidationRules {
+public final class ValidationRules {
+  private ValidationRules() {}
+
   // Set of reserved TLDs according to RFC 2606, section 2
   // https://datatracker.ietf.org/doc/html/rfc2606
   private static final Set<String> reservedTopLevelDomains = new HashSet<>(
