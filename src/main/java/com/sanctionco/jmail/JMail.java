@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
  * Provides static methods to validate an email address
  * using standard validation, or to create a new {@link EmailValidator}.
  */
-public class JMail {
+public final class JMail {
+  private JMail() {}
 
   /**
    * Returns a new instance of {@link EmailValidator}. In general,

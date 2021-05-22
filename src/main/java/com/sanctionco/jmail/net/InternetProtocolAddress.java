@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
  *
  * <p>Note: IP addresses with prefixes are not currently supported.
  */
-public class InternetProtocolAddress {
+public final class InternetProtocolAddress {
+  private InternetProtocolAddress() {}
+
   private static final String IPV6_PREFIX = "IPv6:";
 
   // Set of allowed characters in a HEX number
