@@ -13,7 +13,12 @@ import java.util.stream.Collectors;
  * <p>Note: IP addresses with prefixes are not currently supported.
  */
 public final class InternetProtocolAddress {
-  private InternetProtocolAddress() {}
+
+  /**
+   * Private constructor to prevent instantiation.
+   */
+  private InternetProtocolAddress() {
+  }
 
   private static final String IPV6_PREFIX = "IPv6:";
 

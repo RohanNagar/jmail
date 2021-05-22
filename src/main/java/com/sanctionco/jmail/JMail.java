@@ -16,7 +16,12 @@ import java.util.stream.Collectors;
  * using standard validation, or to create a new {@link EmailValidator}.
  */
 public final class JMail {
-  private JMail() {}
+
+  /**
+   * Private constructor to prevent instantiation.
+   */
+  private JMail() {
+  }
 
   /**
    * Returns a new instance of {@link EmailValidator}. In general,
