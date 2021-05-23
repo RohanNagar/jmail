@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SuppressWarnings("JUnit5MalformedParameterized")
@@ -46,5 +47,10 @@ class TopLevelDomainTest {
     assertEquals("?", TopLevelDomain.fromString("?").stringValue());
 
     assertNotEquals(TopLevelDomain.fromString("unknown"), TopLevelDomain.fromString("?"));
+  }
+
+  @Test
+  void ensureEmailComparesToNull() {
+    assertNotEquals(TopLevelDomain.fromString("abc"), null);
   }
 }
