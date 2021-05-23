@@ -1,6 +1,5 @@
 package com.sanctionco.jmail;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SuppressWarnings("JUnit5MalformedParameterized")
 class TopLevelDomainTest {
@@ -21,9 +22,14 @@ class TopLevelDomainTest {
 
   @SuppressWarnings("unused")
   Stream<Arguments> provideArgs() {
-    return Arrays.stream(TopLevelDomain.values())
-        .filter(tld -> !tld.equals(TopLevelDomain.NONE) && !tld.equals(TopLevelDomain.OTHER))
-        .map(tld -> Arguments.of(tld, tld.stringValue()));
+    return Stream.of(
+            TopLevelDomain.DOT_COM,
+            TopLevelDomain.DOT_EDU,
+            TopLevelDomain.DOT_GOV,
+            TopLevelDomain.DOT_INT,
+            TopLevelDomain.DOT_MIL,
+            TopLevelDomain.DOT_NET
+    ).map(tld -> Arguments.of(tld, tld.stringValue()));
   }
 
   @Test
@@ -33,8 +39,18 @@ class TopLevelDomainTest {
   }
 
   @Test
-  void ensureOtherWorks() {
-    assertEquals(TopLevelDomain.OTHER, TopLevelDomain.fromString("unknown"));
-    assertEquals(TopLevelDomain.OTHER, TopLevelDomain.fromString("?"));
+  void ensureOtherTldWork() {
+    assertEquals(TopLevelDomain.fromString("unknown"), TopLevelDomain.fromString("unknown"));
+    assertEquals(TopLevelDomain.fromString("?"), TopLevelDomain.fromString("?"));
+
+    assertEquals("unknown", TopLevelDomain.fromString("unknown").stringValue());
+    assertEquals("?", TopLevelDomain.fromString("?").stringValue());
+
+    assertNotEquals(TopLevelDomain.fromString("unknown"), TopLevelDomain.fromString("?"));
+  }
+
+  @Test
+  void ensureEmailComparesToNull() {
+    assertNotEquals(TopLevelDomain.fromString("abc"), null);
   }
 }
