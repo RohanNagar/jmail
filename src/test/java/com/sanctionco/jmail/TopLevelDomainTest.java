@@ -6,10 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("JUnit5MalformedParameterized")
 class TopLevelDomainTest {
@@ -52,5 +54,30 @@ class TopLevelDomainTest {
   @Test
   void ensureEmailComparesToNull() {
     assertNotEquals(TopLevelDomain.fromString("abc"), null);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+      ".", "-com", "com-", "test.invalid.tld", "1111",
+      "x234567890123456789012345678901234567890123456789012345678901234"})
+  void ensureFromStringRejectsInvalidTlds(String tld) {
+    assertThrows(InvalidTopLevelDomainException.class, () -> TopLevelDomain.fromString(tld));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+      "c-om", "co-m", "11y1", "a", ".a",
+      "x23456789012345678901234567890123456789012345678901234567890123"})
+  void ensureFromStringAllowsNearlyInvalidTlds(String tld) {
+    assertDoesNotThrow(() -> TopLevelDomain.fromString(tld));
+  }
+
+  @Test
+  void ensureFromStringAllowsLeadingDot() {
+    assertDoesNotThrow(() -> TopLevelDomain.fromString(".com"));
+    assertEquals(TopLevelDomain.DOT_COM, TopLevelDomain.fromString(".com"));
+
+    assertDoesNotThrow(() -> TopLevelDomain.fromString(".net"));
+    assertEquals(TopLevelDomain.DOT_NET, TopLevelDomain.fromString(".net"));
   }
 }

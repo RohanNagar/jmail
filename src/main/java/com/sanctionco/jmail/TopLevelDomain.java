@@ -1,12 +1,5 @@
 package com.sanctionco.jmail;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 /**
  * Enumerates known common top level domains.
  */
@@ -22,7 +15,6 @@ public final class TopLevelDomain {
   public static final TopLevelDomain DOT_MIL = new TopLevelDomain("mil");
 
   // To use when an email address does not have a top level domain
-
   public static final TopLevelDomain NONE = new TopLevelDomain("");
 
   private final String tld;
@@ -39,12 +31,17 @@ public final class TopLevelDomain {
    * Get the {@code TopLevelDomain} that represents the given string.
    *
    * @param tld the string to turn into a {@code TopLevelDomain}
-   * @return a {@code TopLevelDomain}, or {@code TopLevelDomain.NONE} if null or empty TLD is given.
+   * @return a {@code TopLevelDomain}, or {@code TopLevelDomain.NONE} if the input is null or empty
+   * @throws InvalidTopLevelDomainException if the provided string is an invalid top level domain
    */
   public static TopLevelDomain fromString(String tld) {
     if (tld == null || tld.isEmpty()) return NONE;
 
-    return new TopLevelDomain(tld);
+    String dotless = tld.startsWith(".") ? tld.substring(1) : tld;
+
+    if (!isValidTopLevelDomain(dotless)) throw new InvalidTopLevelDomainException();
+
+    return new TopLevelDomain(dotless);
   }
 
   @Override
@@ -62,10 +59,28 @@ public final class TopLevelDomain {
 
   @Override
   public String toString() {
-    return "TopLevelDomain["
-            + "tld='"
-            + tld
-            + '\''
-            + ']';
+    return "TopLevelDomain[tld='" + tld + "']";
+  }
+
+  private static boolean isValidTopLevelDomain(String domain) {
+    // TLD cannot be more than 63 characters or empty
+    if (domain.length() > 63 || domain.length() == 0) return false;
+
+    // TLD cannot start or end with '-'
+    if (domain.startsWith("-") || domain.endsWith("-")) return false;
+
+    boolean isAllNumeric = true;
+
+    for (int i = 0, size = domain.length(); i < size; i++) {
+      char c = domain.charAt(i);
+
+      // TLD cannot contain a dot
+      if (c == '.') return false;
+
+      if (!Character.isDigit(c)) isAllNumeric = false;
+    }
+
+    // TLD cannot be all numeric
+    return !isAllNumeric;
   }
 }
