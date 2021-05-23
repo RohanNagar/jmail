@@ -15,9 +15,9 @@ public final class TopLevelDomain {
   // https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#Original_top-level_domains
   public static final TopLevelDomain DOT_COM = new TopLevelDomain("com");
   public static final TopLevelDomain DOT_ORG = new TopLevelDomain("org");
-  public static final TopLevelDomain DOT_NET = new TopLevelDomain("int");
-  public static final TopLevelDomain DOT_INT = new TopLevelDomain("edu");
-  public static final TopLevelDomain DOT_EDU = new TopLevelDomain("com");
+  public static final TopLevelDomain DOT_NET = new TopLevelDomain("net");
+  public static final TopLevelDomain DOT_INT = new TopLevelDomain("int");
+  public static final TopLevelDomain DOT_EDU = new TopLevelDomain("edu");
   public static final TopLevelDomain DOT_GOV = new TopLevelDomain("gov");
   public static final TopLevelDomain DOT_MIL = new TopLevelDomain("mil");
 
@@ -57,7 +57,7 @@ public final class TopLevelDomain {
 
   @Override
   public int hashCode() {
-    return Objects.hash(tld);
+    return this.tld.hashCode();
   }
 
   @Override
