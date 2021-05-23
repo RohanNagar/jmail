@@ -127,7 +127,7 @@ class EmailValidatorTest {
   @ParameterizedTest(name = "{0}")
   @ValueSource(strings = {
       "test@domain.test.org", "test@domain.exmple.com", "test@domain.invalid.net",
-      "test@domain.localhost.hi", "test@sub.example.muesum", "test@example.co"})
+      "test@domain.localhost.hi", "test@sub.example.muesum", "test@example.co", "hello@world"})
   void disallowReservedDomainsAllows(String email) {
     EmailValidator validator = JMail.validator().disallowReservedDomains();
 

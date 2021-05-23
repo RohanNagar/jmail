@@ -148,3 +148,5 @@ first."".last@test.org
 test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames
 test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com
 invalid@[1]
+ä📧@-foo
+ä📧@foo-

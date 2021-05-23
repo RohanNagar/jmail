@@ -16,7 +16,12 @@ import java.util.stream.Collectors;
  * using standard validation, or to create a new {@link EmailValidator}.
  */
 public final class JMail {
-  private JMail() {}
+
+  /**
+   * Private constructor to prevent instantiation.
+   */
+  private JMail() {
+  }
 
   /**
    * Returns a new instance of {@link EmailValidator}. In general,
@@ -362,6 +367,12 @@ public final class JMail {
 
     // Check that local-part does not end with '.'
     if (localPart.charAt(localPart.length() - 1) == '.') return Optional.empty();
+
+    // Check that the final domain part does not start with '-'
+    // We already checked to make sure it doesn't end with '-'
+    if (currentDomainPart.charAt(0) == '-') {
+      return Optional.empty();
+    }
 
     // Ensure the last domain part (TLD) is not all numeric
     if (currentDomainPart.toString().chars().allMatch(Character::isDigit)) {

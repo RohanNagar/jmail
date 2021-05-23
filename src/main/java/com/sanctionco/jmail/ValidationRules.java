@@ -10,7 +10,12 @@ import java.util.Set;
  * {@link EmailValidator}.
  */
 public final class ValidationRules {
-  private ValidationRules() {}
+
+  /**
+   * Private constructor to prevent instantiation.
+   */
+  private ValidationRules() {
+  }
 
   // Set of reserved TLDs according to RFC 2606, section 2
   // https://datatracker.ietf.org/doc/html/rfc2606
