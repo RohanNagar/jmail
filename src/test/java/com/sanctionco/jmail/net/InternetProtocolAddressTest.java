@@ -1,29 +1,29 @@
 package com.sanctionco.jmail.net;
 
-import java.util.Optional;
-
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 class InternetProtocolAddressTest {
+  private final Condition<String> valid = new Condition<>(
+      InternetProtocolAddress::isValid, "valid");
+
+  private final Condition<String> invalid = new Condition<>(
+      ip -> !InternetProtocolAddress.isValid(ip), "invalid");
 
   @ParameterizedTest(name = "{0}")
   @ValueSource(strings = {"1.2.3.4", "0.0.0.0", "12.34.56.78", "255.255.255.255", "0.255.1.255"})
   void testValidIpv4Address(String ip) {
-    Optional<String> result = InternetProtocolAddress.validate(ip);
+    assertThat(InternetProtocolAddress.validate(ip))
+        .isPresent()
+        .get().isEqualTo(ip);
 
-    assertTrue(result.isPresent());
-    assertEquals(ip, result.get());
-
-    // Validate helper methods
-    assertTrue(InternetProtocolAddress.isValid(ip));
-    assertDoesNotThrow(() -> InternetProtocolAddress.enforceValid(ip));
+    assertThat(ip).is(valid);
+    assertThatNoException().isThrownBy(() -> InternetProtocolAddress.enforceValid(ip));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -31,13 +31,12 @@ class InternetProtocolAddressTest {
       "1.2.3", "1.2.3.", "1.2.3.4.5", "256.255.255.255", "255.4.6.256", "notanip", "1234.1.2.3",
       "-1.2.3.4"})
   void testInvalidIpv4Address(String ip) {
-    Optional<String> result = InternetProtocolAddress.validate(ip);
+    assertThat(InternetProtocolAddress.validate(ip))
+        .isNotPresent();
 
-    assertFalse(result.isPresent());
-
-    // Validate helper methods
-    assertFalse(InternetProtocolAddress.isValid(ip));
-    assertThrows(InvalidAddressException.class, () -> InternetProtocolAddress.enforceValid(ip));
+    assertThat(ip).is(invalid);
+    assertThatExceptionOfType(InvalidAddressException.class)
+        .isThrownBy(() -> InternetProtocolAddress.enforceValid(ip));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -57,14 +56,12 @@ class InternetProtocolAddressTest {
       "IPv6:::1234:5678:1.2.3.4",
       "IPv6:2001:db8::1234:5678:5.6.7.8"})
   void testValidIpv6Address(String ip) {
-    Optional<String> result = InternetProtocolAddress.validate(ip);
+    assertThat(InternetProtocolAddress.validate(ip))
+        .isPresent()
+        .get().isEqualTo(ip);
 
-    assertTrue(result.isPresent());
-    assertEquals(ip, result.get());
-
-    // Validate helper methods
-    assertTrue(InternetProtocolAddress.isValid(ip));
-    assertDoesNotThrow(() -> InternetProtocolAddress.enforceValid(ip));
+    assertThat(ip).is(valid);
+    assertThatNoException().isThrownBy(() -> InternetProtocolAddress.enforceValid(ip));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -78,12 +75,11 @@ class InternetProtocolAddressTest {
       "notanip"
   })
   void testInvalidIpv6Address(String ip) {
-    Optional<String> result = InternetProtocolAddress.validate(ip);
+    assertThat(InternetProtocolAddress.validate(ip))
+        .isNotPresent();
 
-    assertFalse(result.isPresent());
-
-    // Validate helper methods
-    assertFalse(InternetProtocolAddress.isValid(ip));
-    assertThrows(InvalidAddressException.class, () -> InternetProtocolAddress.enforceValid(ip));
+    assertThat(ip).is(invalid);
+    assertThatExceptionOfType(InvalidAddressException.class)
+        .isThrownBy(() -> InternetProtocolAddress.enforceValid(ip));
   }
 }

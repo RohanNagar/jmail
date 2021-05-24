@@ -3,22 +3,21 @@ package com.sanctionco.jmail;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 class JMailTest {
+  private final Condition<String> valid = new Condition<>(JMail::isValid, "valid");
+  private final Condition<String> invalid = new Condition<>(e -> !JMail.isValid(e), "invalid");
 
   @ParameterizedTest(name = "{0}")
   @MethodSource({
@@ -42,20 +41,16 @@ class JMailTest {
         ? TopLevelDomain.fromString(expectedParts.get(expectedParts.size() - 1))
         : TopLevelDomain.NONE;
 
-    Optional<Email> parsed = JMail.tryParse(email);
+    assertThat(JMail.tryParse(email))
+        .isPresent().get()
+        .hasToString(email)
+        .returns(localPart, Email::localPart)
+        .returns(expectedDomain, Email::domain)
+        .returns(expectedParts, Email::domainParts)
+        .returns(expectedTld, Email::topLevelDomain);
 
-    assertTrue(parsed.isPresent());
-
-    assertAll("Created Email object has correct properties",
-        () -> assertEquals(email, parsed.get().toString()),
-        () -> assertEquals(localPart, parsed.get().localPart()),
-        () -> assertEquals(expectedDomain, parsed.get().domain()),
-        () -> assertEquals(expectedParts, parsed.get().domainParts()),
-        () -> assertEquals(expectedTld, parsed.get().topLevelDomain()));
-
-    assertAll("Helper methods are correct",
-        () -> assertTrue(JMail.isValid(email)),
-        () -> assertDoesNotThrow(() -> JMail.enforceValid(email)));
+    assertThat(email).is(valid);
+    assertThatNoException().isThrownBy(() -> JMail.enforceValid(email));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -64,31 +59,27 @@ class JMailTest {
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidWhitespaceEmails"})
   @CsvFileSource(resources = "/invalid-addresses.csv", delimiter = '\u007F')
   void ensureInvalidFails(String email) {
-    Optional<Email> parsed = JMail.tryParse(email);
+    assertThat(JMail.tryParse(email)).isNotPresent();
 
-    assertFalse(parsed.isPresent());
-
-    assertAll("Helper methods are correct",
-        () -> assertFalse(JMail.isValid(email)),
-        () -> assertThrows(InvalidEmailException.class, () -> JMail.enforceValid(email)));
+    assertThat(email).is(invalid);
+    assertThatExceptionOfType(InvalidEmailException.class)
+        .isThrownBy(() -> JMail.enforceValid(email));
   }
 
   @Test
   void tryParseSetsCommentFields() {
     String email = "test(hello)@(world)example.com";
 
-    Optional<Email> parsed = JMail.tryParse(email);
-
-    assertTrue(parsed.isPresent());
-
-    assertAll("The email with comment is correct",
-        () -> assertEquals("test(hello)", parsed.get().localPart()),
-        () -> assertEquals("test", parsed.get().localPartWithoutComments()),
-        () -> assertEquals("(world)example.com", parsed.get().domain()),
-        () -> assertEquals("example.com", parsed.get().domainWithoutComments()),
-        () -> assertEquals(Arrays.asList("hello", "world"), parsed.get().comments()),
-        () -> assertEquals(Arrays.asList("example", "com"), parsed.get().domainParts()),
-        () -> assertEquals(TopLevelDomain.DOT_COM, parsed.get().topLevelDomain()));
+    assertThat(JMail.tryParse(email))
+        .isPresent().get()
+        .hasToString(email)
+        .returns("test(hello)", Email::localPart)
+        .returns("test", Email::localPartWithoutComments)
+        .returns("(world)example.com", Email::domain)
+        .returns("example.com", Email::domainWithoutComments)
+        .returns(Arrays.asList("hello", "world"), Email::comments)
+        .returns(Arrays.asList("example", "com"), Email::domainParts)
+        .returns(TopLevelDomain.DOT_COM, Email::topLevelDomain);
   }
 
   @Test
@@ -97,9 +88,8 @@ class JMailTest {
     String ipEmail = "test@[1.2.3.4]";
     String acceptedEmail = "test@example.com";
 
-    assertAll("Strict validator works correctly",
-        () -> assertTrue(JMail.strictValidator().isValid(acceptedEmail)),
-        () -> assertFalse(JMail.strictValidator().isValid(dotlessEmail)),
-        () -> assertFalse(JMail.strictValidator().isValid(ipEmail)));
+    assertThat(JMail.strictValidator().isValid(acceptedEmail)).isTrue();
+    assertThat(JMail.strictValidator().isValid(dotlessEmail)).isFalse();
+    assertThat(JMail.strictValidator().isValid(ipEmail)).isFalse();
   }
 }
