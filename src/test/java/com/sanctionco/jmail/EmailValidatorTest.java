@@ -4,16 +4,15 @@ import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static com.sanctionco.jmail.helpers.EmailValidatorAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 class EmailValidatorTest {
 
@@ -122,34 +121,19 @@ class EmailValidatorTest {
   }
 
   private static void runValidTest(EmailValidator validator, String email) {
-    assertThat(validator).finds(email)
-        .valid() // and
-        .parsable();
+    Condition<String> valid = new Condition<>(validator::isValid, "valid");
+
+    assertThat(validator.tryParse(email)).isPresent();
+    assertThat(email).is(valid);
+    assertThatNoException().isThrownBy(() -> validator.enforceValid(email));
   }
 
   private static void runInvalidTest(EmailValidator validator, String email) {
-    assertThat(validator).finds(email)
-        .invalid() // and
-        .notParsable();
-  }
+    Condition<String> invalid = new Condition<>(e -> !validator.isValid(e), "invalid");
 
-  @Test
-  void throwsAppropriately() {
-    EmailValidator validator = JMail.validator()
-        .withRule(e -> e.domain().startsWith("test"));
-
-    String valid1 = "first.last@test.com";
-    String valid2 = "x@test.two.com";
-
-    assertAll("Valid emails pass without throwing",
-        () -> assertDoesNotThrow(() -> validator.enforceValid(valid1)),
-        () -> assertDoesNotThrow(() -> validator.enforceValid(valid2)));
-
-    String invalid1 = "first.last@tes.com";
-    String invalid2 = "first.last@example.com";
-
-    assertAll("Invalid emails fail with exception",
-        () -> assertThrows(InvalidEmailException.class, () -> validator.enforceValid(invalid1)),
-        () -> assertThrows(InvalidEmailException.class, () -> validator.enforceValid(invalid2)));
+    assertThat(validator.tryParse(email)).isNotPresent();
+    assertThat(email).is(invalid);
+    assertThatExceptionOfType(InvalidEmailException.class)
+        .isThrownBy(() -> validator.enforceValid(email));
   }
 }

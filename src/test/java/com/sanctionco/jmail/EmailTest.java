@@ -1,40 +1,30 @@
 package com.sanctionco.jmail;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 class EmailTest {
 
   @Test
   void equalsAndHashCodeTest() {
-    Email email = new Email(
-        "test", "test",
-        "domain.com", "domain.com",
-        Arrays.asList("domain", "com"), Collections.emptyList(), false);
-    Email sameEmail = new Email(
-        "test", "test",
-        "domain.com", "domain.com",
-        Arrays.asList("domain", "com"), Collections.emptyList(), false);
-    Email differentEmail = new Email(
-        "hello", "hello",
-        "world.com", "world.com",
-        Arrays.asList("world", "com"), Collections.emptyList(), false);
+    Email email = JMail.tryParse("test@domain.com")
+        .orElseGet(() -> fail("Unable to parse test email"));
+    Email sameEmail = JMail.tryParse("test@domain.com")
+        .orElseGet(() -> fail("Unable to parse test email"));
+    Email differentEmail = JMail.tryParse("hello@world.com")
+        .orElseGet(() -> fail("Unable to parse test email"));
 
-    assertAll("equals() works",
-        () -> assertEquals(email, email),
-        () -> assertEquals(email, sameEmail),
-        () -> assertNotEquals(email, new Object()),
-        () -> assertNotEquals(email, differentEmail));
+    assertThat(email)
+        .isEqualTo(email)
+        .isEqualTo(sameEmail)
+        .isNotEqualTo(new Object())
+        .isNotEqualTo(differentEmail);
 
-    assertAll("hashCode() works",
-        () -> assertEquals(email.hashCode(), email.hashCode()),
-        () -> assertEquals(email.hashCode(), sameEmail.hashCode()),
-        () -> assertNotEquals(email.hashCode(), differentEmail.hashCode()));
+    assertThat(email)
+        .hasSameHashCodeAs(email)
+        .hasSameHashCodeAs(sameEmail)
+        .doesNotHaveSameHashCodeAs(differentEmail);
   }
 }

@@ -22,8 +22,8 @@ class JMailTest {
 
   @ParameterizedTest(name = "{0}")
   @MethodSource({
-      "com.sanctionco.jmail.AdditionalEmailProvider#provideValidEmails",
-      "com.sanctionco.jmail.AdditionalEmailProvider#provideValidWhitespaceEmails"})
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidEmails",
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidWhitespaceEmails"})
   @CsvFileSource(resources = "/valid-addresses.csv", numLinesToSkip = 1)
   void ensureValidPasses(String email, String localPart, String domain) {
     // Set expected values based on if the domain is an IP address or not
@@ -60,8 +60,8 @@ class JMailTest {
 
   @ParameterizedTest(name = "{0}")
   @MethodSource({
-      "com.sanctionco.jmail.AdditionalEmailProvider#provideInvalidEmails",
-      "com.sanctionco.jmail.AdditionalEmailProvider#provideInvalidWhitespaceEmails"})
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails",
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidWhitespaceEmails"})
   @CsvFileSource(resources = "/invalid-addresses.csv", delimiter = '\u007F')
   void ensureInvalidFails(String email) {
     Optional<Email> parsed = JMail.tryParse(email);

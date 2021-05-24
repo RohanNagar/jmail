@@ -1,4 +1,4 @@
-package com.sanctionco.jmail;
+package com.sanctionco.jmail.helpers;
 
 import java.util.stream.Stream;
 
