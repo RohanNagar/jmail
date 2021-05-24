@@ -64,7 +64,7 @@ public final class TopLevelDomain {
 
   private static boolean isValidTopLevelDomain(String domain) {
     // TLD cannot be more than 63 characters or empty
-    if (domain.length() > 63 || domain.length() == 0) return false;
+    if (domain.length() > 63 || domain.isEmpty()) return false;
 
     // TLD cannot start or end with '-'
     if (domain.startsWith("-") || domain.endsWith("-")) return false;

@@ -146,11 +146,13 @@ public final class JMail {
     // email cannot be null, less than 3 chars (local-part, @, domain), or more than 320 chars
     if (email == null || email.length() < 3 || email.length() > 320) return Optional.empty();
 
+    int size = email.length();
+
     // email cannot start with '.'
-    if (email.startsWith(".")) return Optional.empty();
+    if (email.charAt(0) == '.') return Optional.empty();
 
     // email cannot end with '.' or '-'
-    if (email.endsWith(".") || email.endsWith("-")) return Optional.empty();
+    if (email.charAt(size - 1) == '.' || email.charAt(size - 1) == '-') return Optional.empty();
 
     boolean atFound = false;
     boolean inQuotes = false;
@@ -163,8 +165,6 @@ public final class JMail {
     boolean requireAtDotOrComment = false;
     boolean whitespace = false;
     boolean previousComment = false;
-
-    int size = email.length();
 
     StringBuilder localPart = new StringBuilder(size);
     StringBuilder localPartWithoutComments = new StringBuilder(size);

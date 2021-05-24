@@ -35,9 +35,8 @@ class TopLevelDomainTest {
   }
 
   @Test
-  void ensureNoneWorks() {
-    assertEquals(TopLevelDomain.NONE, TopLevelDomain.fromString(""));
-    assertEquals(TopLevelDomain.NONE, TopLevelDomain.fromString(null));
+  void ensureNullStringThrows() {
+    assertThrows(InvalidTopLevelDomainException.class, () -> TopLevelDomain.fromString(null));
   }
 
   @Test
@@ -58,7 +57,7 @@ class TopLevelDomainTest {
 
   @ParameterizedTest
   @ValueSource(strings = {
-      ".", "-com", "com-", "test.invalid.tld", "1111",
+      ".", "-com", "com-", "test.invalid.tld", "1111", "",
       "x234567890123456789012345678901234567890123456789012345678901234"})
   void ensureFromStringRejectsInvalidTlds(String tld) {
     assertThrows(InvalidTopLevelDomainException.class, () -> TopLevelDomain.fromString(tld));
