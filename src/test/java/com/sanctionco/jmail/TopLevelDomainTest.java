@@ -8,51 +8,52 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @SuppressWarnings("JUnit5MalformedParameterized")
 class TopLevelDomainTest {
 
-  @ParameterizedTest
-  @MethodSource("provideArgs")
-  void ensureFromStringWorks(TopLevelDomain tld, String from) {
-    assertEquals(tld, TopLevelDomain.fromString(from));
-  }
-
   @SuppressWarnings("unused")
   Stream<Arguments> provideArgs() {
     return Stream.of(
-            TopLevelDomain.DOT_COM,
-            TopLevelDomain.DOT_EDU,
-            TopLevelDomain.DOT_GOV,
-            TopLevelDomain.DOT_INT,
-            TopLevelDomain.DOT_MIL,
-            TopLevelDomain.DOT_NET
+        TopLevelDomain.DOT_COM,
+        TopLevelDomain.DOT_EDU,
+        TopLevelDomain.DOT_GOV,
+        TopLevelDomain.DOT_INT,
+        TopLevelDomain.DOT_MIL,
+        TopLevelDomain.DOT_NET
     ).map(tld -> Arguments.of(tld, tld.stringValue()));
   }
 
-  @Test
-  void ensureNullStringThrows() {
-    assertThrows(InvalidTopLevelDomainException.class, () -> TopLevelDomain.fromString(null));
+  @ParameterizedTest
+  @MethodSource("provideArgs")
+  void ensureFromStringWorks(TopLevelDomain tld, String from) {
+    assertThat(tld).as("check fromString construction of %s", tld)
+        .isEqualTo(TopLevelDomain.fromString(from));
   }
 
   @Test
   void ensureOtherTldWork() {
-    assertEquals(TopLevelDomain.fromString("unknown"), TopLevelDomain.fromString("unknown"));
-    assertEquals(TopLevelDomain.fromString("?"), TopLevelDomain.fromString("?"));
+    assertThat(TopLevelDomain.fromString("unknown"))
+        .isInstanceOf(TopLevelDomain.class)
+        .isEqualTo(TopLevelDomain.fromString("unknown"))
+        .returns("unknown", TopLevelDomain::stringValue);
 
-    assertEquals("unknown", TopLevelDomain.fromString("unknown").stringValue());
-    assertEquals("?", TopLevelDomain.fromString("?").stringValue());
+    assertThat(TopLevelDomain.fromString("?"))
+        .isInstanceOf(TopLevelDomain.class)
+        .isEqualTo(TopLevelDomain.fromString("?"))
+        .returns("?", TopLevelDomain::stringValue);
 
-    assertNotEquals(TopLevelDomain.fromString("unknown"), TopLevelDomain.fromString("?"));
+    assertThat(TopLevelDomain.fromString("unknown"))
+        .isNotEqualTo(TopLevelDomain.fromString("?"));
   }
 
   @Test
   void ensureEmailComparesToNull() {
-    assertNotEquals(TopLevelDomain.fromString("abc"), null);
+    assertThat(TopLevelDomain.fromString("abc"))
+        .isNotNull();
   }
 
   @ParameterizedTest
@@ -60,7 +61,15 @@ class TopLevelDomainTest {
       ".", "-com", "com-", "test.invalid.tld", "1111", "",
       "x234567890123456789012345678901234567890123456789012345678901234"})
   void ensureFromStringRejectsInvalidTlds(String tld) {
-    assertThrows(InvalidTopLevelDomainException.class, () -> TopLevelDomain.fromString(tld));
+    assertThatExceptionOfType(InvalidTopLevelDomainException.class)
+        .isThrownBy(() -> TopLevelDomain.fromString(tld));
+  }
+
+  @Test
+  @SuppressWarnings("ConstantConditions")
+  void ensureNullStringThrows() {
+    assertThatExceptionOfType(InvalidTopLevelDomainException.class)
+        .isThrownBy(() -> TopLevelDomain.fromString(null));
   }
 
   @ParameterizedTest
@@ -68,15 +77,15 @@ class TopLevelDomainTest {
       "c-om", "co-m", "11y1", "a", ".a",
       "x23456789012345678901234567890123456789012345678901234567890123"})
   void ensureFromStringAllowsNearlyInvalidTlds(String tld) {
-    assertDoesNotThrow(() -> TopLevelDomain.fromString(tld));
+    assertThatNoException().isThrownBy(() -> TopLevelDomain.fromString(tld));
   }
 
   @Test
   void ensureFromStringAllowsLeadingDot() {
-    assertDoesNotThrow(() -> TopLevelDomain.fromString(".com"));
-    assertEquals(TopLevelDomain.DOT_COM, TopLevelDomain.fromString(".com"));
+    assertThat(TopLevelDomain.fromString(".com"))
+        .isEqualTo(TopLevelDomain.DOT_COM);
 
-    assertDoesNotThrow(() -> TopLevelDomain.fromString(".net"));
-    assertEquals(TopLevelDomain.DOT_NET, TopLevelDomain.fromString(".net"));
+    assertThat(TopLevelDomain.fromString(".net"))
+        .isEqualTo(TopLevelDomain.DOT_NET);
   }
 }
