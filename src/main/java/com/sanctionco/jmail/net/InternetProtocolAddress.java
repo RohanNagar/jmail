@@ -23,12 +23,10 @@ public final class InternetProtocolAddress {
   private static final String IPV6_PREFIX = "IPv6:";
 
   // Set of allowed characters in a HEX number
-  private static final Set<Character> ALLOWED_HEX_CHARACTERS = Arrays
-      .stream(new Character[]{
+  private static final Set<Character> ALLOWED_HEX_CHARACTERS = new HashSet<>(
+      Arrays.asList(
           'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f',
-          '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-      })
-      .collect(Collectors.toCollection(HashSet::new));
+          '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
 
   /**
    * Determines if the given string is a valid IP address.

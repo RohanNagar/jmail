@@ -37,7 +37,7 @@ public final class TopLevelDomain {
   public static TopLevelDomain fromString(String tld) {
     if (tld == null || tld.isEmpty()) throw new InvalidTopLevelDomainException();
 
-    String dotless = tld.startsWith(".") ? tld.substring(1) : tld;
+    String dotless = tld.charAt(0) == '.' ? tld.substring(1) : tld;
 
     if (!isValidTopLevelDomain(dotless)) throw new InvalidTopLevelDomainException();
 
@@ -63,15 +63,19 @@ public final class TopLevelDomain {
   }
 
   private static boolean isValidTopLevelDomain(String domain) {
-    // TLD cannot be more than 63 characters or empty
-    if (domain.length() > 63 || domain.isEmpty()) return false;
+    if (domain == null || domain.isEmpty()) return false;
+
+    int size = domain.length();
+
+    // TLD cannot be more than 63 characters
+    if (size > 63) return false;
 
     // TLD cannot start or end with '-'
-    if (domain.startsWith("-") || domain.endsWith("-")) return false;
+    if (domain.charAt(0) == '-' || domain.charAt(size - 1) == '-') return false;
 
     boolean isAllNumeric = true;
 
-    for (int i = 0, size = domain.length(); i < size; i++) {
+    for (int i = 0; i < size; i++) {
       char c = domain.charAt(i);
 
       // TLD cannot contain a dot

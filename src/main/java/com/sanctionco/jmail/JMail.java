@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  * Provides static methods to validate an email address
- * using standard validation, or to create a new {@link EmailValidator}.
+ * using standard RFC validation, or to create a new {@link EmailValidator}.
  */
 public final class JMail {
 
@@ -54,7 +54,7 @@ public final class JMail {
   }
 
   /**
-   * Return true if the given email passes basic validation. See {@link #tryParse(String)} for
+   * Return true if the given email passes basic RFC validation. See {@link #tryParse(String)} for
    * details on what is required of an email within basic validation.
    *
    * @param email the email to validate
@@ -65,9 +65,9 @@ public final class JMail {
   }
 
   /**
-   * Require that the given email passes basic validation, throwing {@link InvalidEmailException}
-   * if the email is invalid. See {@link #tryParse(String)} for details on what is required
-   * of an email within basic validation.
+   * Require that the given email passes basic RFC validation, throwing
+   * {@link InvalidEmailException} if the email is invalid. See {@link #tryParse(String)} for
+   * details on what is required of an email within basic validation.
    *
    * @param email the email to validate
    * @throws InvalidEmailException if the validation fails
@@ -108,7 +108,7 @@ public final class JMail {
    * <li>Ensures that two '.' characters do not occur next to each other outside of quotes
    * <li>Ensures that the TLD of the domain is not all numeric characters
    * <li>Quoted strings in the local-part either start at the beginning or are preceded by a '.'
-   * <li>Ensures that any comments only exist in allowed locations
+   * <li>Ensures that any comments and whitespace only exist in allowed locations
    * </ol>
    *
    * @param email the email to parse
@@ -143,10 +143,13 @@ public final class JMail {
    * @return a new {@link Email} instance if valid, empty if invalid
    */
   private static Optional<Email> internalTryParse(String email) {
-    // email cannot be null, less than 3 chars (local-part, @, domain), or more than 320 chars
-    if (email == null || email.length() < 3 || email.length() > 320) return Optional.empty();
+    // email cannot be null
+    if (email == null) return Optional.empty();
 
     int size = email.length();
+
+    // email cannot less than 3 chars (local-part, @, domain), or more than 320 chars
+    if (size < 3 || size > 320) return Optional.empty();
 
     // email cannot start with '.'
     if (email.charAt(0) == '.') return Optional.empty();
@@ -154,17 +157,17 @@ public final class JMail {
     // email cannot end with '.' or '-'
     if (email.charAt(size - 1) == '.' || email.charAt(size - 1) == '-') return Optional.empty();
 
-    boolean atFound = false;
-    boolean inQuotes = false;
-    boolean previousDot = false;
-    boolean previousBackslash = false;
-    boolean previousQuote = false;
-    boolean firstDomainChar = true;
-    boolean isIpAddress = false;
-    boolean requireAtOrDot = false;
-    boolean requireAtDotOrComment = false;
-    boolean whitespace = false;
-    boolean previousComment = false;
+    boolean atFound = false;               // set to true when the '@' character is found
+    boolean inQuotes = false;              // set to true if we are currently within quotes
+    boolean previousDot = false;           // set to true if the previous character is '.'
+    boolean previousBackslash = false;     // set to true if the previous character is '\'
+    boolean previousQuote = false;         // set to true if the previous character is '"'
+    boolean firstDomainChar = true;        // set to false after beginning parsing the domain
+    boolean isIpAddress = false;           // set to true if encountered an IP address domain
+    boolean requireAtOrDot = false;        // set to true if the next character should be @ or .
+    boolean requireAtDotOrComment = false; // set to true if the next character should be @ . or (
+    boolean whitespace = false;            // set to true if we are currently within whitespace
+    boolean previousComment = false;       // set to true if the last character was the end comment
 
     StringBuilder localPart = new StringBuilder(size);
     StringBuilder localPartWithoutComments = new StringBuilder(size);
@@ -185,6 +188,7 @@ public final class JMail {
         // If we already found an @ outside of quotes, fail
         if (atFound) return Optional.empty();
 
+        // Otherwise
         atFound = true;
         requireAtOrDot = requireAtDotOrComment = false;
         whitespace = false;
@@ -262,7 +266,6 @@ public final class JMail {
 
       if (!atFound) {
         // No @ found, we're in the local-part
-        // Quotes are a pain in the ass
         // If we are at a new quote: it must be preceded by a dot or at the beginning
         if (c == '"' && i > 0 && !previousDot && !inQuotes) {
           return Optional.empty();
@@ -370,14 +373,10 @@ public final class JMail {
 
     // Check that the final domain part does not start with '-'
     // We already checked to make sure it doesn't end with '-'
-    if (currentDomainPart.charAt(0) == '-') {
-      return Optional.empty();
-    }
+    if (currentDomainPart.charAt(0) == '-') return Optional.empty();
 
     // Ensure the last domain part (TLD) is not all numeric
-    if (currentDomainPart.toString().chars().allMatch(Character::isDigit)) {
-      return Optional.empty();
-    }
+    if (currentDomainPart.toString().chars().allMatch(Character::isDigit)) return Optional.empty();
 
     // Ensure the TLD is not greater than 63 chars
     if (currentDomainPart.length() > 63) return Optional.empty();

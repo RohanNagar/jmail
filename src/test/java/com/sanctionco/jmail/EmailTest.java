@@ -15,16 +15,20 @@ class EmailTest {
         .orElseGet(() -> fail("Unable to parse test email"));
     Email differentEmail = JMail.tryParse("hello@world.com")
         .orElseGet(() -> fail("Unable to parse test email"));
+    Email differentEmailOnlyDomain = JMail.tryParse("test@world.com")
+        .orElseGet(() -> fail("Unable to parse test email"));
 
     assertThat(email)
         .isEqualTo(email)
         .isEqualTo(sameEmail)
         .isNotEqualTo(new Object())
-        .isNotEqualTo(differentEmail);
+        .isNotEqualTo(differentEmail)
+        .isNotEqualTo(differentEmailOnlyDomain);
 
     assertThat(email)
         .hasSameHashCodeAs(email)
         .hasSameHashCodeAs(sameEmail)
-        .doesNotHaveSameHashCodeAs(differentEmail);
+        .doesNotHaveSameHashCodeAs(differentEmail)
+        .doesNotHaveSameHashCodeAs(differentEmailOnlyDomain);
   }
 }
