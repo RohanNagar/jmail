@@ -47,7 +47,8 @@ class TopLevelDomainTest {
         .returns("?", TopLevelDomain::stringValue);
 
     assertThat(TopLevelDomain.fromString("unknown"))
-        .isNotEqualTo(TopLevelDomain.fromString("?"));
+        .isNotEqualTo(TopLevelDomain.fromString("?"))
+        .isNotEqualTo("unknown");
   }
 
   @Test
