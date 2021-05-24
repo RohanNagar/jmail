@@ -31,11 +31,11 @@ public final class TopLevelDomain {
    * Get the {@code TopLevelDomain} that represents the given string.
    *
    * @param tld the string to turn into a {@code TopLevelDomain}
-   * @return a {@code TopLevelDomain}, or {@code TopLevelDomain.NONE} if the input is null or empty
+   * @return a {@code TopLevelDomain} that represents the valid input
    * @throws InvalidTopLevelDomainException if the provided string is an invalid top level domain
    */
   public static TopLevelDomain fromString(String tld) {
-    if (tld == null || tld.isEmpty()) return NONE;
+    if (tld == null || tld.isEmpty()) throw new InvalidTopLevelDomainException();
 
     String dotless = tld.startsWith(".") ? tld.substring(1) : tld;
 
