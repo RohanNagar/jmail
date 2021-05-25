@@ -58,7 +58,7 @@ class EmailValidatorTest {
   @Nested
   class RequireTopLevelDomain {
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"admin@mailserver1", "test@example"})
+    @ValueSource(strings = {"admin@mailserver1", "test@example", "test@-server"})
     void rejectsDotlessAddresses(String email) {
       runInvalidTest(JMail.validator().requireTopLevelDomain(), email);
     }

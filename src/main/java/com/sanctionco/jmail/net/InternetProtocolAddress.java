@@ -204,10 +204,8 @@ public final class InternetProtocolAddress {
 
   private static boolean isInvalidIpv4Part(String part) {
     try {
-      int num = Integer.parseInt(part);
-      if ((num < 0) || (num > 255)) {
-        return true;
-      }
+      // The int cannot be less than zero since we check isDigit earlier on
+      if (Integer.parseInt(part) > 255) return true;
     } catch (NumberFormatException e) {
       return true;
     }

@@ -390,7 +390,7 @@ public final class JMail {
   }
 
   private static Optional<String> validateComment(String s) {
-    if (!s.startsWith("(") || s.length() < 2) return Optional.empty();
+    if (s.length() < 2) return Optional.empty();
 
     StringBuilder builder = new StringBuilder(s.length());
 
