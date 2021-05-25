@@ -37,7 +37,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <java.minimum.version>1.8</java.minimum.version>
+    <!-- We need to set the Java version to 9 for IntelliJ since we have a module-info.java file
+         Source is actually re-compiled for Java 8, so we can only use Java 8 features -->
+    <java.minimum.version>1.9</java.minimum.version>
 
     <!-- Plugin versions -->
     <checkstyle.version>8.42</checkstyle.version>
