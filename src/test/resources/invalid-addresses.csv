@@ -132,8 +132,6 @@ first(middle)last@test.org<br>
 "Unicode NULL ␀"@char.com<br>
 Unicode NULL \␀@char.com<br>
 "test"test@test.com<br>
-first."".last@test.org<br>
-""@test.org<br>
 ()@test.com<br>
 test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames<br>
 test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com<br>

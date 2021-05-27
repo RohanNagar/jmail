@@ -161,7 +161,6 @@ public final class JMail {
     boolean inQuotes = false;              // set to true if we are currently within quotes
     boolean previousDot = false;           // set to true if the previous character is '.'
     boolean previousBackslash = false;     // set to true if the previous character is '\'
-    boolean previousQuote = false;         // set to true if the previous character is '"'
     boolean firstDomainChar = true;        // set to false after beginning parsing the domain
     boolean isIpAddress = false;           // set to true if encountered an IP address domain
     boolean requireAtOrDot = false;        // set to true if the next character should be @ or .
@@ -338,13 +337,7 @@ public final class JMail {
       if (c == '"' && !previousBackslash) {
         if (inQuotes) requireAtDotOrComment = true; // closing quote, make sure next char is . or @
 
-        // if we opened and closed quotes without anything inside, fail
-        if (previousQuote) return Optional.empty();
-
         inQuotes = !inQuotes;
-        previousQuote = true;
-      } else {
-        previousQuote = false;
       }
 
       whitespace = isWhitespace(c) && !inQuotes && !previousBackslash;
