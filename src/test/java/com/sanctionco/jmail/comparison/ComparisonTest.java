@@ -129,7 +129,7 @@ class ComparisonTest {
 
     StringBuilder result = new StringBuilder()
         .append("    <tr>\n      <th scope=\"row\" valign=\"middle\">")
-        .append(splitEqually(email, 40).stream().map(s -> s + "</br>")
+        .append(splitEqually(email, 40).stream().map(s -> s + "<br/>")
             .collect(Collectors.joining()))
         .append("</th>\n")
         .append("      ").append(expectedResult).append("\n");
@@ -164,7 +164,7 @@ class ComparisonTest {
       str.append("<td style=\"background-color:#815355\" valign=\"middle\">").append(failureString);
     }
 
-    str.append("</br>");
+    str.append("<br/>");
 
     // test 100 times to get an avg
     int repetitions = 100;
@@ -219,7 +219,7 @@ class ComparisonTest {
 
     String getTotal(int totalTests) {
       return "      <td>" + successes + "/" + totalTests
-          + "</br>Average Time: " + average() + " ns</td>\n";
+          + "<br/>Average Time: " + average() + " ns</td>\n";
     }
 
     String runTest(String email, boolean expected) {

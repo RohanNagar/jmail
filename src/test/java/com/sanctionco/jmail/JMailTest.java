@@ -92,4 +92,20 @@ class JMailTest {
     assertThat(JMail.strictValidator().isValid(dotlessEmail)).isFalse();
     assertThat(JMail.strictValidator().isValid(ipEmail)).isFalse();
   }
+
+  @Test
+  void sourceRoutingWorks() {
+    String email = "@1st.relay,@2nd.relay:user@final.domain";
+
+    assertThat(JMail.validateSourceRouting(email))
+        .isPresent().get()
+        .isEqualTo("@1st.relay,@2nd.relay:");
+
+    assertThat(JMail.validateSourceRouting("@-1st.relay,@2nd.relay:user@final.domain"))
+        .isNotPresent();
+    assertThat(JMail.validateSourceRouting("@1st-.relay,@2nd.relay:user@final.domain"))
+        .isNotPresent();
+    assertThat(JMail.validateSourceRouting("@1st.relay,2nd.relay:user@final.domain"))
+        .isNotPresent();
+  }
 }

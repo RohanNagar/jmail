@@ -10,8 +10,8 @@
   <img src="https://codecov.io/gh/RohanNagar/jmail/branch/master/graph/badge.svg" alt="Coverage Status">
 </a>
 
-A modern, fast, zero-dependency library for working with emails
-and performing email validation in Java.
+A modern, fast, zero-dependency library for working with email addresses
+and performing email address validation in Java.
 
 Built for Java 8 and up.
 
@@ -23,13 +23,13 @@ Built for Java 8 and up.
 ## Why JMail?
 
 JMail was built mainly because I wanted to tackle the complex problem
-of email validation without using Regex. Along the way, JMail became a
+of email address validation without using Regex. Along the way, JMail became a
 much better choice than other Java email validation libraries
 (such as Apache Commons Validator or Java Mail Validation) for the
 following reasons:
 
 1. JMail is **_more correct_** than other libraries. For example, both
-   Apache Commons and Java Mail consider `first@last@iana.org` as a valid
+   Apache Commons and Java Mail consider `first@last@test.org` as a valid
    email address! It clearly is not, as it has two `@` characters. JMail correctly
    considers this address invalid. You can
    [see a full comparison of correctness and try it out for yourself online](https://www.rohannagar.com/jmail/).

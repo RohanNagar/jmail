@@ -120,20 +120,20 @@ public final class JMail {
 
     if (!parsed.isPresent()) return parsed;
 
-    Email parsedEmail = parsed.get();
-
     // if its an ip, we can skip character validation
-    if (parsedEmail.isIpAddress()) return parsed;
+    if (parsed.get().isIpAddress()) return parsed;
 
-    String domain = IDN.toASCII(parsedEmail.domainWithoutComments());
+    return parsed.filter(e -> {
+      String domain = IDN.toASCII(e.domainWithoutComments());
 
-    for (int i = 0, size = domain.length(); i < size; i++) {
-      char c = domain.charAt(i);
+      for (int i = 0, size = domain.length(); i < size; i++) {
+        char c = domain.charAt(i);
 
-      if (!JMail.ALLOWED_DOMAIN_CHARACTERS.contains(c)) return Optional.empty();
-    }
+        if (!JMail.ALLOWED_DOMAIN_CHARACTERS.contains(c)) return false;
+      }
 
-    return parsed;
+      return true;
+    });
   }
 
   /**
@@ -420,6 +420,53 @@ public final class JMail {
     }
 
     return Optional.of(builder.toString());
+  }
+
+  static Optional<String> validateSourceRouting(String s) {
+    boolean requireNewDomain = true;
+
+    StringBuilder sourceRoute = new StringBuilder();
+    StringBuilder currentDomainPart = new StringBuilder();
+
+    for (int i = 0, size = s.length(); i < size; i++) {
+      char c = s.charAt(i);
+
+      // We need the @ character for a new domain
+      if (requireNewDomain && c != '@') return Optional.empty();
+
+      // A . , : means we should validate the current domain part
+      if (c == '.' || c == ',' || c == ':') {
+        // Cannot be empty or more than 63 chars
+        if (currentDomainPart.length() == 0 || currentDomainPart.length() > 63) {
+          return Optional.empty();
+        }
+
+        // Cannot start or end with '-'
+        if (currentDomainPart.charAt(0) == '-'
+            || currentDomainPart.charAt(currentDomainPart.length() - 1) == '-') {
+          return Optional.empty();
+        }
+
+        // TLD cannot be all numeric
+        if ((c == ',' || c == ':')
+            && currentDomainPart.toString().chars().allMatch(Character::isDigit)) {
+          return Optional.empty();
+        }
+
+        currentDomainPart = new StringBuilder();
+      } else {
+        if (c != '@') currentDomainPart.append(c);
+      }
+
+      // A comma is the end of the current domain
+      requireNewDomain = c == ',';
+
+      sourceRoute.append(c);
+
+      if (c == ':') break;
+    }
+
+    return Optional.of(sourceRoute.toString());
   }
 
   /**
