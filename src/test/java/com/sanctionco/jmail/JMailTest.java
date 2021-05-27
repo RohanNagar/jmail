@@ -107,5 +107,9 @@ class JMailTest {
         .isNotPresent();
     assertThat(JMail.validateSourceRouting("@1st.relay,2nd.relay:user@final.domain"))
         .isNotPresent();
+    assertThat(JMail.validateSourceRouting("@.relay,2nd.relay:user@final.domain"))
+        .isNotPresent();
+    assertThat(JMail.validateSourceRouting("@1st.1111,2nd.relay:user@final.domain"))
+        .isNotPresent();
   }
 }
