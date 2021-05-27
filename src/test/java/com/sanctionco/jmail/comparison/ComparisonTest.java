@@ -131,7 +131,9 @@ class ComparisonTest {
         .append("    <tr>\n      <th scope=\"row\" valign=\"middle\">")
         .append(splitEqually(email, 40).stream().map(s -> s + "<br/>")
             .collect(Collectors.joining()))
-        .append(description == null ? "" : "<small class=\"text-muted\">" + description + "</small>")
+        .append(description == null
+            ? ""
+            : "<small class=\"text-muted\">" + description + "</small>")
         .append("</th>\n")
         .append("      ").append(expectedResult).append("\n");
 
