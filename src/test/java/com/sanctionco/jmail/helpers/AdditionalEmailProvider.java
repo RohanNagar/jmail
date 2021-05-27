@@ -77,7 +77,9 @@ public class AdditionalEmailProvider {
         Arguments.of("first.last @test.org", "first.last ", "test.org"),
         Arguments.of("first.last  @test.org", "first.last  ", "test.org"),
         Arguments.of("first .last  @test .org", "first .last  ", "test .org"),
-        Arguments.of("jdoe@machine(comment).  example", "jdoe", "machine(comment).  example")
+        Arguments.of("jdoe@machine(comment).  example", "jdoe", "machine(comment).  example"),
+        Arguments.of("very.\"(),:;<>[]\".VERY.\"very@\\\\ ”very\".unusual@strange.example.com",
+            "very.\"(),:;<>[]\".VERY.\"very@\\\\ ”very\".unusual", "strange.example.com")
     );
   }
 
