@@ -13,11 +13,13 @@ import org.junit.jupiter.params.provider.Arguments;
 public class AdditionalEmailProvider {
 
   // Invalid emails with odd pairs of quotes
-  public static Stream<String> provideInvalidEmails() {
-    return Stream.of("\"qu@test.org",
-        "ote\"@test.org",
-        "\"(),:;<>[\\]@example.com",
-        "\"\"\"@iana.org");
+  public static Stream<Arguments> provideInvalidEmails() {
+    return Stream.of(
+        Arguments.of("\"qu@test.org", "Opening quote must have a closing quote"),
+        Arguments.of("ote\"@test.org", "Closing quote must have an opening quote"),
+        Arguments.of("\"(),:;<>[\\]@example.com", "Opening quote must have a closing quote"),
+        Arguments.of("\"\"\"@iana.org", "Each quote must be in a pair")
+    );
   }
 
   // Invalid emails with whitespace

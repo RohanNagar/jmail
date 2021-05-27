@@ -110,17 +110,17 @@ class ComparisonTest {
   @MethodSource("com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidEmails")
   @CsvFileSource(resources = "/valid-addresses.csv", numLinesToSkip = 1)
   void compareValid(String email) throws Exception {
-    runTest(email, true);
+    runTest(email, true, null);
   }
 
   @ParameterizedTest(name = "{0}")
   @MethodSource("com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails")
-  @CsvFileSource(resources = "/invalid-addresses.csv", delimiter = '\u007F')
-  void compareInvalid(String email) throws Exception {
-    runTest(email, false);
+  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = "<br>")
+  void compareInvalid(String email, String description) throws Exception {
+    runTest(email, false, description);
   }
 
-  private void runTest(String email, boolean expected) throws Exception {
+  private void runTest(String email, boolean expected, String description) throws Exception {
     totalTests++;
 
     String expectedResult = expected
@@ -131,6 +131,7 @@ class ComparisonTest {
         .append("    <tr>\n      <th scope=\"row\" valign=\"middle\">")
         .append(splitEqually(email, 40).stream().map(s -> s + "<br/>")
             .collect(Collectors.joining()))
+        .append(description == null ? "" : "<small class=\"text-muted\">" + description + "</small>")
         .append("</th>\n")
         .append("      ").append(expectedResult).append("\n");
 
@@ -146,8 +147,7 @@ class ComparisonTest {
   }
 
   private static String testImplementation(Implementation impl,
-                                    String email,
-                                    boolean expected, boolean jmail) {
+                                           String email, boolean expected, boolean jmail) {
     Predicate<String> predicate = impl.predicate;
 
     StringBuilder str = new StringBuilder();

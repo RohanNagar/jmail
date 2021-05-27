@@ -1,153 +1,143 @@
-Abc.example.com
-A@b@c@example.com
-a"b(c)d,e:f;g<h>i[j\k]l@example.com
-just"not"right@example.com
-this is"not\allowed@example.com
-this\ still\"not\\allowed@example.com
-1234567890123456789012345678901234567890123456789012345678901234+x@example.com
-i_like_underscore@but_its_not_allowed_in_this_part.example.com
-QA[icon]CHOCOLATE[icon]@test.com
-plainaddress
-#@%^%#$@#$@#.com
-@example.com
-@NotAnEmail
-Joe Smith <email@example.com>
-email.example.com
-email@example@example.com
-.email@example.com
-email.@example.com
-email..email@example.com
-email@-example.com
-email@111.222.333.44444
-email@example..com
-Abc..123@example.com
-just"not"right@example.com
-this\ is"really"not\allowed@example.com
-first.last@sub.do,com
-email@[12.34.44.56
-email@14.44.56.34]
-email@[1.1.23.5f]
-email@[3.256.255.23]
-first.last
-12345678901234567890123456789012345678901234567890123456789012345@test.org
-.first.last@test.org
-first.last.@test.org
-first..last@test.org
-"first"last"@test.org
-first.last@[.12.34.56.78]
-first.last@[12.34.56.789]
-first.last@[::12.34.56.78]
-x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456
-"\"@iana.org
-first\\@last@iana.org
-first.last@
-test@example.com&#10;
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777]
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888:9999]
-first.last@[IPv6:1111:2222::3333::4444:5555:6666]
-first.last@[IPv6:1111:2222:333x::4444:5555]
-first.last@[IPv6:1111:2222:33333::4444:5555]
-first.last@[IPv6::]
-first.last@[IPv6::::]
-first.last@[IPv6::b4]
-first.last@[IPv6::::b4]
-first.last@[IPv6::b3:b4]
-first.last@[IPv6::::b3:b4]
-first.last@[IPv6:a1:::b4]
-first.last@[IPv6:a1:]
-first.last@[IPv6:a1:::]
-first.last@[IPv6:a1:a2:]
-first.last@[IPv6:a1:a2:::]
-first.last@[IPv6:a1::b3:]
-first.last@[IPv6::a2::b4]
-first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]
-first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]
-first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]
-first.last@[IPv6::11.22.33.44]
-first.last@[IPv6::::11.22.33.44]
-first.last@[IPv6:a1:11.22.33.44]
-first.last@[IPv6:a1:::11.22.33.44]
-first.last@[IPv6:a1:a2:::11.22.33.44]
-first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.xx]
-first.last@[IPv5:::12.34.56.78]
-first.last@[IPv6:1111:2222:3333:4444:5555:12.34.56.78]
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:12.34.56.78]
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.567.89]
-aaa@[123.123.123.123]a
-aaa@[123.123.123.333]
-first.last@[IPv6:0123:4567:89ab:CDEFF::11.22.33.44]
-first.last@[IPv6:a1::a4:b1::b4:11.22.33.44]
-first.last@[IPv6:a1::11.22.33]
-first.last@[IPv6:a1::11.22.33.44.55]
-first.last@[IPv6:a1::b211.22.33.44]
-first.last@[IPv6:a1::b2::11.22.33.44]
-a@-b.com
-a@b-.com
--@..com
--@a..com
-invalid@about.museum-
-test@...........com
-first.last@-xample.com
-first.last@exampl-.com
-first.last@x234567890123456789012345678901234567890123456789012345678901234.test.org
-abc@def@test.org
-abc\\@def@test.org
-abc\@test.org
-@test.org
-doug@
-.dot@test.org
-dot.@test.org
-two..dot@test.org
-"Doug "Ace" L."@test.org
-Doug\ \"Ace\"\ L\.@test.org
-hello world@test.org
-gatsby@f.sc.ot.t.f.i.tzg.era.l.d.
-.@
-@bar.com
-@@bar.com
-aaa.com
-aaa@.com
-aaa@.123
-a@bar.com.
-cal(foo(bar)@iamcal.com
-cal(foo)bar)@iamcal.com
-cal(foo\)@iamcal.com
-first(12345678901234567890123456789012345678901234567890)last@(1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890)test.org
-a(a(b(c)d(e(f))g)(h(i)j)@test.org
-Doug\ \"Ace\"\ Lovell@test.org
-test.test.org
-test.@test.org
-test..test@test.org
-.test@test.org
-test@test@test.org
-test@@test.org
--- test --@test.org
-[test]@test.org
-"test"test"@test.org
-()[]\;:,><@test.org
-test@.
-test@example.
-test@.org
-test@123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012.com
-.wooly@test.org
-wo..oly@test.org
-pootieshoe.@test.org
-.@test.org
-Ima Fool@test.org
-"first\\"last"@test.org
-foo@[\1.2.3.4]
-first\last@test.org
-first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno).(abc("def".ghi).mno)com(abc("def".ghi).mno)
-first(middle)last@test.org
-"Unicode NULL ␀"@char.com
-Unicode NULL \␀@char.com
-"test"test@test.com
-first."".last@test.org
-""@test.org
-()@test.com
-test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames
-test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com
-invalid@[1]
-ä📧@-foo
-ä📧@foo-
-first(comment(inner@comment.com
+Abc.example.com<br>The @ character must be present
+A@b@c@example.com<br>There can only be a single @ character
+a"b(c)d,e:f;g<h>i[j\k]l@example.com<br>Certain characters cannot be in the local-part unquoted
+just"not"right@example.com<br>Quoted strings must be separated by dots
+this is"not\allowed@example.com<br>Whitespace should be quoted
+this\ still\"not\\allowed@example.com<br>
+1234567890123456789012345678901234567890123456789012345678901234+x@example.com<br>The local-part cannot have more than 64 characters
+i_like_underscore@but_its_not_allowed_in_this_part.example.com<br>Underscores are not allowed in the domain
+QA[icon]CHOCOLATE[icon]@test.com<br>Unquoted brackets are not allowed
+plainaddress<br>The @ character must be present
+#@%^%#$@#$@#.com<br>There can only be a single @ character
+@example.com<br>The local-part must not be empty
+@NotAnEmail<br>The local-part must not be empty
+Joe Smith <email@example.com><br>
+.email@example.com<br>The local-part cannot begin with the . character
+email.@example.com<br>The local-part cannot end with the . character
+email..email@example.com<br>The local-part cannot contain two dots in a row
+email@-example.com<br>The domain cannot start with the - character
+email@111.222.333.44444<br>The top level domain cannot be all numeric
+email@example..com<br>The domain cannot contain two dots in a row
+this\ is"really"not\allowed@example.com<br>The backslash escape must escape a special character
+first.last@sub.do,com<br>The , character is not allowed in the domain
+email@[12.34.44.56<br>The domain literal must have the closing bracket
+email@14.44.56.34]<br>The domain literal must have the opening bracket
+email@[1.1.23.5f]<br>The IPv4 format must be valid (disallowed character)
+email@[3.256.255.23]<br>The IPv4 format must be valid (256 is above the IP range)
+"first"last"@test.org<br>The final quote is invalid (missing pair and not dot-separated)
+first.last@[.12.34.56.78]<br>The IPv4 format must be valid (leading dot)
+first.last@[12.34.56.789]<br>The IPv4 format must be valid (789 is above the IP range)
+first.last@[::12.34.56.78]<br>IPv6 domain literal must have IPv6 tag
+x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456<br>The domain cannot be more than 255 characters in total
+"\"@iana.org<br>A single backslash is invalid
+first\\@last@iana.org<br>The extra @ must be quote-escaped
+first.last@<br>The domain cannot be missing
+test@example.com&#10;<br>Invalid characters in the domain are not allowed
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777]<br>The IPv6 format must be valid (not enough segments)
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888:9999]<br>The IPv6 format must be valid (too many segments)
+first.last@[IPv6:1111:2222::3333::4444:5555:6666]<br>The IPv6 format must be valid (Only one set of :: is allowed)
+first.last@[IPv6:1111:2222:333x::4444:5555]<br>The IPv6 format must be valid (x is not a valid hexadecimal character)
+first.last@[IPv6:1111:2222:33333::4444:5555]<br>The IPv6 format must be valid (33333 is not a valid segment)
+first.last@[IPv6::]<br>The IPv6 format must be valid (: is invalid)
+first.last@[IPv6::::]<br>The IPv6 format must be valid (::: is invalid)
+first.last@[IPv6::b4]<br>
+first.last@[IPv6::::b4]<br>
+first.last@[IPv6::b3:b4]<br>
+first.last@[IPv6::::b3:b4]<br>
+first.last@[IPv6:a1:::b4]<br>
+first.last@[IPv6:a1:]<br>
+first.last@[IPv6:a1:::]<br>
+first.last@[IPv6:a1:a2:]<br>
+first.last@[IPv6:a1:a2:::]<br>
+first.last@[IPv6:a1::b3:]<br>
+first.last@[IPv6::a2::b4]<br>
+first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:]<br>
+first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4]<br>
+first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4]<br>
+first.last@[IPv6::11.22.33.44]<br>
+first.last@[IPv6::::11.22.33.44]<br>
+first.last@[IPv6:a1:11.22.33.44]<br>
+first.last@[IPv6:a1:::11.22.33.44]<br>
+first.last@[IPv6:a1:a2:::11.22.33.44]<br>
+first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.xx]<br>
+first.last@[IPv5:::12.34.56.78]<br>
+first.last@[IPv6:1111:2222:3333:4444:5555:12.34.56.78]<br>
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:12.34.56.78]<br>
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.567.89]<br>
+aaa@[123.123.123.123]a<br>A domain literal cannot have extra characters outside of the brackets
+first.last@[IPv6:0123:4567:89ab:CDEFF::11.22.33.44]<br>
+first.last@[IPv6:a1::a4:b1::b4:11.22.33.44]<br>
+first.last@[IPv6:a1::11.22.33]<br>
+first.last@[IPv6:a1::11.22.33.44.55]<br>
+first.last@[IPv6:a1::b211.22.33.44]<br>
+first.last@[IPv6:a1::b2::11.22.33.44]<br>
+a@-b.com<br>
+a@b-.com<br>
+-@..com<br>
+-@a..com<br>
+invalid@about.museum-<br>
+test@...........com<br>
+first.last@-xample.com<br>
+first.last@exampl-.com<br>
+first.last@x234567890123456789012345678901234567890123456789012345678901234.test.org<br>
+abc@def@test.org<br>
+abc\\@def@test.org<br>
+abc\@test.org<br>
+@test.org<br>
+doug@<br>
+.dot@test.org<br>
+dot.@test.org<br>
+two..dot@test.org<br>
+"Doug "Ace" L."@test.org<br>
+Doug\ \"Ace\"\ L\.@test.org<br>
+hello world@test.org<br>
+gatsby@f.sc.ot.t.f.i.tzg.era.l.d.<br>
+.@<br>
+@bar.com<br>
+@@bar.com<br>
+aaa.com<br>
+aaa@.com<br>
+aaa@.123<br>
+a@bar.com.<br>
+cal(foo(bar)@iamcal.com<br>
+cal(foo)bar)@iamcal.com<br>
+cal(foo\)@iamcal.com<br>
+first(12345678901234567890123456789012345678901234567890)last@(1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890)test.org<br>
+a(a(b(c)d(e(f))g)(h(i)j)@test.org<br>
+Doug\ \"Ace\"\ Lovell@test.org<br>
+test.test.org<br>
+test.@test.org<br>
+test..test@test.org<br>
+.test@test.org<br>
+test@test@test.org<br>
+test@@test.org<br>
+-- test --@test.org<br>
+[test]@test.org<br>
+"test"test"@test.org<br>
+()[]\;:,><@test.org<br>
+test@.<br>
+test@example.<br>
+test@.org<br>
+test@123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012.com<br>
+.wooly@test.org<br>
+wo..oly@test.org<br>
+pootieshoe.@test.org<br>
+.@test.org<br>
+Ima Fool@test.org<br>
+"first\\"last"@test.org<br>
+foo@[\1.2.3.4]<br>
+first\last@test.org<br>
+first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno).(abc("def".ghi).mno)com(abc("def".ghi).mno)<br>
+first(middle)last@test.org<br>
+"Unicode NULL ␀"@char.com<br>
+Unicode NULL \␀@char.com<br>
+"test"test@test.com<br>
+first."".last@test.org<br>
+""@test.org<br>
+()@test.com<br>
+test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames<br>
+test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com<br>
+invalid@[1]<br>
+ä📧@-foo<br>
+ä📧@foo-<br>
+first(comment(inner@comment.com<br>
