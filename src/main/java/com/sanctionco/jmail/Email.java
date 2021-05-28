@@ -12,20 +12,25 @@ public final class Email {
   private final String localPartWithoutComments;
   private final String domain;
   private final String domainWithoutComments;
+  private final String fullSourceRoute;
   private final List<String> domainParts;
   private final List<String> comments;
+  private final List<String> sourceRoutes;
   private final boolean isIpAddress;
   private final TopLevelDomain tld;
 
   Email(String localPart, String localPartWithoutComments,
-        String domain, String domainWithoutComments,
-        List<String> domainParts, List<String> comments, boolean isIpAddress) {
+        String domain, String domainWithoutComments, String fullSourceRoute,
+        List<String> domainParts, List<String> comments, List<String> sourceRoutes,
+        boolean isIpAddress) {
     this.localPart = localPart;
     this.localPartWithoutComments = localPartWithoutComments;
     this.domain = domain;
     this.domainWithoutComments = domainWithoutComments;
+    this.fullSourceRoute = fullSourceRoute;
     this.domainParts = Collections.unmodifiableList(domainParts);
     this.comments = Collections.unmodifiableList(comments);
+    this.sourceRoutes = Collections.unmodifiableList(sourceRoutes);
     this.isIpAddress = isIpAddress;
 
     this.tld = domainParts.size() > 1
@@ -99,6 +104,22 @@ public final class Email {
   }
 
   /**
+   * Get a list of explicit source routes defined in this email address. For example,
+   * the source routes of {@code "@1st.relay,@2nd.relay:user@final.domain"} are
+   * {@code ["1st.relay", "2nd.relay"]}.
+   *
+   * <p>Note that explicit source routing has been
+   * <a href="https://datatracker.ietf.org/doc/html/rfc5321#section-3.6.1">deprecated</a>
+   * as of RFC 5321 and you SHOULD NOT use explicit source routing except under unusual
+   * circumstances.
+   *
+   * @return the list of explict source routes
+   */
+  public List<String> explicitSourceRoutes() {
+    return sourceRoutes;
+  }
+
+  /**
    * Get whether or not this email address has an IP address domain. For example,
    * the address {@code "test@[12.34.56.78]"} will return {@code true}, but the
    * address {@code "test@example.com"} will return {@code false}.
@@ -129,8 +150,9 @@ public final class Email {
   @Override
   public String toString() {
     String fixedDomain = isIpAddress ? "[" + domain + "]" : domain;
+    String fixedLocalPart = fullSourceRoute + localPart;
 
-    return localPart + "@" + fixedDomain;
+    return fixedLocalPart + "@" + fixedDomain;
   }
 
   @Override

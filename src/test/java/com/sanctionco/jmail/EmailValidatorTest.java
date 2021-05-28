@@ -71,6 +71,21 @@ class EmailValidatorTest {
   }
 
   @Nested
+  class DisallowExplicitSourceRouting {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"@1st.relay,@2nd.relay:user@final.domain", "@a:user@final.domain"})
+    void rejectsAddressesWithExplicitSourceRouting(String email) {
+      runInvalidTest(JMail.validator().disallowExplicitSourceRouting(), email);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"test@123.123.123.com", "first.last@example.com"})
+    void allowsOtherAddresses(String email) {
+      runValidTest(JMail.validator().disallowExplicitSourceRouting(), email);
+    }
+  }
+
+  @Nested
   class RequireOnlyTopLevelDomains {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"test@123.123.123.org", "first.last@example.net"})

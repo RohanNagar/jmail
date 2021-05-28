@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -94,22 +95,37 @@ class JMailTest {
   }
 
   @Test
-  void sourceRoutingWorks() {
+  void addressWithSourceRoutingValidates() {
     String email = "@1st.relay,@2nd.relay:user@final.domain";
 
-    assertThat(JMail.validateSourceRouting(email))
+    assertThat(JMail.tryParse(email))
         .isPresent().get()
-        .isEqualTo("@1st.relay,@2nd.relay:");
+        .hasToString(email)
+        .returns("user", Email::localPart)
+        .returns("final.domain", Email::domain)
+        .returns(Arrays.asList("final", "domain"), Email::domainParts)
+        .returns(TopLevelDomain.fromString("domain"), Email::topLevelDomain)
+        .returns(Arrays.asList("1st.relay", "2nd.relay"), Email::explicitSourceRoutes);
+  }
 
-    assertThat(JMail.validateSourceRouting("@-1st.relay,@2nd.relay:user@final.domain"))
-        .isNotPresent();
-    assertThat(JMail.validateSourceRouting("@1st-.relay,@2nd.relay:user@final.domain"))
-        .isNotPresent();
-    assertThat(JMail.validateSourceRouting("@1st.relay,2nd.relay:user@final.domain"))
-        .isNotPresent();
-    assertThat(JMail.validateSourceRouting("@.relay,2nd.relay:user@final.domain"))
-        .isNotPresent();
-    assertThat(JMail.validateSourceRouting("@1st.1111,2nd.relay:user@final.domain"))
-        .isNotPresent();
+  @ParameterizedTest(name = "{0}")
+  @ValueSource(strings = {
+      "@-1st.relay,@2nd.relay:user@final.domain",
+      "@1st-.relay,@2nd.relay:user@final.domain",
+      "@1st.relay,2nd.relay:user@final.domain",
+      "@.relay,2nd.relay:user@final.domain",
+      "@1st.1111,2nd.relay:user@final.domain",
+      "@hello.world,user@final.domain",
+      "@1st.relay,@2nd.relay:user@-final.domain",
+      "@1st.relay,@2nd.relay:invalid",
+      "@@1st.relay,@2nd.relay:user@final.domain",
+      "@1st.r_elay,@2nd.relay:user@final.domain",
+  })
+  void ensureInvalidSourceRoutingAddressesFail(String email) {
+    assertThat(JMail.tryParse(email)).isNotPresent();
+
+    assertThat(email).is(invalid);
+    assertThatExceptionOfType(InvalidEmailException.class)
+        .isThrownBy(() -> JMail.enforceValid(email));
   }
 }

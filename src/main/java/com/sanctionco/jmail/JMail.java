@@ -5,11 +5,11 @@ import com.sanctionco.jmail.net.InternetProtocolAddress;
 import java.net.IDN;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Provides static methods to validate an email address
@@ -26,8 +26,8 @@ public final class JMail {
   /**
    * Returns a new instance of {@link EmailValidator}. In general,
    * you should favor using {@link #strictValidator()} instead of this method,
-   * as this method will allow IP address domains and dotless domains
-   * unless configured separately.
+   * as this method will allow IP address domain literals, dotless domains, and explicit
+   * source routing unless configured separately.
    *
    * @return the new {@link EmailValidator} instance
    */
@@ -41,8 +41,9 @@ public final class JMail {
    * added:
    *
    * <ul>
-   *   <li>The email cannot have an IP Address domain
-   *   <li>The email cannot have a dotless domain
+   *   <li>The email address cannot have an IP Address domain
+   *   <li>The email address cannot have a dotless domain
+   *   <li>The email address cannot have explicit source routing
    * </ul>
    *
    * @return the new {@link EmailValidator} instance
@@ -50,7 +51,8 @@ public final class JMail {
   public static EmailValidator strictValidator() {
     return new EmailValidator()
         .disallowIpDomain()
-        .requireTopLevelDomain();
+        .requireTopLevelDomain()
+        .disallowExplicitSourceRouting();
   }
 
   /**
@@ -123,17 +125,7 @@ public final class JMail {
     // if its an ip, we can skip character validation
     if (parsed.get().isIpAddress()) return parsed;
 
-    return parsed.filter(e -> {
-      String domain = IDN.toASCII(e.domainWithoutComments());
-
-      for (int i = 0, size = domain.length(); i < size; i++) {
-        char c = domain.charAt(i);
-
-        if (!JMail.ALLOWED_DOMAIN_CHARACTERS.contains(c)) return false;
-      }
-
-      return true;
-    });
+    return parsed.filter(e -> isValidIdn(e.domainWithoutComments()));
   }
 
   /**
@@ -146,10 +138,31 @@ public final class JMail {
     // email cannot be null
     if (email == null) return Optional.empty();
 
+    // email cannot be less than 3 chars (local-part, @, domain)
+    if (email.length() < 3) return Optional.empty();
+
+    // check for source-routing
+    List<String> sourceRoutes = Collections.emptyList();
+    String fullSourceRoute = "";
+
+    if (email.charAt(0) == '@') {
+      Optional<SourceRouteDetail> sourceRoute = validateSourceRouting(email);
+
+      // If there was no source routing, then starting with @ is invalid
+      if (!sourceRoute.isPresent()) return Optional.empty();
+
+      // Otherwise update the email to validate to be just the actual email
+      SourceRouteDetail detail = sourceRoute.get();
+      sourceRoutes = detail.routes;
+      fullSourceRoute = detail.fullRoute.toString();
+
+      email = email.substring(fullSourceRoute.length());
+    }
+
     int size = email.length();
 
-    // email cannot less than 3 chars (local-part, @, domain), or more than 320 chars
-    if (size < 3 || size > 320) return Optional.empty();
+    // email cannot be more than 320 chars
+    if (size > 320) return Optional.empty();
 
     // email cannot start with '.'
     if (email.charAt(0) == '.') return Optional.empty();
@@ -378,8 +391,8 @@ public final class JMail {
 
     return Optional.of(new Email(
         localPart.toString(), localPartWithoutComments.toString(),
-        domain.toString(), domainWithoutComments.toString(),
-        domainParts, comments, isIpAddress));
+        domain.toString(), domainWithoutComments.toString(), fullSourceRoute,
+        domainParts, comments, sourceRoutes, isIpAddress));
   }
 
   private static Optional<String> validateComment(String s) {
@@ -415,17 +428,23 @@ public final class JMail {
     return Optional.of(builder.toString());
   }
 
-  static Optional<String> validateSourceRouting(String s) {
+  private static Optional<SourceRouteDetail> validateSourceRouting(String s) {
     boolean requireNewDomain = true;
 
+    SourceRouteDetail detail = new SourceRouteDetail();
     StringBuilder sourceRoute = new StringBuilder();
     StringBuilder currentDomainPart = new StringBuilder();
 
-    for (int i = 0, size = s.length(); i < size; i++) {
+    int i = 0;
+
+    for (int size = s.length(); i < size; i++) {
       char c = s.charAt(i);
 
       // We need the @ character for a new domain
       if (requireNewDomain && c != '@') return Optional.empty();
+
+      // We can't see the @ character unless we need it
+      if (c == '@' && !requireNewDomain) return Optional.empty();
 
       // A . , : means we should validate the current domain part
       if (c == '.' || c == ',' || c == ':') {
@@ -451,15 +470,45 @@ public final class JMail {
         if (c != '@') currentDomainPart.append(c);
       }
 
-      // A comma is the end of the current domain
+      // A comma is the end of the current domain route
       requireNewDomain = c == ',';
 
-      sourceRoute.append(c);
+      detail.fullRoute.append(c);
+
+      if (c == ',' || c == ':') {
+        String route = sourceRoute.toString();
+
+        if (!isValidIdn(route)) return Optional.empty();
+
+        detail.routes.add(route);
+
+        sourceRoute = new StringBuilder();
+      } else if (c != '@') {
+        sourceRoute.append(c);
+      }
 
       if (c == ':') break;
     }
 
-    return Optional.of(sourceRoute.toString());
+    // If we haven't seen the end of the current part, its invalid
+    if (currentDomainPart.length() > 0) return Optional.empty();
+
+    // If we needed a new domain (last saw a comma), fail
+    if (requireNewDomain) return Optional.empty();
+
+    return Optional.of(detail);
+  }
+
+  private static boolean isValidIdn(String test) {
+    String domain = IDN.toASCII(test);
+
+    for (int i = 0, size = domain.length(); i < size; i++) {
+      char c = domain.charAt(i);
+
+      if (!JMail.ALLOWED_DOMAIN_CHARACTERS.contains(c)) return false;
+    }
+
+    return true;
   }
 
   /**
@@ -470,6 +519,11 @@ public final class JMail {
    */
   private static boolean isWhitespace(char c) {
     return (c == ' ' || c == '\n' || c == '\r');
+  }
+
+  private static final class SourceRouteDetail {
+    private final StringBuilder fullRoute = new StringBuilder();
+    private final List<String> routes = new ArrayList<>();
   }
 
   // Set of characters that are not allowed in the local-part outside of quotes

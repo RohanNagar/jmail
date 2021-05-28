@@ -50,6 +50,22 @@ public final class ValidationRules {
   }
 
   /**
+   * Rejects an email that uses explicit source routing. Explicit source routing has been
+   * <a href="https://datatracker.ietf.org/doc/html/rfc5321#section-3.6.1">deprecated</a>
+   * as of RFC 5321 and you SHOULD NOT use explicit source routing except under unusual
+   * circumstances.
+   *
+   * <p>For example, the address {@code "@1st.relay,@2nd.relay:user@final.domain"} would be
+   * rejected.
+   *
+   * @param email the email to validate
+   * @return true if this email does not contain explicit source routing, or false if it does
+   */
+  public static boolean disallowExplicitSourceRouting(Email email) {
+    return email.explicitSourceRoutes().size() <= 0;
+  }
+
+  /**
    * Rejects an email that has a top-level domain other than the ones in the allowed set.
    * For example, if {@code allowed} is {@code [DOT_COM, DOT_ORG]}, then the address
    * {@code "test@example.net"} would be rejected.
