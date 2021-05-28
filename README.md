@@ -35,7 +35,7 @@ following reasons:
    [see a full comparison of correctness and try it out for yourself online](https://www.rohannagar.com/jmail/).
    
 2. JMail is **_faster_** than other libraries by, on average, at least
-   27%, thanks in part to lack of regex.
+   2x, thanks in part to lack of regex.
    
 3. JMail has **_zero dependencies_** and is very lightweight.
 
@@ -62,7 +62,7 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
@@ -128,8 +128,11 @@ email addresses easier. The `Email` object has the following properties:
 | domain() | The domain of the email address | `(world)example.one.com` |
 | domainWithoutComments() | The domain of the email address without comments | `example.one.com` |
 | domainParts() | A list of the parts of the domain | `[example, one, com]` |
+| identifier() | The identifier of the email address, if it has one. | `null`<br/>(For `Admin <test@server.com>`, it would be `Admin`) |
 | comments() | A list of the comments in the email address | `[hello, world]` |
+| explicitSourceRoutes() | A list of explicit source routes in the address, if present | `[]`<br/>(For `@1st.relay,@2nd.relay:user@final.domain`, it would be `[1st.relay, 2nd.relay]`) |
 | isIpAddress() | Whether or not the domain is an IP address | `false` |
+| hasIdentifier() | Whether or not the address has an identifier | `false` |
 | topLevelDomain() | The `TopLevelDomain` of the email address, or `TopLevelDomain.OTHER` if it is unknown | `TopLevelDomain.DOT_COM` |
 
 To create a new instance of `Email` from a string, use the `tryParse(String email)`
@@ -190,6 +193,18 @@ JMail.validator().requireTopLevelDomain();
 
 > Note: `JMail.strictValidator()` includes this rule automatically.
 
+#### Disallow Explicit Source Routing
+
+Explicit source routing has been [deprecated](https://datatracker.ietf.org/doc/html/rfc5321#section-3.6.1)
+as of RFC 5321 and you SHOULD NOT use explicit source routing except under unusual
+circumstances.
+
+```java
+JMail.validator().disallowExplicitSourceRouting();
+```
+
+> Note: `JMail.strictValidator()` includes this rule automatically.
+
 #### Disallow Reserved Domains
 
 As specified in [RFC 2606](https://datatracker.ietf.org/doc/html/rfc2606),
@@ -200,6 +215,15 @@ all emails that have a reserved domain:
 
 ```java
 JMail.validator().disallowReservedDomains();
+```
+
+#### Disallow Quoted Identifiers
+
+If you want email addresses to only be the raw email address, use this rule.
+Adding this will invalidate addresses of the form `John Smith <john@smith.com>`.
+
+```java
+JMail.validator().disallowQuotedIdentifiers();
 ```
 
 #### Require a specific common Top Level Domain
