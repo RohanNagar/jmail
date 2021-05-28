@@ -94,7 +94,7 @@ public final class Email {
    * Get the domain of this email address without any comments. For example,
    * the local-part without comments of {@code "test@(comment)example.com"} is
    * {@code "example.com"}. If the email has no comments, this is effectively the same
-   * as {@link #domain()} ()}.
+   * as {@link #domain()}.
    *
    * @return the domain string without comments
    */
@@ -104,7 +104,7 @@ public final class Email {
 
   /**
    * Returns the identifier of the email address, if it has one. For example, the identifier
-   * of the email <pre>"John Smith &#60;test@server.com&#62;"</pre> is {@code "John Smith "}.
+   * of the email {@code "John Smith <test@server.com>"} is {@code "John Smith "}.
    *
    * @return the identifier of the email or {@code null} if it does not have one
    */
@@ -140,8 +140,8 @@ public final class Email {
    *
    * <p>Note that explicit source routing has been
    * <a href="https://datatracker.ietf.org/doc/html/rfc5321#section-3.6.1">deprecated</a>
-   * as of RFC 5321 and you SHOULD NOT use explicit source routing except under unusual
-   * circumstances.
+   * as of RFC 5321 and you <em>SHOULD NOT</em> allow addresses with explicit source routing
+   * except under unusual circumstances.
    *
    * @return the list of explict source routes
    */
@@ -162,7 +162,7 @@ public final class Email {
 
   /**
    * Get whether or not this email address has an identifier. For example, the address
-   * <pre>"John Smith &#60;test@server.com&#62;"</pre> will return {@code true}, but the address
+   * {@code "John Smith <test@server.com>"} will return {@code true}, but the address
    * {@code "test@example.com"} will return {@code false}.
    *
    * @return true if this email has en identifier, false otherwise

@@ -56,10 +56,11 @@ public final class JMail {
   }
 
   /**
-   * Return true if the given email passes basic RFC validation. See {@link #tryParse(String)} for
-   * details on what is required of an email within basic validation.
+   * Return true if the given email address passes basic RFC validation. See
+   * {@link #tryParse(String)} for details on what is required of an email address
+   * within basic validation.
    *
-   * @param email the email to validate
+   * @param email the email address to validate
    * @return the result of the validation
    */
   public static boolean isValid(String email) {
@@ -67,11 +68,11 @@ public final class JMail {
   }
 
   /**
-   * Require that the given email passes basic RFC validation, throwing
-   * {@link InvalidEmailException} if the email is invalid. See {@link #tryParse(String)} for
-   * details on what is required of an email within basic validation.
+   * Require that the given email address passes basic RFC validation, throwing
+   * {@link InvalidEmailException} if the address is invalid. See {@link #tryParse(String)} for
+   * details on what is required of an email address within basic validation.
    *
-   * @param email the email to validate
+   * @param email the email address to validate
    * @throws InvalidEmailException if the validation fails
    */
   public static void enforceValid(String email) throws InvalidEmailException {
@@ -81,7 +82,7 @@ public final class JMail {
   }
 
   /**
-   * Parse the given email into a new {@link Email} object. This method does basic
+   * Parse the given email address into a new {@link Email} object. This method does basic
    * validation on the input email address. This method does not claim to be 100%
    * accurate in determining if an email address is valid or invalid due to the
    * complexity of the email RFC standards. That being said, if you come across
@@ -89,29 +90,7 @@ public final class JMail {
    * vice-versa, please open an issue at the
    * <a href="https://github.com/RohanNagar/jmail">GitHub repo</a> so it can be fixed.
    *
-   * <p>In general, this method checks for:
-   *
-   * <ol>
-   * <li>Ensures the email is not null
-   * <li>Ensures the email does not end with the '.' character
-   * <li>Ensures the email contains both a local-part and a domain separated by
-   *     a single '@' character
-   * <li>Ensures the local-part is not more than 64 characters
-   * <li>Ensures the domain is not more than 255 characters and each domain part is not more than
-   *     63 characters
-   * <li>Ensures the domain is one of:
-   *   <ul>
-   *     <li>Only contains allowed characters OR
-   *     <li>An IPv4 address OR
-   *     <li>An IPv6 address (either normal or dual)
-   *   </ul>
-   * <li>Ensures the local-part does not start or end with the '.' character
-   * <li>Ensures the domain does not start or end with the '-' character
-   * <li>Ensures that two '.' characters do not occur next to each other outside of quotes
-   * <li>Ensures that the TLD of the domain is not all numeric characters
-   * <li>Quoted strings in the local-part either start at the beginning or are preceded by a '.'
-   * <li>Ensures that any comments and whitespace only exist in allowed locations
-   * </ol>
+   * <p>In general, this method should be more or less compliant with the latest RFCs.
    *
    * @param email the email to parse
    * @return an {@link Optional} containing the parsed {@link Email}, or empty if the email
@@ -131,7 +110,7 @@ public final class JMail {
   /**
    * Internal parsing method.
    *
-   * @param email the email to parse
+   * @param email the email address to parse
    * @return a new {@link Email} instance if valid, empty if invalid
    */
   private static Optional<Email> internalTryParse(String email) {

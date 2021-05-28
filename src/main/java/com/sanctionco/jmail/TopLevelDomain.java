@@ -1,7 +1,11 @@
 package com.sanctionco.jmail;
 
 /**
- * Enumerates known common top level domains.
+ * Represents a top level domain, such as {@code .com} or {@code .net}.
+ *
+ * <p>Common TLDs are provided as static assessors, for example {@link #DOT_COM}
+ * and {@link #DOT_ORG}. You can represent any top level domain (as long as it is valid)
+ * using {@link #fromString(String)}.
  */
 public final class TopLevelDomain {
   // Original TLDs

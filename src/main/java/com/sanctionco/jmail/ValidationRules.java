@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Provides common email validation rules that can be added to an
+ * Provides common email address validation rules that can be added to an
  * {@link EmailValidator}.
  */
 public final class ValidationRules {
@@ -28,29 +28,29 @@ public final class ValidationRules {
       Arrays.asList(TopLevelDomain.DOT_COM, TopLevelDomain.DOT_NET, TopLevelDomain.DOT_ORG));
 
   /**
-   * Rejects an email that has an IP address as the domain. For example, the address
+   * Rejects an email address that has an IP address as the domain. For example, the address
    * {@code "test@[12.34.56.78]"} would be rejected.
    *
-   * @param email the email to validate
-   * @return true if this email does not have an IP address domain, or false if it does
+   * @param email the email address to validate
+   * @return true if this email address does not have an IP address domain, or false if it does
    */
   public static boolean disallowIpDomain(Email email) {
     return !email.isIpAddress();
   }
 
   /**
-   * Rejects an email that does not have a top-level domain. For example, the address
+   * Rejects an email address that does not have a top-level domain. For example, the address
    * {@code "admin@mailserver"} would be rejected.
    *
-   * @param email the email to validate
-   * @return true if this email has a top-level domain, or false if it does not
+   * @param email the email address to validate
+   * @return true if this email address has a top-level domain, or false if it does not
    */
   public static boolean requireTopLevelDomain(Email email) {
     return !email.topLevelDomain().equals(TopLevelDomain.NONE);
   }
 
   /**
-   * Rejects an email that uses explicit source routing. Explicit source routing has been
+   * Rejects an email address that uses explicit source routing. Explicit source routing has been
    * <a href="https://datatracker.ietf.org/doc/html/rfc5321#section-3.6.1">deprecated</a>
    * as of RFC 5321 and you SHOULD NOT use explicit source routing except under unusual
    * circumstances.
@@ -58,39 +58,39 @@ public final class ValidationRules {
    * <p>For example, the address {@code "@1st.relay,@2nd.relay:user@final.domain"} would be
    * rejected.
    *
-   * @param email the email to validate
-   * @return true if this email does not contain explicit source routing, or false if it does
+   * @param email the email address to validate
+   * @return true if the email address does not contain explicit source routing, or false if it does
    */
   public static boolean disallowExplicitSourceRouting(Email email) {
     return email.explicitSourceRoutes().size() <= 0;
   }
 
   /**
-   * Rejects an email that has quoted identifiers. For example, the address
-   * <pre>"John Smith &#60;test@server.com&#62;"</pre> would be rejected.
+   * Rejects an email address that has quoted identifiers. For example, the address
+   * {@code "John Smith <test@server.com>"} would be rejected.
    *
-   * @param email the email to validate
-   * @return true if this email does not have a quoted identifier, or false if it does
+   * @param email the email address to validate
+   * @return true if this email address does not have a quoted identifier, or false if it does
    */
   public static boolean disallowQuotedIdentifiers(Email email) {
     return !email.hasIdentifier();
   }
 
   /**
-   * Rejects an email that has a top-level domain other than the ones in the allowed set.
+   * Rejects an email address that has a top-level domain other than the ones in the allowed set.
    * For example, if {@code allowed} is {@code [DOT_COM, DOT_ORG]}, then the address
    * {@code "test@example.net"} would be rejected.
    *
-   * @param email the email to validate
+   * @param email the email address to validate
    * @param allowed the set of allowed {@link TopLevelDomain}
-   * @return true if this email has an allowed top-level domain, or false if it does not
+   * @return true if this email address has an allowed top-level domain, or false if it does not
    */
   public static boolean requireOnlyTopLevelDomains(Email email, Set<TopLevelDomain> allowed) {
     return allowed.contains(email.topLevelDomain());
   }
 
   /**
-   * Rejects an email that has a reserved domain according to
+   * Rejects an email address that has a reserved domain according to
    * <a href="https://datatracker.ietf.org/doc/html/rfc2606">RFC 2606</a>. The reserved domains
    * are:
    *
@@ -104,8 +104,8 @@ public final class ValidationRules {
    *   <li>{@code example.net}
    * </ul>
    *
-   * @param email the email to validate
-   * @return true if this email does not have a reserved domain, or false if it does
+   * @param email the email address to validate
+   * @return true if this email address does not have a reserved domain, or false if it does
    */
   public static boolean disallowReservedDomains(Email email) {
     List<String> domainParts = email.domainParts();

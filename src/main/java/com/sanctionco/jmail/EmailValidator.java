@@ -57,7 +57,7 @@ public final class EmailValidator {
    * validator.withRule(email -> email.domain().startsWith("test"));
    * </pre>
    *
-   * @param rule the requirement for a valid email. This must be a {@link Predicate} that
+   * @param rule the requirement for a valid email address. This must be a {@link Predicate} that
    *             accepts an {@link Email} object.
    * @return this, for chaining
    */
@@ -70,6 +70,8 @@ public final class EmailValidator {
    * Add the {@link ValidationRules#disallowIpDomain(Email)} rule to this validator.
    * Email addresses that have an IP address for a domain will fail validation.
    *
+   * <p>For example, {@code "sample@[1.2.3.4]"} would be invalid.
+   *
    * @return this, for chaining
    */
   public EmailValidator disallowIpDomain() {
@@ -80,6 +82,8 @@ public final class EmailValidator {
   /**
    * Add the {@link ValidationRules#requireTopLevelDomain(Email)} rule to this validator.
    * Email addresses that do not have a top level domain will fail validation.
+   *
+   * <p>For example, {@code "sample@mailserver"} would be invalid.
    *
    * @return this, for chaining
    */
@@ -92,6 +96,8 @@ public final class EmailValidator {
    * Add the {@link ValidationRules#disallowExplicitSourceRouting(Email)} rule to this validator.
    * Email addresses that have explicit source routing will fail validation.
    *
+   * <p>For example, {@code "@1st.relay,@2nd.relay:user@final.domain"} would be invalid.
+   *
    * @return this, for chaining
    */
   public EmailValidator disallowExplicitSourceRouting() {
@@ -103,6 +109,8 @@ public final class EmailValidator {
    * Add the {@link ValidationRules#disallowQuotedIdentifiers(Email)} rule to this validator.
    * Email addresses that have quoted identifiers will fail validation.
    *
+   * <p>For example, {@code "John Smith <test@server.com>"} would be invalid.
+   *
    * @return this, for chaining
    */
   public EmailValidator disallowQuotedIdentifiers() {
@@ -113,6 +121,8 @@ public final class EmailValidator {
   /**
    * Add the {@link ValidationRules#disallowReservedDomains(Email)} rule to this validator.
    * Email addresses that have a reserved domain according to RFC 2606 will fail validation.
+   *
+   * <p>For example, {@code "name@example.com"} would be invalid.
    *
    * @return this, for chaining
    */
@@ -126,6 +136,9 @@ public final class EmailValidator {
    * Email addresses that have top level domains other than those provided will
    * fail validation.
    *
+   * <p>For example, if you require only {@link TopLevelDomain#DOT_COM}, the email address
+   * {@code "name@host.net"} would be invalid.
+   *
    * @param allowed the set of allowed {@link TopLevelDomain}
    * @return this, for chaining
    */
@@ -137,11 +150,11 @@ public final class EmailValidator {
   }
 
   /**
-   * Return true if the given email is valid according to all registered validation rules,
+   * Return true if the given email address is valid according to all registered validation rules,
    * or false otherwise. See {@link JMail#tryParse(String)} for details on the basic
    * validation that is always performed.
    *
-   * @param email the email to validate
+   * @param email the email address to validate
    * @return the result of the validation
    */
   public boolean isValid(String email) {
@@ -151,11 +164,11 @@ public final class EmailValidator {
   }
 
   /**
-   * Require that the given email is valid according to all registered validation rules,
+   * Require that the given email address is valid according to all registered validation rules,
    * throwing {@link InvalidEmailException} if the email is invalid. See
    * {@link JMail#tryParse(String)} for details on the basic validation that is always performed.
    *
-   * @param email the email to validate
+   * @param email the email address to validate
    * @throws InvalidEmailException if the validation fails
    */
   public void enforceValid(String email) throws InvalidEmailException {
@@ -165,11 +178,11 @@ public final class EmailValidator {
   }
 
   /**
-   * Attempts to parse the given email string, only succeeding if the given email is
+   * Attempts to parse the given email address string, only succeeding if the given address is
    * valid according to all registered validation rules. See {@link JMail#tryParse(String)}
    * for details on the basic validation that is always performed.
    *
-   * @param email the email to parse
+   * @param email the email address to parse
    * @return an {@link Optional} containing the parsed {@link Email}, or empty if the email
    *         is invalid according to all registered validation rules
    */
@@ -184,9 +197,9 @@ public final class EmailValidator {
   }
 
   /**
-   * Test the given email against all configured validation predicates.
+   * Test the given email address against all configured validation predicates.
    *
-   * @param email the email to test
+   * @param email the email address to test
    * @return true if it passes the predicates, false otherwise
    */
   private boolean passesPredicates(Email email) {

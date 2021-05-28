@@ -1,7 +1,7 @@
 package com.sanctionco.jmail;
 
 /**
- * A {@link RuntimeException} that indicates an invalid email was encountered during
+ * A {@link RuntimeException} that indicates an invalid email address was encountered during
  * validation.
  */
 public final class InvalidEmailException extends RuntimeException {
