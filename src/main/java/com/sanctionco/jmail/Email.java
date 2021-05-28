@@ -91,7 +91,7 @@ public final class Email {
   }
 
   /**
-   * Get the domainof this email address without any comments. For example,
+   * Get the domain of this email address without any comments. For example,
    * the local-part without comments of {@code "test@(comment)example.com"} is
    * {@code "example.com"}. If the email has no comments, this is effectively the same
    * as {@link #domain()} ()}.

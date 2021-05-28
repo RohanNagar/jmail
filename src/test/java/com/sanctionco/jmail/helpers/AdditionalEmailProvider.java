@@ -31,16 +31,6 @@ public class AdditionalEmailProvider {
         "test.\r\n\r\n obs@syntax.com");
   }
 
-  public static Stream<Arguments> provideInvalidQuotedIdentifierEmails() {
-    return Stream.of(
-        Arguments.of("Joe A Smith <email@example.com"),
-        Arguments.of("Joe A Smith email@example.com"),
-        Arguments.of("Joe A Smith <email@example.com->"),
-        Arguments.of("Joe A Smith <email@-example.com->"),
-        Arguments.of("Joe A Smith <email>")
-    );
-  }
-
   // Valid emails with quotes
   public static Stream<Arguments> provideValidEmails() {
     return Stream.of(
@@ -113,14 +103,6 @@ public class AdditionalEmailProvider {
             "\r\n (\r\n x \r\n ) \r\n first\r\n ( \r\n x\r\n ) \r\n .\r\n ( \r\n x) \r\n "
                 + "last \r\n (  x \r\n ) \r\n ",
             "test.org")
-    );
-  }
-
-  public static Stream<Arguments> provideValidQuotedIdentifierEmails() {
-    return Stream.of(
-        Arguments.of("Joe A Smith <email@example.com>", "email", "example.com"),
-        Arguments.of("\"John Michael\" <tester@test.net>", "tester", "test.net"),
-        Arguments.of("A <apple@pie.com>", "apple", "pie.com")
     );
   }
 }

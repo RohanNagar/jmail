@@ -138,3 +138,8 @@ invalid@[1]<br>
 ä📧@-foo<br>
 ä📧@foo-<br>
 first(comment(inner@comment.com<br>
+Joe A Smith <email@example.com<br>
+Joe A Smith email@example.com<br>
+Joe A Smith <email@example.com-><br>
+Joe A Smith <email@-example.com-><br>
+Joe A Smith <email><br>
