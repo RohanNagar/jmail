@@ -11,7 +11,6 @@ plainaddress<br>The @ character must be present
 #@%^%#$@#$@#.com<br>There can only be a single @ character
 @example.com<br>The local-part must not be empty
 @NotAnEmail<br>The local-part must not be empty
-Joe Smith <email@example.com><br>
 .email@example.com<br>The local-part cannot begin with the . character
 email.@example.com<br>The local-part cannot end with the . character
 email..email@example.com<br>The local-part cannot contain two dots in a row

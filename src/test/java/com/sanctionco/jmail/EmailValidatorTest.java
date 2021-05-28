@@ -86,6 +86,21 @@ class EmailValidatorTest {
   }
 
   @Nested
+  class DisallowQuotedIdentifiers {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"John Smith <test@server.com>", "ABC <123t@abc.net"})
+    void rejectsAddressesWithQuotedIdentifiers(String email) {
+      runInvalidTest(JMail.validator().disallowQuotedIdentifiers(), email);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"test@123.123.123.com", "first.last@example.com"})
+    void allowsOtherAddresses(String email) {
+      runValidTest(JMail.validator().disallowQuotedIdentifiers(), email);
+    }
+  }
+
+  @Nested
   class RequireOnlyTopLevelDomains {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"test@123.123.123.org", "first.last@example.net"})

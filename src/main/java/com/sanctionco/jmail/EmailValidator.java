@@ -33,6 +33,8 @@ public final class EmailValidator {
       = ValidationRules::requireTopLevelDomain;
   private static final Predicate<Email> DISALLOW_EXPLICIT_SOURCE_ROUTING
       = ValidationRules::disallowExplicitSourceRouting;
+  private static final Predicate<Email> DISALLOW_QUOTED_IDENTIFIERS
+      = ValidationRules::disallowQuotedIdentifiers;
   private static final Predicate<Email> DISALLOW_RESERVED_DOMAINS_PREDICATE
       = ValidationRules::disallowReservedDomains;
 
@@ -94,6 +96,17 @@ public final class EmailValidator {
    */
   public EmailValidator disallowExplicitSourceRouting() {
     validationPredicates.add(DISALLOW_EXPLICIT_SOURCE_ROUTING);
+    return this;
+  }
+
+  /**
+   * Add the {@link ValidationRules#disallowQuotedIdentifiers(Email)} rule to this validator.
+   * Email addresses that have quoted identifiers will fail validation.
+   *
+   * @return this, for chaining
+   */
+  public EmailValidator disallowQuotedIdentifiers() {
+    validationPredicates.add(DISALLOW_QUOTED_IDENTIFIERS);
     return this;
   }
 

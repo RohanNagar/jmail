@@ -13,14 +13,17 @@ public final class Email {
   private final String domain;
   private final String domainWithoutComments;
   private final String fullSourceRoute;
+  private final String identifier;
   private final List<String> domainParts;
   private final List<String> comments;
   private final List<String> sourceRoutes;
   private final boolean isIpAddress;
+  private final boolean hasIdentifier;
   private final TopLevelDomain tld;
 
   Email(String localPart, String localPartWithoutComments,
-        String domain, String domainWithoutComments, String fullSourceRoute,
+        String domain, String domainWithoutComments,
+        String fullSourceRoute, String identifier,
         List<String> domainParts, List<String> comments, List<String> sourceRoutes,
         boolean isIpAddress) {
     this.localPart = localPart;
@@ -28,14 +31,31 @@ public final class Email {
     this.domain = domain;
     this.domainWithoutComments = domainWithoutComments;
     this.fullSourceRoute = fullSourceRoute;
+    this.identifier = identifier;
     this.domainParts = Collections.unmodifiableList(domainParts);
     this.comments = Collections.unmodifiableList(comments);
     this.sourceRoutes = Collections.unmodifiableList(sourceRoutes);
     this.isIpAddress = isIpAddress;
+    this.hasIdentifier = identifier != null && identifier.length() > 0;
 
     this.tld = domainParts.size() > 1
         ? TopLevelDomain.fromString(domainParts.get(domainParts.size() - 1))
         : TopLevelDomain.NONE;
+  }
+
+  Email(Email other, String identifier) {
+    this.localPart = other.localPart;
+    this.localPartWithoutComments = other.localPartWithoutComments;
+    this.domain = other.domain;
+    this.domainWithoutComments = other.domainWithoutComments;
+    this.fullSourceRoute = other.fullSourceRoute;
+    this.identifier = identifier;
+    this.domainParts = other.domainParts;
+    this.comments = other.comments;
+    this.sourceRoutes = other.sourceRoutes;
+    this.isIpAddress = other.isIpAddress;
+    this.hasIdentifier = identifier != null && identifier.length() > 0;
+    this.tld = other.tld;
   }
 
   /**
@@ -80,6 +100,16 @@ public final class Email {
    */
   public String domainWithoutComments() {
     return domainWithoutComments;
+  }
+
+  /**
+   * Returns the identifier of the email address, if it has one. For example, the identifier
+   * of the email <pre>"John Smith &#60;test@server.com&#62;"</pre> is {@code "John Smith "}.
+   *
+   * @return the identifier of the email or {@code null} if it does not have one
+   */
+  public String identifier() {
+    return identifier;
   }
 
   /**
@@ -131,6 +161,17 @@ public final class Email {
   }
 
   /**
+   * Get whether or not this email address has an identifier. For example, the address
+   * <pre>"John Smith &#60;test@server.com&#62;"</pre> will return {@code true}, but the address
+   * {@code "test@example.com"} will return {@code false}.
+   *
+   * @return true if this email has en identifier, false otherwise
+   */
+  public boolean hasIdentifier() {
+    return hasIdentifier;
+  }
+
+  /**
    * Get the {@link TopLevelDomain} of this email address. For example,
    * the address {@code "test@example.com"} will return {@link TopLevelDomain#DOT_COM}.
    *
@@ -152,7 +193,11 @@ public final class Email {
     String fixedDomain = isIpAddress ? "[" + domain + "]" : domain;
     String fixedLocalPart = fullSourceRoute + localPart;
 
-    return fixedLocalPart + "@" + fixedDomain;
+    String addr = fixedLocalPart + "@" + fixedDomain;
+
+    return hasIdentifier
+        ? identifier + "<" + addr + ">"
+        : addr;
   }
 
   @Override

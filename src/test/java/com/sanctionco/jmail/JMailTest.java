@@ -23,7 +23,8 @@ class JMailTest {
   @ParameterizedTest(name = "{0}")
   @MethodSource({
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidEmails",
-      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidWhitespaceEmails"})
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidWhitespaceEmails",
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidQuotedIdentifierEmails"})
   @CsvFileSource(resources = "/valid-addresses.csv", numLinesToSkip = 1)
   void ensureValidPasses(String email, String localPart, String domain) {
     // Set expected values based on if the domain is an IP address or not
@@ -57,7 +58,8 @@ class JMailTest {
   @ParameterizedTest(name = "{0}")
   @MethodSource({
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails",
-      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidWhitespaceEmails"})
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidWhitespaceEmails",
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidQuotedIdentifierEmails"})
   @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = "<br>")
   void ensureInvalidFails(String email) {
     assertThat(JMail.tryParse(email)).isNotPresent();
@@ -127,5 +129,30 @@ class JMailTest {
     assertThat(email).is(invalid);
     assertThatExceptionOfType(InvalidEmailException.class)
         .isThrownBy(() -> JMail.enforceValid(email));
+  }
+
+  @Test
+  void ensureIdentifiersAreParsed() {
+    String one = "John Smith <test@te.ex>";
+
+    assertThat(JMail.tryParse(one)).isPresent().get()
+        .hasToString(one)
+        .returns(true, Email::hasIdentifier)
+        .returns("John Smith ", Email::identifier);
+
+    String two = "Admin<admin@te.ex>";
+
+    assertThat(JMail.tryParse(two)).isPresent().get()
+        .hasToString(two)
+        .returns(true, Email::hasIdentifier)
+        .returns("Admin", Email::identifier);
+
+    String none = "user@te.ex";
+
+    assertThat(JMail.tryParse(none)).isPresent().get()
+        .hasToString(none)
+        .returns(false, Email::hasIdentifier)
+        .extracting("identifier")
+        .isNull();
   }
 }

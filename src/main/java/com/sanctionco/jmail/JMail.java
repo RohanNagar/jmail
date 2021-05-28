@@ -180,6 +180,7 @@ public final class JMail {
     boolean requireAtDotOrComment = false; // set to true if the next character should be @ . or (
     boolean whitespace = false;            // set to true if we are currently within whitespace
     boolean previousComment = false;       // set to true if the last character was the end comment
+    boolean requireAngledBracket = false;
 
     StringBuilder localPart = new StringBuilder(size);
     StringBuilder localPartWithoutComments = new StringBuilder(size);
@@ -196,9 +197,20 @@ public final class JMail {
     for (int i = 0; i < size; i++) {
       char c = email.charAt(i);
 
+      if (c == '<' && !inQuotes && !previousBackslash) {
+        // could be phrase <address> format. If not, it's not allowed
+        if (!(email.charAt(size - 1) == '>')) return Optional.empty();
+
+        return tryParse(email.substring(i + 1, size - 1))
+            .map(e -> new Email(e, localPart.toString()));
+      }
+
       if (c == '@' && !inQuotes && !previousBackslash) {
         // If we already found an @ outside of quotes, fail
         if (atFound) return Optional.empty();
+
+        // If we need an angled bracket we should fail, it's too late
+        if (requireAngledBracket) return Optional.empty();
 
         // Otherwise
         atFound = true;
@@ -232,7 +244,8 @@ public final class JMail {
         // Whitespace is allowed if it is between parts
         if (!previousDot && !previousComment) {
           if (c != '.' && c != '@' && c != '(' && !isWhitespace(c)) {
-            return Optional.empty();
+            if (!atFound) requireAngledBracket = true; // or in phrase <addr> format
+            else return Optional.empty();
           }
         }
       }
@@ -391,7 +404,7 @@ public final class JMail {
 
     return Optional.of(new Email(
         localPart.toString(), localPartWithoutComments.toString(),
-        domain.toString(), domainWithoutComments.toString(), fullSourceRoute,
+        domain.toString(), domainWithoutComments.toString(), fullSourceRoute, null,
         domainParts, comments, sourceRoutes, isIpAddress));
   }
 

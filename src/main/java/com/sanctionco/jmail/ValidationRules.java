@@ -66,6 +66,17 @@ public final class ValidationRules {
   }
 
   /**
+   * Rejects an email that has quoted identifiers. For example, the address
+   * <pre>"John Smith &#60;test@server.com&#62;"</pre> would be rejected.
+   *
+   * @param email the email to validate
+   * @return true if this email does not have a quoted identifier, or false if it does
+   */
+  public static boolean disallowQuotedIdentifiers(Email email) {
+    return !email.hasIdentifier();
+  }
+
+  /**
    * Rejects an email that has a top-level domain other than the ones in the allowed set.
    * For example, if {@code allowed} is {@code [DOT_COM, DOT_ORG]}, then the address
    * {@code "test@example.net"} would be rejected.
