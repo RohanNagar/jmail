@@ -115,17 +115,21 @@ class ComparisonTest {
 
   @ParameterizedTest(name = "{0}")
   @MethodSource("com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails")
-  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = "<br>")
+  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;")
   void compareInvalid(String email, String description) throws Exception {
-    runTest(email, false, description);
+    runTest(email, false, description == null ? null : description.trim());
   }
 
   private void runTest(String email, boolean expected, String description) throws Exception {
     totalTests++;
 
+    String desc = description == null
+        ? ""
+        : "<small class=\"text-muted\">" + description + "</small>";
+
     String expectedResult = expected
-        ? "<td valign=\"middle\">Valid</td>"
-        : "<td valign=\"middle\">Invalid</td>";
+        ? "<td valign=\"middle\">Valid<br/>" + desc + "</td>"
+        : "<td valign=\"middle\">Invalid<br/>" + desc + "</td>";
 
     StringBuilder result = new StringBuilder()
         .append("    <tr>\n      <th scope=\"row\" valign=\"middle\">")
@@ -134,9 +138,6 @@ class ComparisonTest {
             .replaceAll(">", "&gt;"), 40)
             .stream().map(s -> s + "<br/>")
             .collect(Collectors.joining()))
-        .append(description == null
-            ? ""
-            : "<small class=\"text-muted\">" + description + "</small>")
         .append("</th>\n")
         .append("      ").append(expectedResult).append("\n");
 
