@@ -74,7 +74,7 @@ To perform standard email validation, use the static methods
 available in `JMail`. For example, to test validation:
 
 ```java
-String email = "test@example,com";
+String email = "test@example.com";
 
 if (JMail.isValid(email)) {
   // Work with your email string
@@ -84,7 +84,7 @@ if (JMail.isValid(email)) {
 Or to enforce validation, throwing an `InvalidEmailException` on failure:
 
 ```java
-String email = "test@example,com";
+String email = "test@example.com";
 
 try {
   JMail.enforceValid(email);

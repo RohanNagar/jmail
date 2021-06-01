@@ -78,29 +78,29 @@ invalid@about.museum-<br>
 test@...........com<br>
 first.last@-xample.com<br>
 first.last@exampl-.com<br>
-first.last@x234567890123456789012345678901234567890123456789012345678901234.test.org<br>
-abc@def@test.org<br>
-abc\\@def@test.org<br>
-abc\@test.org<br>
-@test.org<br>
-doug@<br>
-.dot@test.org<br>
-dot.@test.org<br>
-two..dot@test.org<br>
-"Doug "Ace" L."@test.org<br>
+first.last@x234567890123456789012345678901234567890123456789012345678901234.test.org<br>A single domain part cannot have more than 63 characters
+abc@def@test.org<br>There can only be a single @ character
+abc\\@def@test.org<br>The first @ character should be escaped
+abc\@test.org<br>Since the only @ is escaped, this is missing an @ character
+@test.org<br>The local-part cannot be empty
+doug@<br>The domain cannot be empty
+.dot@test.org<br>The local-part cannot start with a . character
+dot.@test.org<br>The local-part cannot end with a . character
+two..dot@test.org<br>The local-part cannot have two . characters in a row
+"Doug "Ace" L."@test.org<br>Quotes must be separated by . characters
 Doug\ \"Ace\"\ L\.@test.org<br>
-hello world@test.org<br>
-gatsby@f.sc.ot.t.f.i.tzg.era.l.d.<br>
-.@<br>
+hello world@test.org<br>Whitespace must be separated by . characters
+gatsby@f.sc.ot.t.f.i.tzg.era.l.d.<br>The domain cannot end with a . character
+.@<br>The local-part cannot be a single . character
 @bar.com<br>
 @@bar.com<br>
 aaa.com<br>
 aaa@.com<br>
 aaa@.123<br>
 a@bar.com.<br>
-cal(foo(bar)@iamcal.com<br>
-cal(foo)bar)@iamcal.com<br>
-cal(foo\)@iamcal.com<br>
+cal(foo(bar)@iamcal.com<br>The comment must be closed
+cal(foo)bar)@iamcal.com<br>There is an extra closing parenthesis
+cal(foo\)@iamcal.com<br>The closing parenthesis is escaped so there is no actual closing parenthesis
 first(12345678901234567890123456789012345678901234567890)last@(1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890)test.org<br>
 a(a(b(c)d(e(f))g)(h(i)j)@test.org<br>
 Doug\ \"Ace\"\ Lovell@test.org<br>
