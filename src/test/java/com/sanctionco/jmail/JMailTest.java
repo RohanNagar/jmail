@@ -58,7 +58,7 @@ class JMailTest {
   @MethodSource({
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails",
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidWhitespaceEmails"})
-  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;")
+  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;", numLinesToSkip = 1)
   void ensureInvalidFails(String email) {
     assertThat(JMail.tryParse(email)).isNotPresent();
 

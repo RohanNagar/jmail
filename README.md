@@ -25,11 +25,11 @@ Built for Java 8 and up.
 JMail was built mainly because I wanted to tackle the complex problem
 of email address validation without using Regex. Along the way, JMail became a
 much better choice than other Java email validation libraries
-(such as Apache Commons Validator or Java Mail Validation) for the
+(such as Apache Commons Validator or Jakarta (Javax) Mail Validation) for the
 following reasons:
 
 1. JMail is **_more correct_** than other libraries. For example, both
-   Apache Commons and Java Mail consider `first@last@test.org` as a valid
+   Apache Commons and Jakarta Mail consider `first@last@test.org` as a valid
    email address! It clearly is not, as it has two `@` characters. JMail correctly
    considers this address invalid. You can
    [see a full comparison of correctness and try it out for yourself online](https://www.rohannagar.com/jmail/).

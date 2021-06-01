@@ -194,7 +194,7 @@
     <module name="OverloadMethodsDeclarationOrder"/>
     <module name="VariableDeclarationUsageDistance"/>
     <module name="ImportOrder">
-      <property name="groups" value="*,com,dagger,io,java,javax,net,okhttp3,org,retrofit2,software"/>
+      <property name="groups" value="*,com,io,jakarta,java,javax,net,org"/>
       <property name="ordered" value="true"/>
       <property name="separated" value="true"/>
       <property name="option" value="bottom"/>

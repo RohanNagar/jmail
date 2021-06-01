@@ -1,3 +1,4 @@
+File format: invalid-address ; Description of why it is invalid
 Abc.example.com ;                                                                 The @ character must be present
 A@b@c@example.com ;                                                               There can only be a single @ character
 a"b(c)d,e:f;g<h>i[j\k]l@example.com ;                                             Certain characters cannot be in the local-part unquoted

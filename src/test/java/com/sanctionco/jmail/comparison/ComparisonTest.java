@@ -2,6 +2,8 @@ package com.sanctionco.jmail.comparison;
 
 import com.sanctionco.jmail.JMail;
 
+import jakarta.mail.internet.InternetAddress;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,8 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import javax.mail.internet.InternetAddress;
 
 import org.hazlewood.connor.bottema.emailaddress.EmailAddressCriteria;
 import org.hazlewood.connor.bottema.emailaddress.EmailAddressValidator;
@@ -41,8 +41,8 @@ class ComparisonTest {
       org.apache.commons.validator.routines.EmailValidator
           .getInstance(true, true)::isValid);
 
-  private final Implementation javaMailImpl = new Implementation("Javax Mail",
-      "https://javaee.github.io/javamail/", s -> {
+  private final Implementation javaMailImpl = new Implementation("Jakarta (Javax) Mail",
+      "https://eclipse-ee4j.github.io/mail/", s -> {
     try {
       new InternetAddress(s).validate();
     } catch (Exception e) {
@@ -115,7 +115,7 @@ class ComparisonTest {
 
   @ParameterizedTest(name = "{0}")
   @MethodSource("com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails")
-  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;")
+  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;", numLinesToSkip = 1)
   void compareInvalid(String email, String description) throws Exception {
     runTest(email, false, description == null ? null : description.trim());
   }
