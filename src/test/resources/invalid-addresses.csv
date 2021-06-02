@@ -1,4 +1,4 @@
-File format: invalid-address ; Description of why it is invalid
+File format: invalid-address ;                                                         Description of why it is invalid
 Abc.example.com ;                                                                      The @ character must be present
 A@b@c@example.com ;                                                                    There can only be a single @ character
 a"b(c)d,e:f;g<h>i[j\k]l@example.com ;                                                  Certain characters cannot be in the local-part unquoted
@@ -115,39 +115,26 @@ test@@test.org ;                                                                
 test@. ;                                                                               The domain cannot be a single . character
 test@example. ;                                                                        The domain cannot end with a . character
 test@.org ;                                                                            The domain cannot start with a . character
-test@123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012.com ;
-.wooly@test.org ;
-wo..oly@test.org ;
-pootieshoe.@test.org ;
-.@test.org ;
-Ima Fool@test.org ;
-"first\\"last"@test.org ;
-foo@[\1.2.3.4] ;
-first\last@test.org ;
-first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno).(abc("def".ghi).mno)com(abc("def".ghi).mno) ;
-first(middle)last@test.org ;
-"Unicode NULL ␀"@char.com ;
-Unicode NULL \␀@char.com ;
-"test"test@test.com ;
-()@test.com ;
-test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames ;
-test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com ;
-invalid@[1] ;
-ä📧@-foo ;
-ä📧@foo- ;
-first(comment(inner@comment.com ;
-Joe A Smith <email@example.com ;
-Joe A Smith email@example.com ;
-Joe A Smith <email@example.com-> ;
-Joe A Smith <email@-example.com-> ;
-Joe A Smith <email> ;
-@-1st.relay,@2nd.relay:user@final.domain ;
-@1st-.relay,@2nd.relay:user@final.domain ;
-@1st.relay,2nd.relay:user@final.domain ;
-@.relay,2nd.relay:user@final.domain ;
-@1st.1111,2nd.relay:user@final.domain ;
-@hello.world,user@final.domain ;
-@1st.relay,@2nd.relay:user@-final.domain ;
-@1st.relay,@2nd.relay:invalid ;
-@@1st.relay,@2nd.relay:user@final.domain ;
-@1st.r_elay,@2nd.relay:user@final.domain ;
+test@123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012.com ; Each domain part can only be 63 characters
+.@test.org ;                                                                           The local-part cannot be a single . character
+Ima Fool@test.org ;                                                                    Whitespace must be separated by . characters
+"first\\"last"@test.org ;                                                              A " character within quotes must be escaped
+foo@[\1.2.3.4] ;                                                                       The \ character is not allowed within the domain literal
+first\last@test.org ;                                                                  The \ character is not escaping anything
+first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno).(abc("def".ghi).mno)com(abc("def".ghi).mno) ; The first comment is not dot separated
+first(middle)last@test.org ;                                                           Comments in the middle of the local-part must be dot separated
+"Unicode NULL ␀"@char.com ;                                                           The unicode null character must be escaped within quotes
+Unicode NULL \␀@char.com ;                                                            The escaped unicode null character is only allowed within quotes
+"test"test@test.com ;                                                                  Quotes must be dot separated
+()@test.com ;                                                                          Empty comment is not allowed
+test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames ; The top level domain can only be 63 characters long
+test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com ;     Each domain part can only be 63 characters long
+invalid@[1] ;                                                                          The domain literal is not a valid IPv4 or IPv6 address
+ä📧@-foo ;                                                                             A dotless domain cannot start with the - character
+ä📧@foo- ;                                                                             A dotless domain cannot end with the - character
+first(comment(inner@comment.com ;                                                      Comments must have closing parenthesis
+Joe A Smith <email@example.com ;                                                       A quoted identifier address must have a closing angled bracket
+Joe A Smith email@example.com ;                                                        The address part must be in angled brackets
+Joe A Smith <email@example.com-> ;                                                     The address part must be valid (cannot end with a dash)
+Joe A Smith <email@-example.com-> ;                                                    The address part must be valid (domain cannot start with a dash)
+Joe A Smith <email> ;                                                                  The address part must be valid (missing @ character and domain)

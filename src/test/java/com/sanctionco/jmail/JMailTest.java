@@ -108,6 +108,27 @@ class JMailTest {
         .returns(Arrays.asList("1st.relay", "2nd.relay"), Email::explicitSourceRoutes);
   }
 
+  @ParameterizedTest(name = "{0}")
+  @ValueSource(strings = {
+      "@-1st.relay,@2nd.relay:user@final.domain",
+      "@1st-.relay,@2nd.relay:user@final.domain",
+      "@1st.relay,2nd.relay:user@final.domain",
+      "@.relay,2nd.relay:user@final.domain",
+      "@1st.1111,2nd.relay:user@final.domain",
+      "@hello.world,user@final.domain",
+      "@1st.relay,@2nd.relay:user@-final.domain",
+      "@1st.relay,@2nd.relay:invalid",
+      "@@1st.relay,@2nd.relay:user@final.domain",
+      "@1st.r_elay,@2nd.relay:user@final.domain",
+  })
+  void ensureInvalidSourceRoutingAddressesFail(String email) {
+    assertThat(JMail.tryParse(email)).isNotPresent();
+
+    assertThat(email).is(invalid);
+    assertThatExceptionOfType(InvalidEmailException.class)
+        .isThrownBy(() -> JMail.enforceValid(email));
+  }
+
   @Test
   void ensureIdentifiersAreParsed() {
     String one = "John Smith <test@te.ex>";
