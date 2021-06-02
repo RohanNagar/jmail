@@ -1,123 +1,120 @@
 File format: invalid-address ; Description of why it is invalid
-Abc.example.com ;                                                                 The @ character must be present
-A@b@c@example.com ;                                                               There can only be a single @ character
-a"b(c)d,e:f;g<h>i[j\k]l@example.com ;                                             Certain characters cannot be in the local-part unquoted
-just"not"right@example.com ;                                                      Quoted strings must be separated by dots
-this is"not\allowed@example.com ;                                                 Whitespace should be quoted or dot-separated
-this\ still\"not\\allowed@example.com ;                                           Escaped whitespaces should still be quoted or dot-separated
-1234567890123456789012345678901234567890123456789012345678901234+x@example.com ;  The local-part cannot have more than 64 characters
-i_like_underscore@but_its_not_allowed_in_this_part.example.com ;                  Underscores are not allowed in the domain
-QA[icon]CHOCOLATE[icon]@test.com ;                                                Unquoted [ and ] characters are not allowed
-plainaddress ;                                                                    The @ character must be present
-#@%^%#$@#$@#.com ;                                                                There can only be a single @ character
-@example.com ;                                                                    The local-part must not be empty
-@NotAnEmail ;                                                                     The local-part must not be empty
-.email@example.com ;                                                              The local-part cannot begin with the . character
-email.@example.com ;                                                              The local-part cannot end with the . character
-email..email@example.com ;                                                        The local-part cannot contain two dots in a row
-email@-example.com ;                                                              The domain cannot start with the - character
-email@111.222.333.44444 ;                                                         The top level domain cannot be all numeric
-email@example..com ;                                                              The domain cannot contain two dots in a row
-this\ is"really"not\allowed@example.com ;                                         The backslash escape must escape a special character
-first.last@sub.do,com ;                                                           The , character is not allowed in the domain
-email@[12.34.44.56 ;                                                              The domain literal must have the closing bracket
-email@14.44.56.34] ;                                                              The domain literal must have the opening bracket
-email@[1.1.23.5f] ;                                                               The IPv4 format must be valid (disallowed character)
-email@[3.256.255.23] ;                                                            The IPv4 format must be valid (256 is above the IP range)
-"first"last"@test.org ;                                                           The final quote is invalid (missing pair and not dot-separated)
-first.last@[.12.34.56.78] ;                                                       The IPv4 format must be valid (leading dot)
-first.last@[12.34.56.789] ;                                                       The IPv4 format must be valid (789 is above the IP range)
-first.last@[::12.34.56.78] ;                                                      IPv6 domain literal must have IPv6 tag
+Abc.example.com ;                                                                      The @ character must be present
+A@b@c@example.com ;                                                                    There can only be a single @ character
+a"b(c)d,e:f;g<h>i[j\k]l@example.com ;                                                  Certain characters cannot be in the local-part unquoted
+just"not"right@example.com ;                                                           Quoted strings must be separated by dots
+this is"not\allowed@example.com ;                                                      Whitespace should be quoted or dot-separated
+this\ still\"not\\allowed@example.com ;                                                Escaped whitespaces should still be quoted or dot-separated
+1234567890123456789012345678901234567890123456789012345678901234+x@example.com ;       The local-part cannot have more than 64 characters
+i_like_underscore@but_its_not_allowed_in_this_part.example.com ;                       Underscores are not allowed in the domain
+QA[icon]CHOCOLATE[icon]@test.com ;                                                     Unquoted [ and ] characters are not allowed
+plainaddress ;                                                                         The @ character must be present
+#@%^%#$@#$@#.com ;                                                                     There can only be a single @ character
+@example.com ;                                                                         The local-part must not be empty
+@NotAnEmail ;                                                                          The local-part must not be empty
+.email@example.com ;                                                                   The local-part cannot begin with the . character
+email.@example.com ;                                                                   The local-part cannot end with the . character
+email..email@example.com ;                                                             The local-part cannot contain two dots in a row
+email@-example.com ;                                                                   The domain cannot start with the - character
+email@111.222.333.44444 ;                                                              The top level domain cannot be all numeric
+email@example..com ;                                                                   The domain cannot contain two dots in a row
+this\ is"really"not\allowed@example.com ;                                              The backslash escape must escape a special character
+first.last@sub.do,com ;                                                                The , character is not allowed in the domain
+email@[12.34.44.56 ;                                                                   The domain literal must have the closing bracket
+email@14.44.56.34] ;                                                                   The domain literal must have the opening bracket
+email@[1.1.23.5f] ;                                                                    The IPv4 format must be valid (disallowed character)
+email@[3.256.255.23] ;                                                                 The IPv4 format must be valid (256 is above the IP range)
+"first"last"@test.org ;                                                                The final quote is invalid (missing pair and not dot-separated)
+first.last@[.12.34.56.78] ;                                                            The IPv4 format must be valid (leading dot)
+first.last@[12.34.56.789] ;                                                            The IPv4 format must be valid (789 is above the IP range)
+first.last@[::12.34.56.78] ;                                                           IPv6 domain literal must have IPv6 tag
 x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456 ; The domain cannot be more than 255 characters in total
-"\"@iana.org ;                                                                    A single backslash is invalid
-first\\@last@iana.org ;                                                           The extra @ must be quote-escaped
-first.last@ ;                                                                     The domain cannot be missing
-test@example.com&#10; ;                                                           Invalid characters in the domain are not allowed
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777] ;                            IPv6 address does not have enough segments)
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888:9999] ;                  IPv6 address has too many segments)
-first.last@[IPv6:1111:2222::3333::4444:5555:6666] ;                               The IPv6 format is invalid (Only one set of :: is allowed)
-first.last@[IPv6:1111:2222:333x::4444:5555] ;                                     The IPv6 format is invalid (x is not a valid hexadecimal character)
-first.last@[IPv6:1111:2222:33333::4444:5555] ;                                    The IPv6 format is invalid (33333 is not a valid segment)
-first.last@[IPv6::] ;                                                             The IPv6 format is invalid (: is invalid)
-first.last@[IPv6::::] ;                                                           The IPv6 format is invalid (::: is invalid)
-first.last@[IPv6::b4] ;                                                           The IPv6 format is invalid
-first.last@[IPv6::::b4] ;                                                         The IPv6 format is invalid
-first.last@[IPv6::b3:b4] ;                                                        The IPv6 format is invalid
-first.last@[IPv6::::b3:b4] ;                                                      The IPv6 format is invalid
-first.last@[IPv6:a1:::b4] ;                                                       The IPv6 format is invalid
-first.last@[IPv6:a1:] ;                                                           The IPv6 format is invalid
-first.last@[IPv6:a1:::] ;                                                         The IPv6 format is invalid
-first.last@[IPv6:a1:a2:] ;                                                        The IPv6 format is invalid
-first.last@[IPv6:a1:a2:::] ;                                                      The IPv6 format is invalid
-first.last@[IPv6:a1::b3:] ;                                                       The IPv6 format is invalid
-first.last@[IPv6::a2::b4] ;                                                       The IPv6 format is invalid
-first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:] ;                                         The IPv6 format is invalid
-first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4] ;                                         The IPv6 format is invalid
-first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4] ;                                      The IPv6 format is invalid
-first.last@[IPv6::11.22.33.44] ;                                                  The IPv6 format is invalid
-first.last@[IPv6::::11.22.33.44] ;                                                The IPv6 format is invalid
-first.last@[IPv6:a1:11.22.33.44] ;                                                The IPv6 format is invalid
-first.last@[IPv6:a1:::11.22.33.44] ;                                              The IPv6 format is invalid
-first.last@[IPv6:a1:a2:::11.22.33.44] ;                                           The IPv6 format is invalid
-first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.xx] ;                              The IPv6 format is invalid
-first.last@[IPv5:::12.34.56.78] ;                                                 IPv5 is not a valid domain literal
-first.last@[IPv6:1111:2222:3333:4444:5555:12.34.56.78] ;                          The IPv6 format is invalid (missing one IPv6 segment)
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:12.34.56.78] ;                The IPv6 format is invalid (extra IPv6 segment)
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.567.89] ;                    The IPv6 format is invalid (IPv4 part has an invalid segment)
-aaa@[123.123.123.123]a ;                                                          A domain literal cannot have extra characters outside of the brackets
-first.last@[IPv6:0123:4567:89ab:CDEFF::11.22.33.44] ;
-first.last@[IPv6:a1::a4:b1::b4:11.22.33.44] ;
-first.last@[IPv6:a1::11.22.33] ;
-first.last@[IPv6:a1::11.22.33.44.55] ;
-first.last@[IPv6:a1::b211.22.33.44] ;
-first.last@[IPv6:a1::b2::11.22.33.44] ;
-a@-b.com ;
-a@b-.com ;
--@..com ;
--@a..com ;
-invalid@about.museum- ;
-test@...........com ;
-first.last@-xample.com ;
-first.last@exampl-.com ;
+"\"@iana.org ;                                                                         A single backslash is invalid
+first\\@last@iana.org ;                                                                The extra @ must be quote-escaped
+first.last@ ;                                                                          The domain cannot be missing
+test@example.com&#10; ;                                                                Invalid characters in the domain are not allowed
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777] ;                                 IPv6 address does not have enough segments)
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888:9999] ;                       IPv6 address has too many segments)
+first.last@[IPv6:1111:2222::3333::4444:5555:6666] ;                                    The IPv6 format is invalid (Only one set of :: is allowed)
+first.last@[IPv6:1111:2222:333x::4444:5555] ;                                          The IPv6 format is invalid (x is not a valid hexadecimal character)
+first.last@[IPv6:1111:2222:33333::4444:5555] ;                                         The IPv6 format is invalid (33333 is not a valid segment)
+first.last@[IPv6::] ;                                                                  The IPv6 format is invalid (: is invalid)
+first.last@[IPv6::::] ;                                                                The IPv6 format is invalid (::: is invalid)
+first.last@[IPv6::b4] ;                                                                The IPv6 format is invalid
+first.last@[IPv6::::b4] ;                                                              The IPv6 format is invalid
+first.last@[IPv6::b3:b4] ;                                                             The IPv6 format is invalid
+first.last@[IPv6::::b3:b4] ;                                                           The IPv6 format is invalid
+first.last@[IPv6:a1:::b4] ;                                                            The IPv6 format is invalid
+first.last@[IPv6:a1:] ;                                                                The IPv6 format is invalid
+first.last@[IPv6:a1:::] ;                                                              The IPv6 format is invalid
+first.last@[IPv6:a1:a2:] ;                                                             The IPv6 format is invalid
+first.last@[IPv6:a1:a2:::] ;                                                           The IPv6 format is invalid
+first.last@[IPv6:a1::b3:] ;                                                            The IPv6 format is invalid
+first.last@[IPv6::a2::b4] ;                                                            The IPv6 format is invalid
+first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3:] ;                                              The IPv6 format is invalid
+first.last@[IPv6::a2:a3:a4:b1:b2:b3:b4] ;                                              The IPv6 format is invalid
+first.last@[IPv6:a1:a2:a3:a4::b1:b2:b3:b4] ;                                           The IPv6 format is invalid
+first.last@[IPv6::11.22.33.44] ;                                                       The IPv6 format is invalid
+first.last@[IPv6::::11.22.33.44] ;                                                     The IPv6 format is invalid
+first.last@[IPv6:a1:11.22.33.44] ;                                                     The IPv6 format is invalid
+first.last@[IPv6:a1:::11.22.33.44] ;                                                   The IPv6 format is invalid
+first.last@[IPv6:a1:a2:::11.22.33.44] ;                                                The IPv6 format is invalid (There is an extra colon after a2)
+first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.xx] ;                                   The IPv6 format is invalid (IPv4 part has invalid characters)
+first.last@[IPv5:::12.34.56.78] ;                                                      IPv5 is not a valid domain literal
+first.last@[IPv6:1111:2222:3333:4444:5555:12.34.56.78] ;                               The IPv6 format is invalid (missing one IPv6 segment)
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:12.34.56.78] ;                     The IPv6 format is invalid (extra IPv6 segment)
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.567.89] ;                         The IPv6 format is invalid (IPv4 part has an invalid segment)
+aaa@[123.123.123.123]a ;                                                               A domain literal cannot have extra characters outside of the brackets
+first.last@[IPv6:0123:4567:89ab:CDEFF::11.22.33.44] ;                                  The IPv6 format is invalid (CDEFF is not a valid segment)
+first.last@[IPv6:a1::a4:b1::b4:11.22.33.44] ;                                          The IPv6 format is invalid
+first.last@[IPv6:a1::11.22.33] ;                                                       The IPv6 format is invalid (IPv4 part is missing a segment)
+first.last@[IPv6:a1::11.22.33.44.55] ;                                                 The IPv6 format is invalid (IPv4 part has an extra segment)
+first.last@[IPv6:a1::b211.22.33.44] ;                                                  The IPv6 format is invalid (A colon is missing between the IPv6 and IPv4 parts)
+first.last@[IPv6:a1::b2::11.22.33.44] ;                                                The IPv6 format is invalid (There is an extra colon before the IPv4 part)
+a@-b.com ;                                                                             The domain cannot start with a - character
+a@b-.com ;                                                                             A domain part cannot end with a - character
+-@..com ;                                                                              There cannot be two . characters in a row in the domain
+-@a..com ;                                                                             There cannot be two . characters in a row in the domain
+invalid@about.museum- ;                                                                The top level domain cannot end with a - character
+test@...........com ;                                                                  There cannot be more than one . character in a row
 first.last@x234567890123456789012345678901234567890123456789012345678901234.test.org ; A single domain part cannot have more than 63 characters
-abc@def@test.org ;                                                                There can only be a single @ character
-abc\\@def@test.org ;                                                              The first @ character should be escaped
-abc\@test.org ;                                                                   Since the only @ is escaped, this is missing an @ character
-@test.org ;                                                                       The local-part cannot be empty
-doug@ ;                                                                           The domain cannot be empty
-.dot@test.org ;                                                                   The local-part cannot start with a . character
-dot.@test.org ;                                                                   The local-part cannot end with a . character
-two..dot@test.org ;                                                               The local-part cannot have two . characters in a row
-"Doug "Ace" L."@test.org ;                                                        Quotes must be separated by . characters
-Doug\ \"Ace\"\ L\.@test.org ;
-hello world@test.org ;                                                            Whitespace must be separated by . characters
-gatsby@f.sc.ot.t.f.i.tzg.era.l.d. ;                                               The domain cannot end with a . character
-.@ ;                                                                              The local-part cannot be a single . character
-@bar.com ;
-@@bar.com ;
-aaa.com ;
-aaa@.com ;
-aaa@.123 ;
-a@bar.com. ;
-cal(foo(bar)@iamcal.com ; The comment must be closed
-cal(foo)bar)@iamcal.com ; There is an extra closing parenthesis
-cal(foo\)@iamcal.com ; The closing parenthesis is escaped so there is no actual closing parenthesis
-first(12345678901234567890123456789012345678901234567890)last@(1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890)test.org ;
-a(a(b(c)d(e(f))g)(h(i)j)@test.org ;
-Doug\ \"Ace\"\ Lovell@test.org ;
-test.test.org ;
-test.@test.org ;
-test..test@test.org ;
-.test@test.org ;
-test@test@test.org ;
-test@@test.org ;
--- test --@test.org ;
-[test]@test.org ;
-"test"test"@test.org ;
-()[]\;:,><@test.org ;
-test@. ;
-test@example. ;
-test@.org ;
+abc@def@test.org ;                                                                     There can only be a single @ character
+abc\\@def@test.org ;                                                                   The first @ character should be escaped
+abc\@test.org ;                                                                        Since the only @ is escaped, this is missing an @ character
+@test.org ;                                                                            The local-part cannot be empty
+doug@ ;                                                                                The domain cannot be empty
+.dot@test.org ;                                                                        The local-part cannot start with a . character
+dot.@test.org ;                                                                        The local-part cannot end with a . character
+two..dot@test.org ;                                                                    The local-part cannot have two . characters in a row
+"Doug "Ace" L."@test.org ;                                                             Quotes must be separated by . characters
+Doug\ \"Ace\"\ L\.@test.org ;                                                          Whitespace must be separated by . characters
+hello world@test.org ;                                                                 Whitespace must be separated by . characters
+gatsby@f.sc.ot.t.f.i.tzg.era.l.d. ;                                                    The domain cannot end with a . character
+.@ ;                                                                                   The local-part cannot be a single . character
+@bar.com ;                                                                             The local-part cannot be empty
+@@bar.com ;                                                                            There cannot be more than one @ character
+aaa@.com ;                                                                             The domain cannot start with a . character
+aaa@.123 ;                                                                             The domain cannot start with a . character and the tld cannot be all numeric
+a@bar.com. ;                                                                           The domain cannot end with a . character
+cal(foo(bar)@iamcal.com ;                                                              The comment must be closed
+cal(foo)bar)@iamcal.com ;                                                              There is an extra closing parenthesis
+cal(foo\)@iamcal.com ;                                                                 The closing parenthesis is escaped so there is no actual closing parenthesis
+first(12345678901234567890123456789012345678901234567890)last@(1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890)test.org ; The comment in the local-part must be . separated
+a(a(b(c)d(e(f))g)(h(i)j)@test.org ;                                                    Nested comments are ok, but this is missing a closing parenthesis
+Doug\ \"Ace\"\ Lovell@test.org ;                                                       Whitespace must be separated by . characters
+test.test.org ;                                                                        There must be an @ character
+test.@test.org ;                                                                       The local-part cannot end with a . character
+test..test@test.org ;                                                                  The local-part cannot have two . characters in a row
+.test@test.org ;                                                                       The local-part cannot start with a . character
+test@test@test.org ;                                                                   There cannot be more than one @ character
+test@@test.org ;                                                                       There cannot be more than one @ character
+-- test --@test.org ;                                                                  Whitespace must be separated by . characters
+[test]@test.org ;                                                                      The characters [ and ] are not allowed unquoted
+"test"test"@test.org ;                                                                 Quotes must be in pairs
+()[]\;:,><@test.org ;                                                                  The local-part contains invalid unquoted characters
+test@. ;                                                                               The domain cannot be a single . character
+test@example. ;                                                                        The domain cannot end with a . character
+test@.org ;                                                                            The domain cannot start with a . character
 test@123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012.com ;
 .wooly@test.org ;
 wo..oly@test.org ;
@@ -144,3 +141,13 @@ Joe A Smith email@example.com ;
 Joe A Smith <email@example.com-> ;
 Joe A Smith <email@-example.com-> ;
 Joe A Smith <email> ;
+@-1st.relay,@2nd.relay:user@final.domain ;
+@1st-.relay,@2nd.relay:user@final.domain ;
+@1st.relay,2nd.relay:user@final.domain ;
+@.relay,2nd.relay:user@final.domain ;
+@1st.1111,2nd.relay:user@final.domain ;
+@hello.world,user@final.domain ;
+@1st.relay,@2nd.relay:user@-final.domain ;
+@1st.relay,@2nd.relay:invalid ;
+@@1st.relay,@2nd.relay:user@final.domain ;
+@1st.r_elay,@2nd.relay:user@final.domain ;
