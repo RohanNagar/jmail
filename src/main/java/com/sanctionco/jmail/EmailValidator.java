@@ -1,6 +1,7 @@
 package com.sanctionco.jmail;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -41,7 +42,7 @@ public final class EmailValidator {
   private final Set<Predicate<Email>> validationPredicates;
 
   EmailValidator(Set<Predicate<Email>> validationPredicates) {
-    this.validationPredicates = validationPredicates;
+    this.validationPredicates = Collections.unmodifiableSet(validationPredicates);
   }
 
   EmailValidator() {
@@ -49,7 +50,8 @@ public final class EmailValidator {
   }
 
   /**
-   * Add a custom validation rule to this {@code EmailValidator}.
+   * Create a new {@code EmailValidator} with all rules from the current instance and an
+   * additional provided custom validation rule.
    *
    * <p>Example usage:
    *
@@ -59,80 +61,83 @@ public final class EmailValidator {
    *
    * @param rule the requirement for a valid email address. This must be a {@link Predicate} that
    *             accepts an {@link Email} object.
-   * @return this, for chaining
+   * @return the new {@code EmailValidator} instance
    */
   public EmailValidator withRule(Predicate<Email> rule) {
-    validationPredicates.add(rule);
-    return this;
+    Set<Predicate<Email>> rules = new HashSet<>(validationPredicates);
+    rules.add(rule);
+
+    return new EmailValidator(rules);
   }
 
   /**
-   * Add the {@link ValidationRules#disallowIpDomain(Email)} rule to this validator.
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#disallowIpDomain(Email)} rule.
    * Email addresses that have an IP address for a domain will fail validation.
    *
    * <p>For example, {@code "sample@[1.2.3.4]"} would be invalid.
    *
-   * @return this, for chaining
+   * @return the new {@code EmailValidator} instance
    */
   public EmailValidator disallowIpDomain() {
-    validationPredicates.add(DISALLOW_IP_DOMAIN_PREDICATE);
-    return this;
+    return withRule(DISALLOW_IP_DOMAIN_PREDICATE);
   }
 
   /**
-   * Add the {@link ValidationRules#requireTopLevelDomain(Email)} rule to this validator.
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#requireTopLevelDomain(Email)} rule.
    * Email addresses that do not have a top level domain will fail validation.
    *
    * <p>For example, {@code "sample@mailserver"} would be invalid.
    *
-   * @return this, for chaining
+   * @return the new {@code EmailValidator} instance
    */
   public EmailValidator requireTopLevelDomain() {
-    validationPredicates.add(REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE);
-    return this;
+    return withRule(REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE);
   }
 
   /**
-   * Add the {@link ValidationRules#disallowExplicitSourceRouting(Email)} rule to this validator.
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#disallowExplicitSourceRouting(Email)} rule.
    * Email addresses that have explicit source routing will fail validation.
    *
    * <p>For example, {@code "@1st.relay,@2nd.relay:user@final.domain"} would be invalid.
    *
-   * @return this, for chaining
+   * @return the new {@code EmailValidator} instance
    */
   public EmailValidator disallowExplicitSourceRouting() {
-    validationPredicates.add(DISALLOW_EXPLICIT_SOURCE_ROUTING);
-    return this;
+    return withRule(DISALLOW_EXPLICIT_SOURCE_ROUTING);
   }
 
   /**
-   * Add the {@link ValidationRules#disallowQuotedIdentifiers(Email)} rule to this validator.
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#disallowQuotedIdentifiers(Email)} rule.
    * Email addresses that have quoted identifiers will fail validation.
    *
    * <p>For example, {@code "John Smith <test@server.com>"} would be invalid.
    *
-   * @return this, for chaining
+   * @return the new {@code EmailValidator} instance
    */
   public EmailValidator disallowQuotedIdentifiers() {
-    validationPredicates.add(DISALLOW_QUOTED_IDENTIFIERS);
-    return this;
+    return withRule(DISALLOW_QUOTED_IDENTIFIERS);
   }
 
   /**
-   * Add the {@link ValidationRules#disallowReservedDomains(Email)} rule to this validator.
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#disallowReservedDomains(Email)} rule.
    * Email addresses that have a reserved domain according to RFC 2606 will fail validation.
    *
    * <p>For example, {@code "name@example.com"} would be invalid.
    *
-   * @return this, for chaining
+   * @return the new {@code EmailValidator} instance
    */
   public EmailValidator disallowReservedDomains() {
-    validationPredicates.add(DISALLOW_RESERVED_DOMAINS_PREDICATE);
-    return this;
+    return withRule(DISALLOW_RESERVED_DOMAINS_PREDICATE);
   }
 
   /**
-   * Add the {@link ValidationRules#requireOnlyTopLevelDomains(Email, Set)} rule to this validator.
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#requireOnlyTopLevelDomains(Email, Set)} rule.
    * Email addresses that have top level domains other than those provided will
    * fail validation.
    *
@@ -140,13 +145,11 @@ public final class EmailValidator {
    * {@code "name@host.net"} would be invalid.
    *
    * @param allowed the set of allowed {@link TopLevelDomain}
-   * @return this, for chaining
+   * @return the new {@code EmailValidator} instance
    */
   public EmailValidator requireOnlyTopLevelDomains(TopLevelDomain... allowed) {
-    validationPredicates.add(email -> ValidationRules.requireOnlyTopLevelDomains(
+    return withRule(email -> ValidationRules.requireOnlyTopLevelDomains(
         email, Arrays.stream(allowed).collect(Collectors.toSet())));
-
-    return this;
   }
 
   /**
