@@ -3,6 +3,7 @@ package com.sanctionco.jmail;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Represents an email address.
@@ -56,6 +57,19 @@ public final class Email {
     this.isIpAddress = other.isIpAddress;
     this.hasIdentifier = identifier != null && identifier.length() > 0;
     this.tld = other.tld;
+  }
+
+  /**
+   * Try to construct a new {@link Email} object from the given email address
+   * string. This method is a convenience wrapper around {@link JMail#tryParse(String)}
+   * and performs the same validation.
+   *
+   * @param email the email address to parse
+   * @return an {@link Optional} containing the parsed {@link Email}, or empty if the email
+   *         is invalid
+   */
+  public static Optional<Email> of(String email) {
+    return JMail.tryParse(email);
   }
 
   /**

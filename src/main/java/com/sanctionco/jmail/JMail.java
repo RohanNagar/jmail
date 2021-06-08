@@ -92,7 +92,7 @@ public final class JMail {
    *
    * <p>In general, this method should be more or less compliant with the latest RFCs.
    *
-   * @param email the email to parse
+   * @param email the email address to parse
    * @return an {@link Optional} containing the parsed {@link Email}, or empty if the email
    *         is invalid
    */

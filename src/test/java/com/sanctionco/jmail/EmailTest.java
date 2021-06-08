@@ -31,4 +31,14 @@ class EmailTest {
         .doesNotHaveSameHashCodeAs(differentEmail)
         .doesNotHaveSameHashCodeAs(differentEmailOnlyDomain);
   }
+
+  @Test
+  void staticConstructorParses() {
+    assertThat(Email.of("user@my.domain.com"))
+        .isPresent().get()
+        .hasToString("user@my.domain.com");
+
+    assertThat(Email.of("invalid"))
+        .isNotPresent();
+  }
 }
