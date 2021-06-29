@@ -122,3 +122,4 @@ abc\\@test.org,abc\\,test.org
 Joe A Smith <email@example.com>,email,example.com
 "John Michael" <tester@test.net>,tester,test.net
 A <apple@pie.com>,apple,pie.com
+ABC.DEF@GHI.JKL (MNO),ABC.DEF,GHI.JKL (MNO)

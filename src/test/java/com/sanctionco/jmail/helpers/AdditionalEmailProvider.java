@@ -28,7 +28,8 @@ public class AdditionalEmailProvider {
         "\"test\rblah\"@test.org",
         "\"test\\\r\n blah\"@test.org",
         "Invalid \\\n Folding \\\n Whitespace@test.org",
-        "test.\r\n\r\n obs@syntax.com");
+        "test.\r\n\r\n obs@syntax.com",
+        "ABC.DEF@GHI.JKL . ");
   }
 
   // Valid emails with quotes
