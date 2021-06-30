@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -175,7 +176,7 @@ public final class EmailValidator {
    * @throws InvalidEmailException if the validation fails
    */
   public void enforceValid(String email) throws InvalidEmailException {
-    if (!JMail.tryParse(email).filter(this::passesPredicates).isPresent()) {
+    if (!isValid(email)) {
       throw new InvalidEmailException();
     }
   }
@@ -190,13 +191,7 @@ public final class EmailValidator {
    *         is invalid according to all registered validation rules
    */
   public Optional<Email> tryParse(String email) {
-    Optional<Email> result = JMail.tryParse(email);
-
-    if (result.isPresent() && passesPredicates(result.get())) {
-      return result;
-    }
-
-    return Optional.empty();
+    return JMail.tryParse(email).filter(this::passesPredicates);
   }
 
   /**
@@ -208,5 +203,12 @@ public final class EmailValidator {
   private boolean passesPredicates(Email email) {
     return validationPredicates.stream()
         .allMatch(rule -> rule.test(email));
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", EmailValidator.class.getSimpleName() + "[", "]")
+        .add("validationRuleCount=" + validationPredicates.size())
+        .toString();
   }
 }

@@ -40,6 +40,13 @@ class EmailValidatorTest {
     assertThat(predicates).hasSize(1);
   }
 
+  @Test
+  void toStringIsCorrect() {
+    EmailValidator validator = JMail.validator().requireTopLevelDomain();
+
+    assertThat(validator).hasToString("EmailValidator[validationRuleCount=1]");
+  }
+
   @Nested
   class DisallowIpAddress {
     @ParameterizedTest(name = "{0}")
