@@ -42,7 +42,7 @@
     <java.minimum.version>1.9</java.minimum.version>
 
     <!-- Plugin versions -->
-    <checkstyle.version>8.45</checkstyle.version>
+    <checkstyle.version>8.45.1</checkstyle.version>
     <checkstyle-plugin.version>3.1.2</checkstyle-plugin.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <gpg-plugin.version>3.0.1</gpg-plugin.version>
