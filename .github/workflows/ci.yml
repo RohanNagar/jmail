@@ -33,6 +33,6 @@ jobs:
         run: mvn package jacoco:report
 
       - name: Upload Codecov report
-        uses: codecov/codecov-action@v2.0.2
+        uses: codecov/codecov-action@v2.0.3
         with:
           directory: .
