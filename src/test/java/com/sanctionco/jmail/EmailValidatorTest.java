@@ -1,6 +1,7 @@
 package com.sanctionco.jmail;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -154,6 +155,13 @@ class EmailValidatorTest {
     @ValueSource(strings = {"first.last@tes.com", "first.last@example.com"})
     void invalidatesCorrectly(String email) {
       runInvalidTest(JMail.validator().withRule(e -> e.domain().startsWith("test")), email);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"first.last@test.com", "x@test.two.com"})
+    void validatesCorrectlyWithCollection(String email) {
+      Predicate<Email> rule = e -> e.domain().startsWith("test");
+      runValidTest(JMail.validator().withRules(Collections.singletonList(rule)), email);
     }
   }
 

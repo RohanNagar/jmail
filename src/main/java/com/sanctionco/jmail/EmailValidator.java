@@ -1,6 +1,7 @@
 package com.sanctionco.jmail;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -51,6 +52,28 @@ public final class EmailValidator {
   }
 
   /**
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * additional provided custom validation rules.
+   *
+   * <p>Example usage:
+   *
+   * <pre>
+   * validator.withRules(
+   *     email -> email.domain().startsWith("test"),
+   *     email -> email.localPart.contains("hello"));
+   * </pre>
+   *
+   * @param rules a collection of requirements that make a valid email address
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator withRules(Collection<Predicate<Email>> rules) {
+    Set<Predicate<Email>> ruleSet = new HashSet<>(validationPredicates);
+    ruleSet.addAll(rules);
+
+    return new EmailValidator(ruleSet);
+  }
+
+  /**
    * Create a new {@code EmailValidator} with all rules from the current instance and an
    * additional provided custom validation rule.
    *
@@ -65,10 +88,7 @@ public final class EmailValidator {
    * @return the new {@code EmailValidator} instance
    */
   public EmailValidator withRule(Predicate<Email> rule) {
-    Set<Predicate<Email>> rules = new HashSet<>(validationPredicates);
-    rules.add(rule);
-
-    return new EmailValidator(rules);
+    return withRules(Collections.singletonList(rule));
   }
 
   /**
