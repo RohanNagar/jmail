@@ -153,4 +153,9 @@ class JMailTest {
         .extracting("identifier")
         .isNull();
   }
+
+  @Test
+  void isInvalidCanValidate() {
+    assertThat(JMail.isInvalid("test@test.com")).isFalse();
+  }
 }

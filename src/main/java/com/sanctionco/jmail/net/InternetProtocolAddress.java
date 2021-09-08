@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Provides validation methods for internet protocol (IP) addresses,
@@ -19,8 +18,6 @@ public final class InternetProtocolAddress {
    */
   private InternetProtocolAddress() {
   }
-
-  private static final String IPV6_PREFIX = "IPv6:";
 
   // Set of allowed characters in a HEX number
   private static final Set<Character> ALLOWED_HEX_CHARACTERS = new HashSet<>(
@@ -61,11 +58,12 @@ public final class InternetProtocolAddress {
    *         otherwise
    */
   public static Optional<String> validate(String ip) {
-    // If it starts with the IPv6 prefix, validate with IPv6
-    if (ip.startsWith(IPV6_PREFIX)) return validateIpv6(ip.substring(IPV6_PREFIX.length()));
+    // First try to validate with IPv4
+    Optional<String> ipv4Validated = validateIpv4(ip);
 
-    // Otherwise, validate with IPv4
-    return validateIpv4(ip);
+    // If that worked, return it. Otherwise, try to validate with IPv6
+    if (ipv4Validated.isPresent()) return ipv4Validated;
+    else return validateIpv6(ip);
   }
 
   /**
@@ -199,7 +197,7 @@ public final class InternetProtocolAddress {
       }
     }
 
-    return Optional.of(IPV6_PREFIX + ip);
+    return Optional.of(ip);
   }
 
   private static boolean isInvalidIpv4Part(String part) {

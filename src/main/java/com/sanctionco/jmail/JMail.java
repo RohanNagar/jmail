@@ -318,7 +318,11 @@ public final class JMail {
           }
 
           String ip = ipDomain.substring(1, ipDomain.length() - 1);
-          Optional<String> validatedIp = InternetProtocolAddress.validate(ip);
+          Optional<String> validatedIp = ip.startsWith(IPV6_PREFIX)
+              // If it starts with the IPv6 prefix, validate with IPv6
+              ? InternetProtocolAddress.validateIpv6(ip.substring(IPV6_PREFIX.length())).map(s -> IPV6_PREFIX + s)
+              // Otherwise, it must be IPv4
+              : InternetProtocolAddress.validateIpv4(ip);
 
           if (!validatedIp.isPresent()) return Optional.empty();
 
@@ -529,6 +533,8 @@ public final class JMail {
     private final StringBuilder fullRoute = new StringBuilder();
     private final List<String> routes = new ArrayList<>();
   }
+
+  private static final String IPV6_PREFIX = "IPv6:";
 
   // Set of characters that are not allowed in the local-part outside of quotes
   private static final Set<Character> DISALLOWED_UNQUOTED_CHARACTERS = new HashSet<>(
