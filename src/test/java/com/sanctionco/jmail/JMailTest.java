@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 
 class JMailTest {
   private final Condition<String> valid = new Condition<>(JMail::isValid, "valid");
-  private final Condition<String> invalid = new Condition<>(e -> !JMail.isValid(e), "invalid");
+  private final Condition<String> invalid = new Condition<>(JMail::isInvalid, "invalid");
 
   @ParameterizedTest(name = "{0}")
   @MethodSource({

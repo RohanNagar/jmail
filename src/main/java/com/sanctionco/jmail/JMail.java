@@ -61,10 +61,22 @@ public final class JMail {
    * within basic validation.
    *
    * @param email the email address to validate
-   * @return the result of the validation
+   * @return true if the given string is a valid email address, false otherwise
    */
   public static boolean isValid(String email) {
     return tryParse(email).isPresent();
+  }
+
+  /**
+   * Return true if the given email address fails basic RFC validation. See
+   * {@link #tryParse(String)} for details on what is required of an email address
+   * within basic validation.
+   *
+   * @param email the email address to validate
+   * @return true if the given string is not a valid email address, false otherwise
+   */
+  public static boolean isInvalid(String email) {
+    return !isValid(email);
   }
 
   /**

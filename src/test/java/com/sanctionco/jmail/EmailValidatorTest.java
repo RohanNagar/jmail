@@ -174,7 +174,7 @@ class EmailValidatorTest {
   }
 
   private static void runInvalidTest(EmailValidator validator, String email) {
-    Condition<String> invalid = new Condition<>(e -> !validator.isValid(e), "invalid");
+    Condition<String> invalid = new Condition<>(validator::isInvalid, "invalid");
 
     assertThat(validator.tryParse(email)).isNotPresent();
     assertThat(email).is(invalid);

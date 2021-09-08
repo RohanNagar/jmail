@@ -188,6 +188,18 @@ public final class EmailValidator {
   }
 
   /**
+   * Return true if the given email address is <strong>NOT</strong> valid according to all
+   * registered validation rules, or false otherwise. See {@link JMail#tryParse(String)} for
+   * details on the basic validation that is always performed.
+   *
+   * @param email the email address to validate
+   * @return the result of the validation
+   */
+  public boolean isInvalid(String email) {
+    return !isValid(email);
+  }
+
+  /**
    * Require that the given email address is valid according to all registered validation rules,
    * throwing {@link InvalidEmailException} if the email is invalid. See
    * {@link JMail#tryParse(String)} for details on the basic validation that is always performed.
