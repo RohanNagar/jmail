@@ -320,7 +320,8 @@ public final class JMail {
           String ip = ipDomain.substring(1, ipDomain.length() - 1);
           Optional<String> validatedIp = ip.startsWith(IPV6_PREFIX)
               // If it starts with the IPv6 prefix, validate with IPv6
-              ? InternetProtocolAddress.validateIpv6(ip.substring(IPV6_PREFIX.length())).map(s -> IPV6_PREFIX + s)
+              ? InternetProtocolAddress.validateIpv6(ip.substring(IPV6_PREFIX.length()))
+              .map(s -> IPV6_PREFIX + s)
               // Otherwise, it must be IPv4
               : InternetProtocolAddress.validateIpv4(ip);
 
