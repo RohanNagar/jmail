@@ -58,9 +58,9 @@ public final class EmailValidator {
    * <p>Example usage:
    *
    * <pre>
-   * validator.withRules(
+   * validator.withRules(List.of(
    *     email -> email.domain().startsWith("test"),
-   *     email -> email.localPart.contains("hello"));
+   *     email -> email.localPart.contains("hello")));
    * </pre>
    *
    * @param rules a collection of requirements that make a valid email address
