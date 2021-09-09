@@ -62,7 +62,7 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>1.2.3</version>
+  <version>1.3.0</version>
 </dependency>
 ```
 
@@ -253,7 +253,7 @@ if (InternetProtocolAddress.isValid(ipv4)) {
 ```
 
 ```java
-String ipv6 = "IPv6:2001:db8::1234:5678";
+String ipv6 = "2001:db8::1234:5678";
 
 if (InternetProtocolAddress.isValid(ipv6)) {
   // Use address
@@ -273,7 +273,7 @@ try {
 ```
 
 ```java
-String ipv6 = "IPv6:2001:db8::1234:5678";
+String ipv6 = "2001:db8::1234:5678";
 
 try {
   InternetProtocolAddress.enforceValid(ipv6);
@@ -296,14 +296,14 @@ String ip = InternetProtocolAddress
 ```
 
 ```java
-String ipv6 = "IPv6:2001:db8::1234:5678";
+String ipv6 = "2001:db8::1234:5678";
 
 Optional<String> validated = InternetProtocolAddress.validate(ipv6);
 
 // The validate() method allows for convenience such as:
 String ip = InternetProtocolAddress
     .validate("notvalid")
-    .orElse("IPv6:2001:db8::1234:5678");
+    .orElse("2001:db8::1234:5678");
 ```
 
 ### Contributing
