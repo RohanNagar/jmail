@@ -49,9 +49,8 @@ public final class InternetProtocolAddress {
   }
 
   /**
-   * Determines if the given string is a valid IP address, returning an {@link Optional}
-   * that contains the string if valid. If the address to validate is an IPv6 address,
-   * it is expected that the address starts with the prefix {@code "IPv6:"}.
+   * Determines if the given string is a valid IP address (either IPv4 or IPv6), returning an
+   * {@link Optional} that contains the string if valid.
    *
    * @param ip the IP address to validate
    * @return an {@link Optional} containing the string if valid, or an empty {@link Optional}
