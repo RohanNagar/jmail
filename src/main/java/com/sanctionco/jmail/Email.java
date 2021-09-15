@@ -219,12 +219,24 @@ public final class Email {
     if (this == o) return true;
     if (!(o instanceof Email)) return false;
     Email email = (Email) o;
-    return localPart.equals(email.localPart)
-        && domain.equals(email.domain);
+    return Objects.equals(localPart, email.localPart)
+        && Objects.equals(localPartWithoutComments, email.localPartWithoutComments)
+        && Objects.equals(domain, email.domain)
+        && Objects.equals(domainWithoutComments, email.domainWithoutComments)
+        && Objects.equals(fullSourceRoute, email.fullSourceRoute)
+        && Objects.equals(identifier, email.identifier)
+        && Objects.equals(domainParts, email.domainParts)
+        && Objects.equals(sourceRoutes, email.sourceRoutes)
+        && Objects.equals(comments, email.comments)
+        && Objects.equals(isIpAddress, email.isIpAddress)
+        && Objects.equals(hasIdentifier, email.hasIdentifier)
+        && Objects.equals(tld, email.tld);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(localPart, domain);
+    return Objects.hash(
+        localPart, localPartWithoutComments, domain, domainWithoutComments, fullSourceRoute,
+        identifier, domainParts, sourceRoutes, comments, isIpAddress, hasIdentifier, tld);
   }
 }

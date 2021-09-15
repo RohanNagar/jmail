@@ -1,5 +1,7 @@
 package com.sanctionco.jmail;
 
+import java.util.Objects;
+
 /**
  * Represents a top level domain, such as {@code .com} or {@code .net}.
  *
@@ -53,12 +55,12 @@ public final class TopLevelDomain {
     if (this == o) return true;
     if (!(o instanceof TopLevelDomain)) return false;
     TopLevelDomain that = (TopLevelDomain) o;
-    return tld.equals(that.tld);
+    return Objects.equals(tld, that.tld);
   }
 
   @Override
   public int hashCode() {
-    return this.tld.hashCode();
+    return Objects.hash(tld);
   }
 
   @Override

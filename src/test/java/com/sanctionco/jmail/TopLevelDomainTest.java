@@ -2,6 +2,8 @@ package com.sanctionco.jmail;
 
 import java.util.stream.Stream;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -88,5 +90,10 @@ class TopLevelDomainTest {
 
     assertThat(TopLevelDomain.fromString(".net"))
         .isEqualTo(TopLevelDomain.DOT_NET);
+  }
+
+  @Test
+  void ensureEqualsContract() {
+    EqualsVerifier.forClass(TopLevelDomain.class).verify();
   }
 }

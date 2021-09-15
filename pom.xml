@@ -52,6 +52,11 @@
     <release-plugin.version>2.5.3</release-plugin.version>
     <source-plugin.version>3.2.1</source-plugin.version>
     <surefire.version>2.22.2</surefire.version>
+
+    <!-- Test dependency versions -->
+    <equalsverifier.version>3.7.1</equalsverifier.version>
+    <junit.version>5.8.0</junit.version>
+    <junit.platform.version>1.8.0</junit.platform.version>
   </properties>
 
   <!-- Specify releases to Maven Central -->
@@ -288,6 +293,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>nl.jqno.equalsverifier</groupId>
+      <artifactId>equalsverifier</artifactId>
+      <version>${equalsverifier.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>3.20.2</version>
@@ -296,19 +307,19 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.8.0</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>5.8.0</version>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-runner</artifactId>
-      <version>1.8.0</version>
+      <version>${junit.platform.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
