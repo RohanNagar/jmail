@@ -109,8 +109,8 @@ class ComparisonTest {
   @ParameterizedTest(name = "{0}")
   @MethodSource("com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidEmails")
   @CsvFileSource(resources = "/valid-addresses.csv", numLinesToSkip = 1)
-  void compareValid(String email) throws Exception {
-    runTest(email, true, null);
+  void compareValid(String email, String localPart, String domain, String desc) throws Exception {
+    runTest(email, true, desc == null ? null : desc.trim());
   }
 
   @ParameterizedTest(name = "{0}")
@@ -212,7 +212,7 @@ class ComparisonTest {
     private final List<Double> times = new ArrayList<>();
     private int successes = 0;
 
-    public Implementation(String name, String url, Predicate<String> predicate) {
+    Implementation(String name, String url, Predicate<String> predicate) {
       this.name = name;
       this.url = url;
       this.predicate = predicate;
