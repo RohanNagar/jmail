@@ -56,7 +56,7 @@
     <!-- Test dependency versions -->
     <equalsverifier.version>3.7.1</equalsverifier.version>
     <junit.version>5.8.0</junit.version>
-    <junit.platform.version>1.8.0</junit.platform.version>
+    <junit.platform.version>1.8.1</junit.platform.version>
   </properties>
 
   <!-- Specify releases to Maven Central -->
