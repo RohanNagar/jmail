@@ -1,4 +1,4 @@
-Format: email-to-test,expected-local-part,expected-domain
+Format: email-to-test,expected-local-part,expected-domain,Description
 simple@example.com,simple,example.com,A simple valid email address
 very.common@example.com,very.common,example.com,A simple address with a dot separator
 very.common@example.org,very.common,example.org,A simple address ending in .org
@@ -123,3 +123,5 @@ Joe A Smith <email@example.com>,email,example.com,
 "John Michael" <tester@test.net>,tester,test.net,
 A <apple@pie.com>,apple,pie.com,
 ABC.DEF@GHI.JKL (MNO),ABC.DEF,GHI.JKL (MNO),
+xyz@🚀.kz,xyz,🚀.kz,Emoji domains are valid
+test@😉.tld,test,😉.tld,Emoji domains are valid

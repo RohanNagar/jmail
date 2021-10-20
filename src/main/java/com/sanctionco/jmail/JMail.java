@@ -509,7 +509,7 @@ public final class JMail {
   }
 
   private static boolean isValidIdn(String test) {
-    String domain = IDN.toASCII(test);
+    String domain = IDN.toASCII(test, IDN.ALLOW_UNASSIGNED);
 
     for (int i = 0, size = domain.length(); i < size; i++) {
       char c = domain.charAt(i);
