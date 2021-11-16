@@ -18,7 +18,9 @@ public class AdditionalEmailProvider {
         Arguments.of("\"qu@test.org", "Opening quote must have a closing quote"),
         Arguments.of("ote\"@test.org", "Closing quote must have an opening quote"),
         Arguments.of("\"(),:;<>[\\]@example.com", "Opening quote must have a closing quote"),
-        Arguments.of("\"\"\"@iana.org", "Each quote must be in a pair")
+        Arguments.of("\"\"\"@iana.org", "Each quote must be in a pair"),
+        Arguments.of("a@b.com\u0081",
+            "The high octet preset character is not allowed at the end of the domain")
     );
   }
 
