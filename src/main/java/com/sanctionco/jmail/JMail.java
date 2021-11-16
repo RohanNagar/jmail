@@ -513,7 +513,7 @@ public final class JMail {
 
     try {
       domain = IDN.toASCII(test, IDN.ALLOW_UNASSIGNED);
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       // If IDN.toASCII fails, it's not valid
       return false;
     }
