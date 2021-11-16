@@ -66,6 +66,12 @@ Add this library as a dependency in your `pom.xml`:
 </dependency>
 ```
 
+Or in your `build.gradle`:
+
+```groovy
+implementation 'com.sanctionco.jmail:jmail:1.3.3'
+```
+
 ## Usage
 
 ### Standard Email Validation
