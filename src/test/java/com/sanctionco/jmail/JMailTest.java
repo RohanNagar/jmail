@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.andreinc.mockneat.MockNeat;
+
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,6 +54,13 @@ class JMailTest {
 
     assertThat(email).is(valid);
     assertThatNoException().isThrownBy(() -> JMail.enforceValid(email));
+  }
+
+  @Test
+  void ensureRandomEmailsPass() {
+    for (int i = 0; i < 1000; i++) {
+      assertThat(JMail.isValid(MockNeat.threadLocal().emails().get())).isTrue();
+    }
   }
 
   @ParameterizedTest(name = "{0}")
