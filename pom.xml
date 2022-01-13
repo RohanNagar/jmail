@@ -44,7 +44,7 @@
     <!-- Plugin versions -->
     <checkstyle.version>9.2.1</checkstyle.version>
     <checkstyle-plugin.version>3.1.2</checkstyle-plugin.version>
-    <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    <compiler-plugin.version>3.9.0</compiler-plugin.version>
     <gpg-plugin.version>3.0.1</gpg-plugin.version>
     <jacoco.version>0.8.7</jacoco.version>
     <javadoc-plugin.version>3.3.1</javadoc-plugin.version>
