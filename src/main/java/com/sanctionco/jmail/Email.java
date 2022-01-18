@@ -197,6 +197,22 @@ public final class Email {
   }
 
   /**
+   * Return a "normalized" version of this email address. The normalized version
+   * is the same as the original email address, except that all comments and optional
+   * parts (identifiers, source routing) are removed. For example, the address
+   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
+   *
+   * @return the normalized version of this email address
+   */
+  public String normalized() {
+    String domain = isIpAddress
+        ? "[" + this.domainWithoutComments + "]"
+        : this.domainWithoutComments;
+
+    return localPartWithoutComments + "@" + domain;
+  }
+
+  /**
    * Get the string value of this email address. For example, the address
    * {@code "test@example.com"} will return {@code "test@example.com"}.
    *

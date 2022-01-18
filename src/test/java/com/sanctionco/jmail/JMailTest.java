@@ -89,7 +89,8 @@ class JMailTest {
         .returns("example.com", Email::domainWithoutComments)
         .returns(Arrays.asList("hello", "world"), Email::comments)
         .returns(Arrays.asList("example", "com"), Email::domainParts)
-        .returns(TopLevelDomain.DOT_COM, Email::topLevelDomain);
+        .returns(TopLevelDomain.DOT_COM, Email::topLevelDomain)
+        .returns("test@example.com", Email::normalized);
   }
 
   @Test
@@ -114,7 +115,8 @@ class JMailTest {
         .returns("final.domain", Email::domain)
         .returns(Arrays.asList("final", "domain"), Email::domainParts)
         .returns(TopLevelDomain.fromString("domain"), Email::topLevelDomain)
-        .returns(Arrays.asList("1st.relay", "2nd.relay"), Email::explicitSourceRoutes);
+        .returns(Arrays.asList("1st.relay", "2nd.relay"), Email::explicitSourceRoutes)
+        .returns("user@final.domain", Email::normalized);
   }
 
   @ParameterizedTest(name = "{0}")
@@ -145,19 +147,22 @@ class JMailTest {
     assertThat(JMail.tryParse(one)).isPresent().get()
         .hasToString(one)
         .returns(true, Email::hasIdentifier)
-        .returns("John Smith ", Email::identifier);
+        .returns("John Smith ", Email::identifier)
+        .returns("test@te.ex", Email::normalized);
 
     String two = "Admin<admin@te.ex>";
 
     assertThat(JMail.tryParse(two)).isPresent().get()
         .hasToString(two)
         .returns(true, Email::hasIdentifier)
-        .returns("Admin", Email::identifier);
+        .returns("Admin", Email::identifier)
+        .returns("admin@te.ex", Email::normalized);
 
     String none = "user@te.ex";
 
     assertThat(JMail.tryParse(none)).isPresent().get()
         .hasToString(none)
+        .returns(none, Email::normalized)
         .returns(false, Email::hasIdentifier)
         .extracting("identifier")
         .isNull();

@@ -172,6 +172,16 @@ JMail.tryParse("test@example.com")
         () -> log.error("Could not send email to invalid email"));
 ```
 
+#### Get a normalized version of the email address
+
+```java
+// Get a normalized email address without any comments
+String normalied = JMail.tryParse("admin(comment)@mysite.org")
+    .map(Email::normalize);
+
+// normalized == "admin@mysite.org"
+```
+
 ### Additional Validation Rules
 
 #### Disallow IP Address Domain
