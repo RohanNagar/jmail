@@ -176,8 +176,8 @@ JMail.tryParse("test@example.com")
 
 ```java
 // Get a normalized email address without any comments
-String normalied = JMail.tryParse("admin(comment)@mysite.org")
-    .map(Email::normalize);
+String normalized = JMail.tryParse("admin(comment)@mysite.org")
+    .map(Email::normalized);
 
 // normalized == "admin@mysite.org"
 ```
