@@ -62,14 +62,14 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>1.3.3</version>
+  <version>1.4.0</version>
 </dependency>
 ```
 
 Or in your `build.gradle`:
 
 ```groovy
-implementation 'com.sanctionco.jmail:jmail:1.3.3'
+implementation 'com.sanctionco.jmail:jmail:1.4.0'
 ```
 
 ## Usage
@@ -137,8 +137,9 @@ email addresses easier. The `Email` object has the following properties:
 | identifier() | The identifier of the email address, if it has one. | `null`<br/>(For `Admin <test@server.com>`, it would be `Admin`) |
 | comments() | A list of the comments in the email address | `[hello, world]` |
 | explicitSourceRoutes() | A list of explicit source routes in the address, if present | `[]`<br/>(For `@1st.relay,@2nd.relay:user@final.domain`, it would be `[1st.relay, 2nd.relay]`) |
-| isIpAddress() | Whether or not the domain is an IP address | `false` |
-| hasIdentifier() | Whether or not the address has an identifier | `false` |
+| isIpAddress() | Whether the domain is an IP address | `false` |
+| containsWhitespace() | Whether the address contains obsolete whitespace | `false` |
+| hasIdentifier() | Whether the address has an identifier | `false` |
 | topLevelDomain() | The `TopLevelDomain` of the email address, or `TopLevelDomain.OTHER` if it is unknown | `TopLevelDomain.DOT_COM` |
 
 To create a new instance of `Email` from a string, use the `tryParse(String email)`
@@ -251,6 +252,18 @@ a top-level domain other than the ones you specify:
 JMail.validator().requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM);
 JMail.validator().requireOnlyTopLevelDomains(
     TopLevelDomain.DOT_NET, TopLevelDomain.DOT_EDU);
+```
+
+#### Disallow Obsolete Whitespace
+
+Whitespace (spaces, newlines, and carraige returns) is by default allowed between dot-separated
+parts of the local-part and domain since RFC 822. However, this whitespace is
+considered [obsolete since RFC 2822](https://datatracker.ietf.org/doc/html/rfc2822#section-4.4).
+
+You can require that your `EmailValidator` reject all emails that have obsolete whitespace.
+
+```java
+JMail.validator().disallowObsoleteWhitespace();
 ```
 
 ### Bonus: IP Address Validation
