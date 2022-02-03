@@ -90,6 +90,17 @@ public final class ValidationRules {
   }
 
   /**
+   * Rejects an email address that has obsolete whitespace within the local-part or domain.
+   * For example, the address {@code "1234   @   local(blah)  .com"} would be rejected.
+   *
+   * @param email the email address to validate
+   * @return true if this email does not contain obsolete whitespace, or false if it does
+   */
+  public static boolean disallowObsoleteWhitespace(Email email) {
+    return !email.containsWhitespace();
+  }
+
+  /**
    * Rejects an email address that has a reserved domain according to
    * <a href="https://datatracker.ietf.org/doc/html/rfc2606">RFC 2606</a>. The reserved domains
    * are:

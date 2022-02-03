@@ -152,6 +152,27 @@ class EmailValidatorTest {
   }
 
   @Nested
+  class DisallowObsoleteWhitespace {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "a@b .com", "a. b@c.com", "1234   @   local(blah)  .machine .example",
+        "Test.\r\n Folding.\r\n Whitespace@test.org", "test. \r\n \r\n obs@syntax.com",
+        "\r\n (\r\n x \r\n ) \r\n first\r\n ( \r\n x\r\n ) \r\n .\r\n ( \r\n x) \r\n "
+            + "last \r\n (  x \r\n ) \r\n @test.org"})
+    void rejectsObsoleteWhitespace(String email) {
+      runInvalidTest(JMail.validator().disallowObsoleteWhitespace(), email);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "test@domain.test.org", "test@domain.exmple.com", "test@domain.invalid.net",
+        "test@domain.localhost.hi", "test@sub.example.muesum", "test@example.co", "hello@world"})
+    void allowsOtherAddresses(String email) {
+      runValidTest(JMail.validator().disallowObsoleteWhitespace(), email);
+    }
+  }
+
+  @Nested
   class CustomRule {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"first.last@test.com", "x@test.two.com"})

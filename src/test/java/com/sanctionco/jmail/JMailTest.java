@@ -64,6 +64,33 @@ class JMailTest {
   }
 
   @ParameterizedTest(name = "{0}")
+  @ValueSource(strings = {
+      "\"test\\\rblah\"@test.org",
+      "first.(\r\n middle\r\n )last@test.org",
+  })
+  void ensureQuotedWhitespaceEmailsDoNotContainWhitespace(String email) {
+    // Whitespace within quotes or comments should not return true
+    assertThat(JMail.tryParse(email))
+        .isPresent().get()
+        .returns(false, Email::containsWhitespace);
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @ValueSource(strings = {
+      "1234   @   local(blah)  .machine .example",
+      "Test.\r\n Folding.\r\n Whitespace@test.org",
+      "test. \r\n \r\n obs@syntax.com",
+      "\r\n (\r\n x \r\n ) \r\n first\r\n ( \r\n x\r\n ) \r\n .\r\n ( \r\n x) \r\n "
+          + "last \r\n (  x \r\n ) \r\n @test.org",
+  })
+  void ensureWhitespaceEmailsContainWhitespace(String email) {
+    // Whitespace within quotes or comments should not return true
+    assertThat(JMail.tryParse(email))
+        .isPresent().get()
+        .returns(true, Email::containsWhitespace);
+  }
+
+  @ParameterizedTest(name = "{0}")
   @MethodSource({
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails",
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidWhitespaceEmails"})
@@ -90,7 +117,8 @@ class JMailTest {
         .returns(Arrays.asList("hello", "world"), Email::comments)
         .returns(Arrays.asList("example", "com"), Email::domainParts)
         .returns(TopLevelDomain.DOT_COM, Email::topLevelDomain)
-        .returns("test@example.com", Email::normalized);
+        .returns("test@example.com", Email::normalized)
+        .returns(false, Email::containsWhitespace);
   }
 
   @Test
@@ -116,7 +144,8 @@ class JMailTest {
         .returns(Arrays.asList("final", "domain"), Email::domainParts)
         .returns(TopLevelDomain.fromString("domain"), Email::topLevelDomain)
         .returns(Arrays.asList("1st.relay", "2nd.relay"), Email::explicitSourceRoutes)
-        .returns("user@final.domain", Email::normalized);
+        .returns("user@final.domain", Email::normalized)
+        .returns(false, Email::containsWhitespace);
   }
 
   @ParameterizedTest(name = "{0}")
@@ -148,7 +177,8 @@ class JMailTest {
         .hasToString(one)
         .returns(true, Email::hasIdentifier)
         .returns("John Smith ", Email::identifier)
-        .returns("test@te.ex", Email::normalized);
+        .returns("test@te.ex", Email::normalized)
+        .returns(false, Email::containsWhitespace);
 
     String two = "Admin<admin@te.ex>";
 

@@ -172,6 +172,7 @@ public final class JMail {
     boolean whitespace = false;            // set to true if we are currently within whitespace
     boolean previousComment = false;       // set to true if the last character was the end comment
     boolean requireAngledBracket = false;
+    boolean containsWhiteSpace = false;    // set to true if the email contains whitespace anywhere
 
     StringBuilder localPart = new StringBuilder(size);
     StringBuilder localPartWithoutComments = new StringBuilder(size);
@@ -364,6 +365,10 @@ public final class JMail {
 
       whitespace = isWhitespace(c) && !inQuotes && !previousBackslash;
 
+      if (whitespace) {
+        containsWhiteSpace = true;
+      }
+
       if (!whitespace) {
         previousDot = c == '.';
       }
@@ -401,7 +406,7 @@ public final class JMail {
     return Optional.of(new Email(
         localPart.toString(), localPartWithoutComments.toString(),
         domain.toString(), domainWithoutComments.toString(), fullSourceRoute, null,
-        domainParts, comments, sourceRoutes, isIpAddress));
+        domainParts, comments, sourceRoutes, isIpAddress, containsWhiteSpace));
   }
 
   private static Optional<String> validateComment(String s) {

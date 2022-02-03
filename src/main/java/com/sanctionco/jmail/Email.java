@@ -19,6 +19,7 @@ public final class Email {
   private final List<String> comments;
   private final List<String> sourceRoutes;
   private final boolean isIpAddress;
+  private final boolean containsWhitespace;
   private final boolean hasIdentifier;
   private final TopLevelDomain tld;
 
@@ -26,7 +27,7 @@ public final class Email {
         String domain, String domainWithoutComments,
         String fullSourceRoute, String identifier,
         List<String> domainParts, List<String> comments, List<String> sourceRoutes,
-        boolean isIpAddress) {
+        boolean isIpAddress, boolean containsWhitespace) {
     this.localPart = localPart;
     this.localPartWithoutComments = localPartWithoutComments;
     this.domain = domain;
@@ -37,6 +38,7 @@ public final class Email {
     this.comments = Collections.unmodifiableList(comments);
     this.sourceRoutes = Collections.unmodifiableList(sourceRoutes);
     this.isIpAddress = isIpAddress;
+    this.containsWhitespace = containsWhitespace;
     this.hasIdentifier = identifier != null && identifier.length() > 0;
 
     this.tld = domainParts.size() > 1
@@ -55,6 +57,7 @@ public final class Email {
     this.comments = other.comments;
     this.sourceRoutes = other.sourceRoutes;
     this.isIpAddress = other.isIpAddress;
+    this.containsWhitespace = other.containsWhitespace;
     this.hasIdentifier = identifier != null && identifier.length() > 0;
     this.tld = other.tld;
   }
@@ -164,7 +167,7 @@ public final class Email {
   }
 
   /**
-   * Get whether or not this email address has an IP address domain. For example,
+   * Get whether this email address has an IP address domain. For example,
    * the address {@code "test@[12.34.56.78]"} will return {@code true}, but the
    * address {@code "test@example.com"} will return {@code false}.
    *
@@ -172,6 +175,19 @@ public final class Email {
    */
   public boolean isIpAddress() {
     return isIpAddress;
+  }
+
+  /**
+   * Get whether this email address contains whitespace in either the local-part
+   * or the domain, outside of comments or quoted-strings. For example, the
+   * address {@code "1234   @   local(blah)  .com"} will return {@code true}, but
+   * the address {@code "first.(  middle  )last@test.org"} will return {@code false}.
+   *
+   * @return true if this email contains whitespace outside of comments or quoted-strings,
+   *     false otherwise
+   */
+  public boolean containsWhitespace() {
+    return containsWhitespace;
   }
 
   /**
@@ -245,6 +261,7 @@ public final class Email {
         && Objects.equals(sourceRoutes, email.sourceRoutes)
         && Objects.equals(comments, email.comments)
         && Objects.equals(isIpAddress, email.isIpAddress)
+        && Objects.equals(containsWhitespace, email.containsWhitespace)
         && Objects.equals(hasIdentifier, email.hasIdentifier)
         && Objects.equals(tld, email.tld);
   }
@@ -253,6 +270,7 @@ public final class Email {
   public int hashCode() {
     return Objects.hash(
         localPart, localPartWithoutComments, domain, domainWithoutComments, fullSourceRoute,
-        identifier, domainParts, sourceRoutes, comments, isIpAddress, hasIdentifier, tld);
+        identifier, domainParts, sourceRoutes, comments, isIpAddress, containsWhitespace,
+        hasIdentifier, tld);
   }
 }

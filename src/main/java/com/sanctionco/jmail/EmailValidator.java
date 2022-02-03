@@ -40,6 +40,8 @@ public final class EmailValidator {
       = ValidationRules::disallowQuotedIdentifiers;
   private static final Predicate<Email> DISALLOW_RESERVED_DOMAINS_PREDICATE
       = ValidationRules::disallowReservedDomains;
+  private static final Predicate<Email> DISALLOW_OBSOLETE_WHITESPACE_PREDICATE
+      = ValidationRules::disallowObsoleteWhitespace;
 
   private final Set<Predicate<Email>> validationPredicates;
 
@@ -171,6 +173,20 @@ public final class EmailValidator {
   public EmailValidator requireOnlyTopLevelDomains(TopLevelDomain... allowed) {
     return withRule(email -> ValidationRules.requireOnlyTopLevelDomains(
         email, Arrays.stream(allowed).collect(Collectors.toSet())));
+  }
+
+  /**
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#disallowObsoleteWhitespace(Email)} rule.
+   * Email addresses that have obsolete folding whitespace according to RFC 2822 will fail
+   * validation.
+   *
+   * <p>For example, {@code "1234   @   local(blah)  .com"} would be invalid.
+   *
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator disallowObsoleteWhitespace() {
+    return withRule(DISALLOW_OBSOLETE_WHITESPACE_PREDICATE);
   }
 
   /**
