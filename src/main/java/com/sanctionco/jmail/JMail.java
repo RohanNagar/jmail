@@ -76,7 +76,7 @@ public final class JMail {
    * @return true if the given string is not a valid email address, false otherwise
    */
   public static boolean isInvalid(String email) {
-    return !isValid(email);
+    return !tryParse(email).isPresent();
   }
 
   /**
@@ -88,7 +88,7 @@ public final class JMail {
    * @throws InvalidEmailException if the validation fails
    */
   public static void enforceValid(String email) throws InvalidEmailException {
-    if (!JMail.tryParse(email).isPresent()) {
+    if (!tryParse(email).isPresent()) {
       throw new InvalidEmailException();
     }
   }

@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -187,7 +188,7 @@ class ComparisonTest {
     double avg = times.stream().mapToDouble(n -> n).average().orElse(0.0);
 
     str.append("in ");
-    str.append(avg);
+    str.append(new DecimalFormat("#,###.##").format(avg));
     str.append(" ns</td>");
 
     impl.times.add(avg);
@@ -224,7 +225,9 @@ class ComparisonTest {
 
     String getTotal(int totalTests) {
       return "      <td>" + successes + "/" + totalTests
-          + "<br/>Average Time: " + average() + " ns</td>\n";
+          + "<br/>Average Time: "
+          + new DecimalFormat("#,###.##").format(average())
+          + " ns</td>\n";
     }
 
     String runTest(String email, boolean expected) {
