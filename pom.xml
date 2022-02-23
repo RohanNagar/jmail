@@ -48,7 +48,7 @@
     <gpg-plugin.version>3.0.1</gpg-plugin.version>
     <jacoco.version>0.8.7</jacoco.version>
     <javadoc-plugin.version>3.3.2</javadoc-plugin.version>
-    <nexus-plugin.version>1.6.11</nexus-plugin.version>
+    <nexus-plugin.version>1.6.12</nexus-plugin.version>
     <release-plugin.version>2.5.3</release-plugin.version>
     <source-plugin.version>3.2.1</source-plugin.version>
     <surefire.version>2.22.2</surefire.version>
