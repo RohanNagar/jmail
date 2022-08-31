@@ -18,5 +18,3 @@ jobs:
 
       - name: Approve
         uses: hmarr/auto-approve-action@v2.4.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
