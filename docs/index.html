@@ -104,7 +104,7 @@
         var encoded = encodeURIComponent(email);
 
         $.get({
-            'url': "https://jmail-api.herokuapp.com/app/validate?address=" + encoded,
+            'url': "https://tnrrvxkpol.execute-api.us-east-1.amazonaws.com/prod/jmail?address=" + encoded,
             'dataType': "jsonp",
             'complete': function(response) {
                 if (response.status === 200) {

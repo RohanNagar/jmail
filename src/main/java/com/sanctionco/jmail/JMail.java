@@ -113,7 +113,7 @@ public final class JMail {
 
     if (!parsed.isPresent()) return parsed;
 
-    // if its an ip, we can skip character validation
+    // if it's an ip, we can skip character validation
     if (parsed.get().isIpAddress()) return parsed;
 
     return parsed.filter(e -> isValidIdn(e.domainWithoutComments()));
