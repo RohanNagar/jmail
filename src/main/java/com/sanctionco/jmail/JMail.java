@@ -139,10 +139,12 @@ public final class JMail {
     if (email.charAt(0) == '@') {
       Optional<SourceRouteDetail> sourceRoute = validateSourceRouting(email);
 
-      // If there was no source routing, then starting with @ is invalid
+      // If the sourceRoute is not present, then either the route was invalid or there was no
+      // source routing.
+      // If there was no source routing then starting with @ is invalid
       if (!sourceRoute.isPresent()) return Optional.empty();
 
-      // Otherwise update the email to validate to be just the actual email
+      // Otherwise, update the email to validate to be just the actual email
       SourceRouteDetail detail = sourceRoute.get();
       sourceRoutes = detail.routes;
       fullSourceRoute = detail.fullRoute.toString();
@@ -190,7 +192,7 @@ public final class JMail {
       char c = email.charAt(i);
 
       if (c == '<' && !inQuotes && !previousBackslash) {
-        // could be phrase <address> format. If not, it's not allowed
+        // could be "phrase <address>" format. If not, it's not allowed
         if (!(email.charAt(size - 1) == '>')) return Optional.empty();
 
         return tryParse(email.substring(i + 1, size - 1))
