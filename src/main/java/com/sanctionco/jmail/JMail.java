@@ -378,10 +378,6 @@ public final class JMail {
         }
 
         if (c == '.') {
-          if (currentDomainPart.length() == 0) {
-            return EmailValidationResult.failure(FailureReason.DOMAIN_STARTS_WITH_DOT);
-          }
-
           if (currentDomainPart.length() > 63) {
             return EmailValidationResult.failure(FailureReason.DOMAIN_PART_TOO_LONG);
           }
@@ -486,6 +482,7 @@ public final class JMail {
     StringBuilder builder = new StringBuilder(s.length());
 
     boolean previousBackslash = false;
+    boolean foundClosingParenthesis = false;
 
     for (int i = 0, size = s.length(); i < size; i++) {
       char c = s.charAt(i);
@@ -504,10 +501,15 @@ public final class JMail {
       builder.append(c);
 
       if (c == ')' && !previousBackslash) {
+        foundClosingParenthesis = true;
         break;
       }
 
       previousBackslash = c == '\\';
+    }
+
+    if (!foundClosingParenthesis) {
+      return Optional.empty();
     }
 
     return Optional.of(builder.toString());

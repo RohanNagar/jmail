@@ -54,11 +54,6 @@ public enum FailureReason {
   DOMAIN_PART_TOO_LONG,
 
   /**
-   * The domain of an email address cannot start with the {@code '.'} character.
-   */
-  DOMAIN_STARTS_WITH_DOT,
-
-  /**
    * The domain of an email address cannot be more than 255 characters.
    */
   DOMAIN_TOO_LONG,
