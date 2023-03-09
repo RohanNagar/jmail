@@ -94,6 +94,20 @@ public final class JMail {
   }
 
   /**
+   * Determine if the given email address is valid, returning a new {@link EmailValidationResult}
+   * object that contains details on the result of the validation. Use this method if you need to
+   * see the {@link FailureReason} upon validation failure. See {@link #tryParse(String)}
+   * for details on what is required of an email address within basic validation.
+   *
+   * @param email the email address to validate
+   * @return a {@link EmailValidationResult} containing success or failure, along with the parsed
+   *         {@link Email} object if successful, or the {@link FailureReason} if not
+   */
+  public static EmailValidationResult validate(String email) {
+    return validateInternal(email);
+  }
+
+  /**
    * Parse the given email address into a new {@link Email} object. This method does basic
    * validation on the input email address. This method does not claim to be 100%
    * accurate in determining if an email address is valid or invalid due to the
@@ -109,7 +123,7 @@ public final class JMail {
    *         is invalid
    */
   public static Optional<Email> tryParse(String email) {
-    EmailValidationResult result = internalTryParse(email);
+    EmailValidationResult result = validateInternal(email);
 
     return result.getEmail();
   }
@@ -120,7 +134,7 @@ public final class JMail {
    * @param email the email address to parse
    * @return a new {@link Email} instance if valid, empty if invalid
    */
-  private static EmailValidationResult internalTryParse(String email) {
+  private static EmailValidationResult validateInternal(String email) {
     // email cannot be null
     if (email == null) return EmailValidationResult.failure(FailureReason.NULL_ADDRESS);
 
@@ -195,7 +209,7 @@ public final class JMail {
           return EmailValidationResult.failure(FailureReason.UNQUOTED_ANGLED_BRACKET);
         }
 
-        EmailValidationResult innerResult = internalTryParse(email.substring(i + 1, size - 1));
+        EmailValidationResult innerResult = validateInternal(email.substring(i + 1, size - 1));
 
         // If the address passed validation, return success with the identifier included
         if (innerResult.getEmail().isPresent()) {
