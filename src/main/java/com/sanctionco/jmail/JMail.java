@@ -109,14 +109,9 @@ public final class JMail {
    *         is invalid
    */
   public static Optional<Email> tryParse(String email) {
-    Optional<Email> parsed = internalTryParse(email);
+    EmailValidationResult result = internalTryParse(email);
 
-    if (!parsed.isPresent()) return parsed;
-
-    // if it's an ip, we can skip character validation
-    if (parsed.get().isIpAddress()) return parsed;
-
-    return parsed.filter(e -> isValidIdn(e.domainWithoutComments()));
+    return result.getEmail();
   }
 
   /**
@@ -125,12 +120,12 @@ public final class JMail {
    * @param email the email address to parse
    * @return a new {@link Email} instance if valid, empty if invalid
    */
-  private static Optional<Email> internalTryParse(String email) {
+  private static EmailValidationResult internalTryParse(String email) {
     // email cannot be null
-    if (email == null) return Optional.empty();
+    if (email == null) return EmailValidationResult.failure(FailureReason.NULL_ADDRESS);
 
     // email cannot be less than 3 chars (local-part, @, domain)
-    if (email.length() < 3) return Optional.empty();
+    if (email.length() < 3) return EmailValidationResult.failure(FailureReason.ADDRESS_TOO_SHORT);
 
     // check for source-routing
     List<String> sourceRoutes = Collections.emptyList();
@@ -140,9 +135,10 @@ public final class JMail {
       Optional<SourceRouteDetail> sourceRoute = validateSourceRouting(email);
 
       // If the sourceRoute is not present, then either the route was invalid or there was no
-      // source routing.
-      // If there was no source routing then starting with @ is invalid
-      if (!sourceRoute.isPresent()) return Optional.empty();
+      // source routing. In either case, starting with the @ symbol would be invalid.
+      if (!sourceRoute.isPresent()) {
+        return EmailValidationResult.failure(FailureReason.BEGINS_WITH_AT_SYMBOL);
+      }
 
       // Otherwise, update the email to validate to be just the actual email
       SourceRouteDetail detail = sourceRoute.get();
@@ -155,13 +151,15 @@ public final class JMail {
     int size = email.length();
 
     // email cannot be more than 320 chars
-    if (size > 320) return Optional.empty();
+    if (size > 320) return EmailValidationResult.failure(FailureReason.ADDRESS_TOO_LONG);
 
     // email cannot start with '.'
-    if (email.charAt(0) == '.') return Optional.empty();
+    if (email.charAt(0) == '.') return EmailValidationResult.failure(FailureReason.STARTS_WITH_DOT);
 
     // email cannot end with '.' or '-'
-    if (email.charAt(size - 1) == '.' || email.charAt(size - 1) == '-') return Optional.empty();
+    if (email.charAt(size - 1) == '.' || email.charAt(size - 1) == '-') {
+      return EmailValidationResult.failure(FailureReason.ENDS_WITH_DOT);
+    }
 
     boolean atFound = false;               // set to true when the '@' character is found
     boolean inQuotes = false;              // set to true if we are currently within quotes
@@ -193,18 +191,30 @@ public final class JMail {
 
       if (c == '<' && !inQuotes && !previousBackslash) {
         // could be "phrase <address>" format. If not, it's not allowed
-        if (!(email.charAt(size - 1) == '>')) return Optional.empty();
+        if (!(email.charAt(size - 1) == '>')) {
+          return EmailValidationResult.failure(FailureReason.UNQUOTED_ANGLED_BRACKET);
+        }
 
-        return tryParse(email.substring(i + 1, size - 1))
-            .map(e -> new Email(e, localPart.toString()));
+        EmailValidationResult innerResult = internalTryParse(email.substring(i + 1, size - 1));
+
+        // If the address passed validation, return success with the identifier included
+        if (innerResult.getEmail().isPresent()) {
+          return EmailValidationResult
+              .success(new Email(innerResult.getEmail().get(), localPart.toString()));
+        }
+
+        // Otherwise, just return the failed internal result
+        return innerResult;
       }
 
       if (c == '@' && !inQuotes && !previousBackslash) {
         // If we already found an @ outside of quotes, fail
-        if (atFound) return Optional.empty();
+        if (atFound) return EmailValidationResult.failure(FailureReason.MULTIPLE_AT_SYMBOLS);
 
         // If we need an angled bracket we should fail, it's too late
-        if (requireAngledBracket) return Optional.empty();
+        if (requireAngledBracket) {
+          return EmailValidationResult.failure(FailureReason.INVALID_WHITESPACE);
+        }
 
         // Otherwise
         atFound = true;
@@ -215,7 +225,10 @@ public final class JMail {
       }
 
       if (c == '\n') {
-        if (charactersOnLine <= 0) return Optional.empty();
+        // Ensure there are no empty lines
+        if (charactersOnLine <= 0) {
+          return EmailValidationResult.failure(FailureReason.INVALID_WHITESPACE);
+        }
 
         charactersOnLine = 0;
       } else if (c != '\r') {
@@ -224,14 +237,17 @@ public final class JMail {
       }
 
       if (requireAtOrDot) {
-        // If we needed to find the @ and we didn't, we have to fail
-        if (!isWhitespace(c) && c != '.') return Optional.empty();
-        else requireAtOrDot = false;
+        // If we needed to find the @ or . and we didn't, we have to fail
+        if (!isWhitespace(c) && c != '.') {
+          return EmailValidationResult.failure(FailureReason.INVALID_COMMENT_LOCATION);
+        } else requireAtOrDot = false;
       }
 
       if (requireAtDotOrComment) {
-        if (!isWhitespace(c) && c != '.' && c != '(') return Optional.empty();
-        else requireAtDotOrComment = false;
+        // If we needed to find the @ or . ( and we didn't, we have to fail
+        if (!isWhitespace(c) && c != '.' && c != '(') {
+          return EmailValidationResult.failure(FailureReason.INVALID_QUOTE_LOCATION);
+        } else requireAtDotOrComment = false;
       }
 
       if (whitespace) {
@@ -239,7 +255,7 @@ public final class JMail {
         if (!previousDot && !previousComment) {
           if (c != '.' && c != '@' && c != '(' && !isWhitespace(c)) {
             if (!atFound) requireAngledBracket = true; // or in phrase <addr> format
-            else return Optional.empty();
+            else return EmailValidationResult.failure(FailureReason.INVALID_WHITESPACE);
           }
         }
       }
@@ -248,7 +264,9 @@ public final class JMail {
         // validate comment
         Optional<String> comment = validateComment(email.substring(i));
 
-        if (!comment.isPresent()) return Optional.empty();
+        if (!comment.isPresent()) {
+          return EmailValidationResult.failure(FailureReason.INVALID_COMMENT);
+        }
 
         String commentStr = comment.get();
         int commentStrLen = commentStr.length();
@@ -281,30 +299,35 @@ public final class JMail {
       }
 
       // If we find two dots outside of quotes, fail
-      if (c == '.' && previousDot && !inQuotes) return Optional.empty();
+      if (c == '.' && previousDot && !inQuotes) {
+        return EmailValidationResult.failure(FailureReason.MULTIPLE_DOT_SEPARATORS);
+      }
 
       if (!atFound) {
         // No @ found, we're in the local-part
         // If we are at a new quote: it must be preceded by a dot or at the beginning
         if (c == '"' && i > 0 && !previousDot && !inQuotes) {
-          return Optional.empty();
+          return EmailValidationResult.failure(FailureReason.INVALID_QUOTE_LOCATION);
         }
 
         // If we are not in quotes, and this character is not the quote, make sure the
         // character is allowed
         boolean mustBeQuoted = JMail.DISALLOWED_UNQUOTED_CHARACTERS.contains(c);
 
-        if (c != '"' && !inQuotes && !previousBackslash && mustBeQuoted) return Optional.empty();
+        if (c != '"' && !inQuotes && !previousBackslash && mustBeQuoted) {
+          return EmailValidationResult.failure(FailureReason.DISALLOWED_UNQUOTED_CHARACTER);
+        }
 
+        // If we previously saw a backslash, we must make sure it is being used to quote something
         if (!inQuotes && previousBackslash && !mustBeQuoted && c != ' ' && c != '\\') {
-          return Optional.empty();
+          return EmailValidationResult.failure(FailureReason.UNUSED_BACKSLASH_ESCAPE);
         }
 
         if (inQuotes) {
           // if we are in quotes, we need to make sure that if the character requires
           // a backlash escape, that it is there
-          if (JMail.ALLOWED_QUOTED_WITH_ESCAPE.contains(c)) {
-            if (!previousBackslash) return Optional.empty();
+          if (JMail.ALLOWED_QUOTED_WITH_ESCAPE.contains(c) && !previousBackslash) {
+            return EmailValidationResult.failure(FailureReason.MISSING_BACKSLASH_ESCAPE);
           }
         }
 
@@ -317,7 +340,7 @@ public final class JMail {
           String ipDomain = email.substring(i);
 
           if (!ipDomain.startsWith("[") || !ipDomain.endsWith("]") || ipDomain.length() < 3) {
-            return Optional.empty();
+            return EmailValidationResult.failure(FailureReason.INVALID_IP_DOMAIN);
           }
 
           String ip = ipDomain.substring(1, ipDomain.length() - 1);
@@ -328,7 +351,9 @@ public final class JMail {
               // Otherwise, it must be IPv4
               : InternetProtocolAddress.validateIpv4(ip);
 
-          if (!validatedIp.isPresent()) return Optional.empty();
+          if (!validatedIp.isPresent()) {
+            return EmailValidationResult.failure(FailureReason.INVALID_IP_DOMAIN);
+          }
 
           currentDomainPart.append(validatedIp.get());
           domain.append(validatedIp.get());
@@ -339,13 +364,20 @@ public final class JMail {
         }
 
         if (c == '.') {
-          if (currentDomainPart.length() == 0 || currentDomainPart.length() > 63) {
-            return Optional.empty();
+          if (currentDomainPart.length() == 0) {
+            return EmailValidationResult.failure(FailureReason.DOMAIN_STARTS_WITH_DOT);
           }
 
-          if (currentDomainPart.charAt(0) == '-'
-              || currentDomainPart.charAt(currentDomainPart.length() - 1) == '-') {
-            return Optional.empty();
+          if (currentDomainPart.length() > 63) {
+            return EmailValidationResult.failure(FailureReason.DOMAIN_PART_TOO_LONG);
+          }
+
+          if (currentDomainPart.charAt(0) == '-') {
+            return EmailValidationResult.failure(FailureReason.DOMAIN_PART_STARTS_WITH_DASH);
+          }
+
+          if (currentDomainPart.charAt(currentDomainPart.length() - 1) == '-') {
+            return EmailValidationResult.failure(FailureReason.DOMAIN_PART_ENDS_WITH_DASH);
           }
 
           domainParts.add(currentDomainPart.toString());
@@ -379,36 +411,59 @@ public final class JMail {
       previousBackslash = (c == '\\' && !previousBackslash);
     }
 
-    if (!atFound) return Optional.empty();
+    if (!atFound) return EmailValidationResult.failure(FailureReason.MISSING_AT_SYMBOL);
 
-    if (requireAtDotOrComment) return Optional.empty();
+    if (requireAtDotOrComment) {
+      return EmailValidationResult.failure(FailureReason.INVALID_QUOTE_LOCATION);
+    }
 
     // Check length
     int localPartLen = localPart.length() - localPartCommentLength;
-    if (localPartLen == 0 || localPartLen > 64) return Optional.empty();
+    if (localPartLen == 0) return EmailValidationResult.failure(FailureReason.LOCAL_PART_MISSING);
+    if (localPartLen > 64) return EmailValidationResult.failure(FailureReason.LOCAL_PART_TOO_LONG);
 
     int domainLen = domain.length() - domainCommentLength;
-    if (domainLen == 0 || domainLen > 255) return Optional.empty();
+    if (domainLen == 0) return EmailValidationResult.failure(FailureReason.DOMAIN_MISSING);
+    if (domainLen > 255) return EmailValidationResult.failure(FailureReason.DOMAIN_TOO_LONG);
 
     // Check that local-part does not end with '.'
-    if (localPart.charAt(localPart.length() - 1) == '.') return Optional.empty();
+    if (localPart.charAt(localPart.length() - 1) == '.') {
+      return EmailValidationResult.failure(FailureReason.LOCAL_PART_ENDS_WITH_DOT);
+    }
 
     // Ensure the TLD is not empty or greater than 63 chars
-    if (currentDomainPart.length() <= 0 || currentDomainPart.length() > 63) return Optional.empty();
+    if (currentDomainPart.length() <= 0) {
+      return EmailValidationResult.failure(FailureReason.MISSING_TOP_LEVEL_DOMAIN);
+    }
+
+    if (currentDomainPart.length() > 63) {
+      return EmailValidationResult.failure(FailureReason.TOP_LEVEL_DOMAIN_TOO_LONG);
+    }
 
     // Check that the final domain part does not start with '-'
     // We already checked to make sure it doesn't end with '-'
-    if (currentDomainPart.charAt(0) == '-') return Optional.empty();
+    if (currentDomainPart.charAt(0) == '-') {
+      return EmailValidationResult.failure(FailureReason.DOMAIN_PART_STARTS_WITH_DASH);
+    }
 
     // Ensure the last domain part (TLD) is not all numeric
-    if (currentDomainPart.toString().chars().allMatch(Character::isDigit)) return Optional.empty();
+    if (currentDomainPart.toString().chars().allMatch(Character::isDigit)) {
+      return EmailValidationResult.failure(FailureReason.NUMERIC_TLD);
+    }
 
     domainParts.add(currentDomainPart.toString());
 
-    return Optional.of(new Email(
+    // Validate the characters in the domain if it is not an IP address
+    if (!isIpAddress && !isValidIdn(domainWithoutComments.toString())) {
+      return EmailValidationResult.failure(FailureReason.INVALID_DOMAIN_CHARACTER);
+    }
+
+    Email parsed = new Email(
         localPart.toString(), localPartWithoutComments.toString(),
         domain.toString(), domainWithoutComments.toString(), fullSourceRoute, null,
-        domainParts, comments, sourceRoutes, isIpAddress, containsWhiteSpace));
+        domainParts, comments, sourceRoutes, isIpAddress, containsWhiteSpace);
+
+    return EmailValidationResult.success(parsed);
   }
 
   private static Optional<String> validateComment(String s) {
