@@ -17,8 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 @SuppressWarnings("JUnit5MalformedParameterized")
 class TopLevelDomainTest {
 
-  @SuppressWarnings("unused")
-  Stream<Arguments> provideArgs() {
+  static Stream<Arguments> provideArgs() {
     return Stream.of(
         TopLevelDomain.DOT_COM,
         TopLevelDomain.DOT_EDU,

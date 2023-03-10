@@ -32,6 +32,8 @@ class EmailValidationResultTest {
         .returns(false, EmailValidationResult::isSuccess)
         .returns(true, EmailValidationResult::isFailure)
         .returns(Optional.empty(), EmailValidationResult::getEmail)
-        .returns(FailureReason.NULL_ADDRESS, EmailValidationResult::getFailureReason);
+        .returns(FailureReason.NULL_ADDRESS, EmailValidationResult::getFailureReason)
+        .hasToString("EmailValidationResult"
+            + "[success=false, emailAddress=null, failureReason=NULL_ADDRESS]");
   }
 }

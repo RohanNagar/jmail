@@ -26,6 +26,16 @@ class EmailValidatorTest {
   }
 
   @Test
+  void passesThroughDefaultValidateFailure() {
+    String invalid = "test.@test.com";
+
+    EmailValidationResult result = JMail.validator().validate(invalid);
+
+    assertThat(result.isFailure()).isTrue();
+    assertThat(result.getFailureReason()).isEqualTo(FailureReason.LOCAL_PART_ENDS_WITH_DOT);
+  }
+
+  @Test
   @SuppressWarnings("unchecked")
   void duplicateRuleCallsOnlyAddsOnePredicate() throws Exception {
     EmailValidator validator = JMail.validator()
