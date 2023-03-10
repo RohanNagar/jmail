@@ -230,6 +230,30 @@ public final class EmailValidator {
   }
 
   /**
+   * Determine if the given email address is valid, returning a new {@link EmailValidationResult}
+   * object that contains details on the result of the validation. Use this method if you need to
+   * see the {@link FailureReason} upon validation failure. See {@link JMail#tryParse(String)}
+   * for details on what is required of an email address within basic validation.
+   *
+   * @param email the email address to validate
+   * @return a {@link EmailValidationResult} containing success or failure, along with the parsed
+   *         {@link Email} object if successful, or the {@link FailureReason} if not
+   */
+  public EmailValidationResult validate(String email) {
+    EmailValidationResult result = JMail.validate(email);
+
+    // If failed basic validation, just return it
+    if (!result.getEmail().isPresent()) return result;
+
+    // If the address fails custom validation, return failure
+    if (!passesPredicates(result.getEmail().get())) {
+      return EmailValidationResult.failure(FailureReason.FAILED_CUSTOM_VALIDATION);
+    }
+
+    return result;
+  }
+
+  /**
    * Attempts to parse the given email address string, only succeeding if the given address is
    * valid according to all registered validation rules. See {@link JMail#tryParse(String)}
    * for details on the basic validation that is always performed.

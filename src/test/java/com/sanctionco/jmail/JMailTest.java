@@ -52,6 +52,8 @@ class JMailTest {
         .returns(expectedParts, Email::domainParts)
         .returns(expectedTld, Email::topLevelDomain);
 
+    assertThat(JMail.validate(email).isSuccess()).isTrue();
+
     assertThat(email).is(valid);
     assertThatNoException().isThrownBy(() -> JMail.enforceValid(email));
   }
@@ -97,6 +99,8 @@ class JMailTest {
   @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;", numLinesToSkip = 1)
   void ensureInvalidFails(String email) {
     assertThat(JMail.tryParse(email)).isNotPresent();
+
+    assertThat(JMail.validate(email).isFailure()).isTrue();
 
     assertThat(email).is(invalid);
     assertThatExceptionOfType(InvalidEmailException.class)

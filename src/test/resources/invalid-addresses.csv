@@ -109,6 +109,7 @@ test..test@test.org ;                                                           
 test@test@test.org ;                                                                   There cannot be more than one @ character
 test@@test.org ;                                                                       There cannot be more than one @ character
 -- test --@test.org ;                                                                  Whitespace must be separated by . characters
+test@te st.org ;                                                                       Whitespace must be separated by . characters
 [test]@test.org ;                                                                      The characters [ and ] are not allowed unquoted
 "test"test"@test.org ;                                                                 Quotes must be in pairs
 ()[]\;:,><@test.org ;                                                                  The local-part contains invalid unquoted characters
@@ -139,3 +140,4 @@ Joe A Smith <email@example.com-> ;                                              
 Joe A Smith <email@-example.com-> ;                                                    The address part must be valid (domain cannot start with a dash)
 Joe A Smith <email> ;                                                                  The address part must be valid (missing @ character and domain)
 ABC.DEF@GHI. (MNO) ;                                                                   The domain cannot end with the . character even with an ending comment
+test@test.com(comment ;                                                                A comment at the end of the domain must have closing parenthesis
