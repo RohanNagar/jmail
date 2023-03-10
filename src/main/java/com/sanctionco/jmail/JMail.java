@@ -423,10 +423,6 @@ public final class JMail {
 
     if (!atFound) return EmailValidationResult.failure(FailureReason.MISSING_AT_SYMBOL);
 
-    if (requireAtDotOrComment) {
-      return EmailValidationResult.failure(FailureReason.INVALID_QUOTE_LOCATION);
-    }
-
     // Check length
     int localPartLen = localPart.length() - localPartCommentLength;
     if (localPartLen == 0) return EmailValidationResult.failure(FailureReason.LOCAL_PART_MISSING);
