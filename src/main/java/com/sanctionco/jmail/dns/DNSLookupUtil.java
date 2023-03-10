@@ -9,6 +9,12 @@ import javax.naming.directory.InitialDirContext;
 
 public final class DNSLookupUtil {
 
+  /**
+   * Private constructor to prevent instantiation.
+   */
+  private DNSLookupUtil() {
+  }
+
   public static boolean hasMXRecord(String domain) {
     Hashtable<String, String> env = new Hashtable<>();
     env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
