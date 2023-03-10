@@ -183,6 +183,24 @@ class EmailValidatorTest {
   }
 
   @Nested
+  class RequireValidMXRecord {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "test@domain.test", "test@domain.example", "test@domain.invalid", "test@domain.localhost"})
+    void rejectsDomainsWithoutMXRecord(String email) {
+      runInvalidTest(JMail.validator().requireValidMXRecord(), email);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "test@gmail.com", "test@hotmail.com", "test@yahoo.com", "test@utexas.edu",
+        "test@gmail.(comment)com"})
+    void allowsDomansWithMXRecord(String email) {
+      runValidTest(JMail.validator().requireValidMXRecord(), email);
+    }
+  }
+
+  @Nested
   class CustomRule {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"first.last@test.com", "x@test.two.com"})
