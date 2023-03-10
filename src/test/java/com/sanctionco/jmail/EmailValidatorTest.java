@@ -74,7 +74,7 @@ class EmailValidatorTest {
   @Nested
   class RequireTopLevelDomain {
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"admin@mailserver1", "test@example", "test@-server"})
+    @ValueSource(strings = {"admin@mailserver1", "test@example", "test@server"})
     void rejectsDotlessAddresses(String email) {
       runInvalidTest(JMail.validator().requireTopLevelDomain(), email);
     }
@@ -104,7 +104,7 @@ class EmailValidatorTest {
   @Nested
   class DisallowQuotedIdentifiers {
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"John Smith <test@server.com>", "ABC <123t@abc.net"})
+    @ValueSource(strings = {"John Smith <test@server.com>", "ABC <123t@abc.net>"})
     void rejectsAddressesWithQuotedIdentifiers(String email) {
       runInvalidTest(JMail.validator().disallowQuotedIdentifiers(), email);
     }
@@ -200,6 +200,7 @@ class EmailValidatorTest {
     assertThat(validator.tryParse(email)).isPresent();
     assertThat(email).is(valid);
     assertThatNoException().isThrownBy(() -> validator.enforceValid(email));
+    assertThat(validator.validate(email).isSuccess()).isTrue();
   }
 
   private static void runInvalidTest(EmailValidator validator, String email) {
@@ -209,5 +210,8 @@ class EmailValidatorTest {
     assertThat(email).is(invalid);
     assertThatExceptionOfType(InvalidEmailException.class)
         .isThrownBy(() -> validator.enforceValid(email));
+    assertThat(validator.validate(email).isFailure()).isTrue();
+    assertThat(validator.validate(email).getFailureReason())
+        .isEqualTo(FailureReason.FAILED_CUSTOM_VALIDATION);
   }
 }

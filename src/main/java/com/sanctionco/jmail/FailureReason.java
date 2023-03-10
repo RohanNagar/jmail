@@ -64,6 +64,12 @@ public enum FailureReason {
   ENDS_WITH_DOT,
 
   /**
+   * If an email address fails custom validation that was added to an {@link EmailValidator},
+   * then this failure reason indicates that the email address failed custom validation.
+   */
+  FAILED_CUSTOM_VALIDATION,
+
+  /**
    * A comment within an email address should have surrounding parenthesis. If it does not,
    * for example there is no closing parenthesis, then the email address is invalid.
    */
