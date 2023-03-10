@@ -109,6 +109,7 @@ test..test@test.org ;                                                           
 test@test@test.org ;                                                                   There cannot be more than one @ character
 test@@test.org ;                                                                       There cannot be more than one @ character
 -- test --@test.org ;                                                                  Whitespace must be separated by . characters
+test@te st.org ;                                                                       Whitespace must be separated by . characters
 [test]@test.org ;                                                                      The characters [ and ] are not allowed unquoted
 "test"test"@test.org ;                                                                 Quotes must be in pairs
 ()[]\;:,><@test.org ;                                                                  The local-part contains invalid unquoted characters
