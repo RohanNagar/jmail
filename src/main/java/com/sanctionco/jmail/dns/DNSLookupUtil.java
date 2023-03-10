@@ -7,7 +7,7 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
-public class DNSLookupUtil {
+public final class DNSLookupUtil {
 
   public static boolean hasMXRecord(String domain) {
     Hashtable<String, String> env = new Hashtable<>();
