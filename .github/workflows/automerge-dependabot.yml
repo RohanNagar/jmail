@@ -17,4 +17,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Approve
-        uses: hmarr/auto-approve-action@v3.2.0
+        uses: hmarr/auto-approve-action@v3.2.1
