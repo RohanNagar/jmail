@@ -266,6 +266,18 @@ You can require that your `EmailValidator` reject all emails that have obsolete 
 JMail.validator().disallowObsoleteWhitespace();
 ```
 
+#### Require a valid MX record
+
+You can require that your `EmailValidator` reject all email addresses that do not have a valid MX
+record associated with the domain.
+
+> **Please note that since this rule looks up DNS records, including this rule on your email validator can significantly increase the
+amount of time it takes to validate email addresses.**
+
+```java
+JMail.validator().requireValidMXRecord();
+```
+
 ### Bonus: IP Address Validation
 
 Since validating email addresses requires validation of IP addresses,
