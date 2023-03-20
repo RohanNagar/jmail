@@ -32,7 +32,7 @@ public final class DNSLookupUtil {
       DirContext ctx = new InitialDirContext(env);
       Attribute attr = ctx.getAttributes(domain, new String[]{"MX"}).get("MX");
 
-      return attr.size() > 0;
+      return attr != null && attr.size() > 0;
     } catch (NamingException e) {
       return false;
     }
