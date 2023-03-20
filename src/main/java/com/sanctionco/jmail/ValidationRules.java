@@ -1,5 +1,7 @@
 package com.sanctionco.jmail;
 
+import com.sanctionco.jmail.dns.DNSLookupUtil;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -135,5 +137,15 @@ public final class ValidationRules {
     }
 
     return true;
+  }
+
+  /**
+   * Rejects an email address that does not have a valid MX record for the domain.
+   *
+   * @param email the email address to validate
+   * @return true if this email address has a valid MX record, or false if it does not
+   */
+  public static boolean requireValidMXRecord(Email email) {
+    return DNSLookupUtil.hasMXRecord(email.domainWithoutComments());
   }
 }

@@ -42,6 +42,8 @@ public final class EmailValidator {
       = ValidationRules::disallowReservedDomains;
   private static final Predicate<Email> DISALLOW_OBSOLETE_WHITESPACE_PREDICATE
       = ValidationRules::disallowObsoleteWhitespace;
+  private static final Predicate<Email> REQUIRE_VALID_MX_RECORD_PREDICATE
+      = ValidationRules::requireValidMXRecord;
 
   private final Set<Predicate<Email>> validationPredicates;
 
@@ -187,6 +189,20 @@ public final class EmailValidator {
    */
   public EmailValidator disallowObsoleteWhitespace() {
     return withRule(DISALLOW_OBSOLETE_WHITESPACE_PREDICATE);
+  }
+
+  /**
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#requireValidMXRecord(Email)} rule.
+   * Email addresses that have a domain without a valid MX record will fail validation.
+   *
+   * <p><strong>NOTE: Adding this rule to your EmailValidator may significantly increase
+   * the amount of time it takes to validate email addresses.</strong>
+   *
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator requireValidMXRecord() {
+    return withRule(REQUIRE_VALID_MX_RECORD_PREDICATE);
   }
 
   /**
