@@ -62,14 +62,14 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>1.4.1</version>
+  <version>1.5.0</version>
 </dependency>
 ```
 
 Or in your `build.gradle`:
 
 ```groovy
-implementation 'com.sanctionco.jmail:jmail:1.4.1'
+implementation 'com.sanctionco.jmail:jmail:1.5.0'
 ```
 
 ## Usage
@@ -98,6 +98,22 @@ try {
   // Work with your email string
 } catch (InvalidEmailException) {
   // Handle invalid email
+}
+```
+
+You can also retrieve the reason for validation failure with the `validate` method:
+
+```java
+String email = "test@example.com"
+
+EmailValidationResult result = JMail.validate(email);
+
+if (result.isSuccess()) {
+  // Use the email address
+} else {
+  FailureReason reason = result.getFailureReason();
+
+  logger.error("Validating email address failed with reason: " + reason);
 }
 ```
 
