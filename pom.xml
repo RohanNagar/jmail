@@ -208,6 +208,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>${release-plugin.version}</version>
         <configuration>
+          <releaseProfiles>performRelease</releaseProfiles>
           <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
