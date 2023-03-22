@@ -51,7 +51,7 @@
 
             <!-- Advanced options section -->
             <div class="col-sm-12">
-                <a href="#advancedOptions" class="link-secondary" data-bs-toggle="collapse">Show Advanced Options</a>
+                <a href="#advancedOptions" class="link-secondary" data-bs-toggle="collapse" id="advancedOptionsLabel">Show Advanced Options</a>
                 <br>
                 <div class="collapse text-start pt-2" id="advancedOptions">
                     <input class="form-check-input" type="checkbox" value="" id="tldCheckbox">
@@ -130,6 +130,14 @@
                 }
             }
         });
+    });
+
+    $('#advancedOptions').on('shown.bs.collapse', function() {
+        $('#advancedOptionsLabel').text('Hide Advanced Options');
+    });
+
+    $('#advancedOptions').on('hidden.bs.collapse', function() {
+        $('#advancedOptionsLabel').text('Show Advanced Options');
     });
 
 </script>
