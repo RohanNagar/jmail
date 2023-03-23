@@ -54,8 +54,31 @@
                 <a href="#advancedOptions" class="link-secondary" data-bs-toggle="collapse" id="advancedOptionsLabel">Show Advanced Options</a>
                 <br>
                 <div class="collapse text-start pt-2" id="advancedOptions">
-                    <input class="form-check-input" type="checkbox" value="" id="tldCheckbox">
-                    <label class="form-check-label" for="tldCheckbox">Require Top Level Domain</label>
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div>
+                                <input class="form-check-input" type="checkbox" value="" id="tldCheckbox">
+                                <label class="form-check-label" for="tldCheckbox">Require Top Level Domain</label>
+                            </div>
+
+                            <div>
+                                <input class="form-check-input" type="checkbox" value="" id="sourceRouteCheckbox">
+                                <label class="form-check-label" for="sourceRouteCheckbox">Reject Explicit Source Routing</label>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6">
+                            <div>
+                                <input class="form-check-input" type="checkbox" value="" id="ipCheckbox">
+                                <label class="form-check-label" for="ipCheckbox">Reject IP Domains</label>
+                            </div>
+
+                            <div>
+                                <input class="form-check-input" type="checkbox" value="" id="reservedDomainsCheckbox">
+                                <label class="form-check-label" for="reservedDomainsCheckbox">Reject Reserved Domains</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <br>
@@ -116,9 +139,14 @@
         var encoded = encodeURIComponent(email);
 
         var tld = $('#tldCheckbox').is(":checked");
+        var ip = $('#ipCheckbox').is(":checked");
+        var sourceRoute = $('#sourceRouteCheckbox').is(":checked");
+        var reservedDomains = $('#reservedDomainsCheckbox').is(":checked");
 
         $.get({
-            'url': "https://tnrrvxkpol.execute-api.us-east-1.amazonaws.com/prod/jmail?address=" + encoded + "&tld=" + tld,
+            'url': "https://tnrrvxkpol.execute-api.us-east-1.amazonaws.com/prod/jmail?address=" + encoded
+                + "&tld=" + tld + "&rejectIp=" + ip + "&rejectSourceRoutes=" + sourceRoute
+                + "&rejectReserved=" + reservedDomains,
             'dataType': "jsonp",
             'complete': function(response) {
                 if (response.status === 200) {
