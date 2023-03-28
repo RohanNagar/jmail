@@ -368,3 +368,9 @@ String ip = InternetProtocolAddress
 All contributions are welcome! Open issues for bug reports or
 feature requests. Pull requests with fixes or enhancements are
 encouraged.
+
+Relevant RFCs:
+[822](https://datatracker.ietf.org/doc/html/rfc822),
+[2822](https://datatracker.ietf.org/doc/html/rfc2822),
+[5321](https://datatracker.ietf.org/doc/html/rfc5321),
+[5322](https://datatracker.ietf.org/doc/html/rfc5322)
