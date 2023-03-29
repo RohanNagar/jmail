@@ -18,16 +18,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: 11
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.m2/repository
-            scripts/node_modules
-          key: ${{ runner.os }}-maven-node-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-node-
+          cache: 'maven'
 
       - name: Build with Maven
         run: mvn package jacoco:report

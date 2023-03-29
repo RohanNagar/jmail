@@ -78,10 +78,10 @@ t*est@test.org,t*est,test.org,
 {_test_}@test.org,{_test_},test.org,
 test@123.123.123.x123,test,123.123.123.x123,
 cdburgess+!#$%&'*-/=?+_{}|~test@gmail.com,cdburgess+!#$%&'*-/=?+_{}|~test,gmail.com,
-valid@about.museum,valid,about.museum,
+valid@about.museum,valid,about.museum,Simple valid address with unique TLD
 a@bar,a,bar,
 a-b@bar.com,a-b,bar.com,
-+@b.com,+,b.com,
++@b.com,+,b.com,The plus symbol is a valid local-part
 cal(foo\@bar)@iamcal.com,cal(foo\@bar),iamcal.com,
 (comment)test@test.org,(comment)test,test.org,
 (foo)cal(bar)@(baz)iamcal.com(quux),(foo)cal(bar),(baz)iamcal.com(quux),
@@ -92,9 +92,9 @@ pete(his account)@silly.test(his host),pete(his account),silly.test(his host),
 first(abc\(def)@test.org,first(abc\(def),test.org,
 a(a(b(c)d(e(f))g)h(i)j)@test.org,a(a(b(c)d(e(f))g)h(i)j),test.org,
 c@(Chris's host.)public.example,c,(Chris's host.)public.example,
-a@b.co-foo.uk,a,b.co-foo.uk,
-_Yosemite.Sam@test.org,_Yosemite.Sam,test.org,
-~@test.org,~,test.org,
+a@b.co-foo.uk,a,b.co-foo.uk,The - character is allowed within a domain part
+_Yosemite.Sam@test.org,_Yosemite.Sam,test.org,Underscore is allowed in the local-part
+~@test.org,~,test.org,The ~ character is a valid local-part
 Iinsist@(that comments are allowed)this.is.ok,Iinsist,(that comments are allowed)this.is.ok,
 test@Bücher.ch,test,Bücher.ch,
 あいうえお@example.com,あいうえお,example.com,
@@ -117,11 +117,11 @@ Abc\@def@test.org,Abc\@def,test.org,
 Fred\ Bloggs@test.org,Fred\ Bloggs,test.org,
 Joe.\\Blow@test.org,Joe.\\Blow,test.org,
 {^c\@**Dog^}@cartoon.com,{^c\@**Dog^},cartoon.com,
-phil.h\@\@ck@haacked.com,phil.h\@\@ck,haacked.com,
-abc\\@test.org,abc\\,test.org,
-Joe A Smith <email@example.com>,email,example.com,
-"John Michael" <tester@test.net>,tester,test.net,
-A <apple@pie.com>,apple,pie.com,
-ABC.DEF@GHI.JKL (MNO),ABC.DEF,GHI.JKL (MNO),
+phil.h\@\@ck@haacked.com,phil.h\@\@ck,haacked.com,Escaped @ symbols are allowed
+abc\\@test.org,abc\\,test.org,Escaped backslash is allowed
+Joe A Smith <email@example.com>,email,example.com,Quoted identifier address
+"John Michael" <tester@test.net>,tester,test.net,Quoted identifier address
+A <apple@pie.com>,apple,pie.com,Quoted identifier address
+ABC.DEF@GHI.JKL (MNO),ABC.DEF,GHI.JKL (MNO),Trailing comment with prior whitespace
 xyz@🚀.kz,xyz,🚀.kz,Emoji domains are valid
 test@😉.tld,test,😉.tld,Emoji domains are valid

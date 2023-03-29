@@ -159,12 +159,14 @@
             'url': "https://tnrrvxkpol.execute-api.us-east-1.amazonaws.com/prod/jmail?address=" + encoded
                 + "&tld=" + tld + "&rejectIp=" + ip + "&rejectSourceRoutes=" + sourceRoute
                 + "&rejectReserved=" + reservedDomains + "&rejectQuotedIds=" + quoted + "&mx=" + mx,
-            'dataType': "jsonp",
+            'dataType': "text",
             'complete': function(response) {
                 if (response.status === 200) {
                     $('.validation-failure').hide();
                     $('.validation-success').show();
                 } else {
+                    var failureReason = response.getResponseHeader('validation-failure-reason');
+                    $('.validation-failure').html('The email address is invalid.<br>Reason: ' + failureReason);
                     $('.validation-success').hide();
                     $('.validation-failure').show();
                 }
