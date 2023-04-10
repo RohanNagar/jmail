@@ -1,4 +1,4 @@
-name: Qodana
+name: code quality
 on:
   push:
     branches: [ master ]
