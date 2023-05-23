@@ -43,7 +43,7 @@
 
     <!-- Plugin versions -->
     <checkstyle.version>10.11.0</checkstyle.version>
-    <checkstyle-plugin.version>3.2.2</checkstyle-plugin.version>
+    <checkstyle-plugin.version>3.3.0</checkstyle-plugin.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <gpg-plugin.version>3.1.0</gpg-plugin.version>
     <jacoco.version>0.8.10</jacoco.version>
