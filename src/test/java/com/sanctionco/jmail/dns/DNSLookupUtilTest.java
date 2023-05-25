@@ -19,4 +19,13 @@ class DNSLookupUtilTest {
     assertThat(DNSLookupUtil.hasMXRecord("a.com")).isFalse();
     assertThat(DNSLookupUtil.hasMXRecord("whatis.hello")).isFalse();
   }
+
+  @Test
+  void customTimeoutWorksAsExpected() {
+    long startTime = System.currentTimeMillis();
+    assertThat(DNSLookupUtil.hasMXRecord("coolio.com", 10, 1)).isFalse();
+    long endTime = System.currentTimeMillis();
+
+    assertThat(endTime - startTime).isLessThan(100);
+  }
 }

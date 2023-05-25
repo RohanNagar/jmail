@@ -195,8 +195,17 @@ class EmailValidatorTest {
     @ValueSource(strings = {
         "test@gmail.com", "test@hotmail.com", "test@yahoo.com", "test@utexas.edu",
         "test@gmail.(comment)com"})
-    void allowsDomansWithMXRecord(String email) {
+    void allowsDomainsWithMXRecord(String email) {
       runValidTest(JMail.validator().requireValidMXRecord(), email);
+    }
+
+    @Test
+    void correctlyCustomizesTimeoutAndRetries() {
+      long startTime = System.currentTimeMillis();
+      runInvalidTest(JMail.validator().requireValidMXRecord(10, 1), "test@coolio.com");
+      long endTime = System.currentTimeMillis();
+
+      assertThat(endTime - startTime).isLessThan(500);
     }
   }
 
