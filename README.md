@@ -193,10 +193,10 @@ JMail.tryParse("test@example.com")
 
 ```java
 // Get a normalized email address without any comments
-String normalized = JMail.tryParse("admin(comment)@mysite.org")
+Optional<String> normalized = JMail.tryParse("admin(comment)@mysite.org")
     .map(Email::normalized);
 
-// normalized == "admin@mysite.org"
+// normalized == Optional.of("admin@mysite.org")
 ```
 
 ### Additional Validation Rules
@@ -272,7 +272,7 @@ JMail.validator().requireOnlyTopLevelDomains(
 
 #### Disallow Obsolete Whitespace
 
-Whitespace (spaces, newlines, and carraige returns) is by default allowed between dot-separated
+Whitespace (spaces, newlines, and carriage returns) is by default allowed between dot-separated
 parts of the local-part and domain since RFC 822. However, this whitespace is
 considered [obsolete since RFC 2822](https://datatracker.ietf.org/doc/html/rfc2822#section-4.4).
 
@@ -287,11 +287,16 @@ JMail.validator().disallowObsoleteWhitespace();
 You can require that your `EmailValidator` reject all email addresses that do not have a valid MX
 record associated with the domain.
 
-> **Please note that since this rule looks up DNS records, including this rule on your email validator can significantly increase the
-amount of time it takes to validate email addresses.**
+> **Please note that including this rule on your email validator can increase the
+amount of time it takes to validate email addresses by approximately 600ms in the worst case.
+To further control the amount of time spent doing DNS lookups, you can use the overloaded method
+to customize the timeout and retries.**
 
 ```java
 JMail.validator().requireValidMXRecord();
+
+// Or, customize the timeout and retries
+JMail.validator().requireValidMXRecord(50, 2);
 ```
 
 ### Bonus: IP Address Validation

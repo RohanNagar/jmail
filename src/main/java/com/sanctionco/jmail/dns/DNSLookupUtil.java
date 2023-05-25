@@ -11,8 +11,8 @@ import javax.naming.directory.InitialDirContext;
  * Utility class that provides static methods for DNS related operations.
  */
 public final class DNSLookupUtil {
-  private static final int DEFAULT_INITIAL_TIMEOUT = 1000;
-  private static final int DEFAULT_RETRIES = 4;
+  private static final int DEFAULT_INITIAL_TIMEOUT = 100;
+  private static final int DEFAULT_RETRIES = 2;
 
   /**
    * Private constructor to prevent instantiation.

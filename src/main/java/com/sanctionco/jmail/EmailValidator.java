@@ -196,9 +196,9 @@ public final class EmailValidator {
    * {@link ValidationRules#requireValidMXRecord(Email)} rule.
    * Email addresses that have a domain without a valid MX record will fail validation.
    *
-   * <p><strong>NOTE: Adding this rule to your EmailValidator may significantly increase
-   * the amount of time it takes to validate email addresses, as the default timeout is one
-   * second and the number of retries using exponential backoff is 4.
+   * <p><strong>NOTE: Adding this rule to your EmailValidator may increase
+   * the amount of time it takes to validate email addresses, as the default initial timeout is
+   * 100ms and the number of retries using exponential backoff is 2.
    * Use {@link #requireValidMXRecord(int, int)} to customize the timeout and retries.</strong>
    *
    * @return the new {@code EmailValidator} instance
