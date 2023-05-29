@@ -196,7 +196,7 @@ class EmailValidatorTest {
         "test@gmail.com", "test@hotmail.com", "test@yahoo.com", "test@utexas.edu",
         "test@gmail.(comment)com"})
     void allowsDomainsWithMXRecord(String email) {
-      runValidTest(JMail.validator().requireValidMXRecord(), email);
+      runValidTest(JMail.validator().requireValidMXRecord(100, 3), email);
     }
 
     @Test
