@@ -148,4 +148,16 @@ public final class ValidationRules {
   public static boolean requireValidMXRecord(Email email) {
     return DNSLookupUtil.hasMXRecord(email.domainWithoutComments());
   }
+
+  /**
+   * Rejects an email address that does not have a valid MX record for the domain.
+   *
+   * @param email the email address to validate
+   * @param initialTimeout the timeout in milliseconds for the initial DNS lookup
+   * @param numRetries the number of retries to perform using exponential backoff
+   * @return true if this email address has a valid MX record, or false if it does not
+   */
+  public static boolean requireValidMXRecord(Email email, int initialTimeout, int numRetries) {
+    return DNSLookupUtil.hasMXRecord(email.domainWithoutComments(), initialTimeout, numRetries);
+  }
 }
