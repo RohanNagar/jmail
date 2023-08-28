@@ -3,7 +3,9 @@ package com.sanctionco.jmail;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -34,9 +36,9 @@ public final class EmailValidator {
       = ValidationRules::disallowIpDomain;
   private static final Predicate<Email> REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE
       = ValidationRules::requireTopLevelDomain;
-  private static final Predicate<Email> DISALLOW_EXPLICIT_SOURCE_ROUTING
+  private static final Predicate<Email> DISALLOW_EXPLICIT_SOURCE_ROUTING_PREDICATE
       = ValidationRules::disallowExplicitSourceRouting;
-  private static final Predicate<Email> DISALLOW_QUOTED_IDENTIFIERS
+  private static final Predicate<Email> DISALLOW_QUOTED_IDENTIFIERS_PREDICATE
       = ValidationRules::disallowQuotedIdentifiers;
   private static final Predicate<Email> DISALLOW_RESERVED_DOMAINS_PREDICATE
       = ValidationRules::disallowReservedDomains;
@@ -44,6 +46,25 @@ public final class EmailValidator {
       = ValidationRules::disallowObsoleteWhitespace;
   private static final Predicate<Email> REQUIRE_VALID_MX_RECORD_PREDICATE
       = ValidationRules::requireValidMXRecord;
+
+  private static final Map<Predicate<Email>, FailureReason> RULE_TO_FAILURE_MAP = new HashMap<>();
+
+  static {
+    RULE_TO_FAILURE_MAP.put(DISALLOW_IP_DOMAIN_PREDICATE,
+        FailureReason.CONTAINS_IP_DOMAIN);
+    RULE_TO_FAILURE_MAP.put(REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE,
+        FailureReason.MISSING_TOP_LEVEL_DOMAIN);
+    RULE_TO_FAILURE_MAP.put(DISALLOW_EXPLICIT_SOURCE_ROUTING_PREDICATE,
+        FailureReason.SOURCE_ROUTING_DISALLOWED);
+    RULE_TO_FAILURE_MAP.put(DISALLOW_QUOTED_IDENTIFIERS_PREDICATE,
+        FailureReason.QUOTED_IDENTIFIERS_DISALLOWED);
+    RULE_TO_FAILURE_MAP.put(DISALLOW_RESERVED_DOMAINS_PREDICATE,
+        FailureReason.CONTAINS_RESERVED_DOMAIN);
+    RULE_TO_FAILURE_MAP.put(DISALLOW_OBSOLETE_WHITESPACE_PREDICATE,
+        FailureReason.CONTAINS_OBSOLETE_WHITESPACE);
+    RULE_TO_FAILURE_MAP.put(REQUIRE_VALID_MX_RECORD_PREDICATE,
+        FailureReason.INVALID_MX_RECORD);
+  }
 
   private final Set<Predicate<Email>> validationPredicates;
 
@@ -131,7 +152,7 @@ public final class EmailValidator {
    * @return the new {@code EmailValidator} instance
    */
   public EmailValidator disallowExplicitSourceRouting() {
-    return withRule(DISALLOW_EXPLICIT_SOURCE_ROUTING);
+    return withRule(DISALLOW_EXPLICIT_SOURCE_ROUTING_PREDICATE);
   }
 
   /**
@@ -144,7 +165,7 @@ public final class EmailValidator {
    * @return the new {@code EmailValidator} instance
    */
   public EmailValidator disallowQuotedIdentifiers() {
-    return withRule(DISALLOW_QUOTED_IDENTIFIERS);
+    return withRule(DISALLOW_QUOTED_IDENTIFIERS_PREDICATE);
   }
 
   /**
@@ -222,8 +243,12 @@ public final class EmailValidator {
    * @return the new {@code EmailValidator} instance
    */
   public EmailValidator requireValidMXRecord(int initialTimeout, int numRetries) {
-    return withRule(email ->
-        ValidationRules.requireValidMXRecord(email, initialTimeout, numRetries));
+    Predicate<Email> predicate = email ->
+        ValidationRules.requireValidMXRecord(email, initialTimeout, numRetries);
+
+    RULE_TO_FAILURE_MAP.put(predicate, FailureReason.INVALID_MX_RECORD);
+
+    return withRule(predicate);
   }
 
   /**
@@ -283,11 +308,13 @@ public final class EmailValidator {
     if (!result.getEmail().isPresent()) return result;
 
     // If the address fails custom validation, return failure
-    if (!passesPredicates(result.getEmail().get())) {
-      return EmailValidationResult.failure(FailureReason.FAILED_CUSTOM_VALIDATION);
-    }
+    Optional<FailureReason> failureReason = validationPredicates.stream()
+        .filter(rule -> !rule.test(result.getEmail().get()))
+        .findFirst()
+        .map(rule ->
+            RULE_TO_FAILURE_MAP.getOrDefault(rule, FailureReason.FAILED_CUSTOM_VALIDATION));
 
-    return result;
+    return failureReason.map(EmailValidationResult::failure).orElse(result);
   }
 
   /**

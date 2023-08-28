@@ -222,6 +222,25 @@ public final class FailureReason {
   public static final FailureReason UNUSED_BACKSLASH_ESCAPE
       = new FailureReason("UNUSED_BACKSLASH_ESCAPE");
 
+  // -- FailureReasons for custom rules --
+  public static final FailureReason CONTAINS_IP_DOMAIN
+      = new FailureReason("CONTAINS_IP_DOMAIN");
+
+  public static final FailureReason CONTAINS_OBSOLETE_WHITESPACE
+      = new FailureReason("CONTAINS_OBSOLETE_WHITESPACE");
+
+  public static final FailureReason CONTAINS_RESERVED_DOMAIN
+      = new FailureReason("CONTAINS_RESERVED_DOMAIN");
+
+  public static final FailureReason INVALID_MX_RECORD
+      = new FailureReason("INVALID_MX_RECORD");
+
+  public static final FailureReason QUOTED_IDENTIFIERS_DISALLOWED
+      = new FailureReason("QUOTED_IDENTIFIERS_DISALLOWED");
+
+  public static final FailureReason SOURCE_ROUTING_DISALLOWED
+      = new FailureReason("SOURCE_ROUTING_DISALLOWED");
+
   private final String reason;
 
   public FailureReason(String reason) {
