@@ -5,10 +5,16 @@ updates:
     schedule:
       interval: daily
       time: "09:00"
-    open-pull-requests-limit: 10
+    groups:
+      test-dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: daily
       time: "09:00"
-    open-pull-requests-limit: 10
+    groups:
+      gh-actions:
+        patterns:
+          - "*"
