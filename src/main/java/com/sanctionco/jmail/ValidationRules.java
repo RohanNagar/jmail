@@ -160,4 +160,14 @@ public final class ValidationRules {
   public static boolean requireValidMXRecord(Email email, int initialTimeout, int numRetries) {
     return DNSLookupUtil.hasMXRecord(email.domainWithoutComments(), initialTimeout, numRetries);
   }
+
+  /**
+   * Rejects an email address that contains characters other than those in the ASCII set.
+   *
+   * @param email the email address to validate
+   * @return true if this email address only contains ASCII characters, or false if it does not
+   */
+  public static boolean requireOnlyAscii(Email email) {
+    return email.toString().chars().allMatch(c -> c < 128);
+  }
 }

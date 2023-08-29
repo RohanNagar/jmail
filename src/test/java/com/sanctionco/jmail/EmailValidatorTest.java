@@ -210,6 +210,24 @@ class EmailValidatorTest {
   }
 
   @Nested
+  class RequireOnlyAsciiCharacters {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "jørn@test.com", "我買@屋企.香港", "Pelé@example.com", "xyz@🙏.kz"})
+    void rejectsNonAsciiEmails(String email) {
+      runInvalidTest(JMail.validator().requireOnlyAsciiCharacters(), email);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "test@domain.test.org", "hello@world", "user%uucp!path@berkeley.edu",
+        "\"John Michael\" <tester@test.net>", "(comment)test@test.org"})
+    void allowsOtherAddresses(String email) {
+      runValidTest(JMail.validator().requireOnlyAsciiCharacters(), email);
+    }
+  }
+
+  @Nested
   class CustomRule {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"first.last@test.com", "x@test.two.com"})

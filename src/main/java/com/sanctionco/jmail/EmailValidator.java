@@ -44,6 +44,8 @@ public final class EmailValidator {
       = ValidationRules::disallowObsoleteWhitespace;
   private static final Predicate<Email> REQUIRE_VALID_MX_RECORD_PREDICATE
       = ValidationRules::requireValidMXRecord;
+  private static final Predicate<Email> REQUIRE_ONLY_ASCII_CHARACTERS_PREDICATE
+      = ValidationRules::requireOnlyAscii;
 
   private final Set<Predicate<Email>> validationPredicates;
 
@@ -224,6 +226,20 @@ public final class EmailValidator {
   public EmailValidator requireValidMXRecord(int initialTimeout, int numRetries) {
     return withRule(email ->
         ValidationRules.requireValidMXRecord(email, initialTimeout, numRetries));
+  }
+
+  /**
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#requireOnlyAscii(Email)} rule.
+   * Email addresses that contain characters other than those in the ASCII charset will fail
+   * validation.
+   *
+   * <p>For example, {@code "jørn@test.com"} would be invalid.
+   *
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator requireOnlyAsciiCharacters() {
+    return withRule(REQUIRE_ONLY_ASCII_CHARACTERS_PREDICATE);
   }
 
   /**
