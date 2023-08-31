@@ -11,6 +11,7 @@ import java.util.Optional;
 public final class Email {
   private final String localPart;
   private final String localPartWithoutComments;
+  private final String localPartWithoutQuotes;
   private final String domain;
   private final String domainWithoutComments;
   private final String fullSourceRoute;
@@ -23,13 +24,14 @@ public final class Email {
   private final boolean hasIdentifier;
   private final TopLevelDomain tld;
 
-  Email(String localPart, String localPartWithoutComments,
+  Email(String localPart, String localPartWithoutComments, String localPartWithoutQuotes,
         String domain, String domainWithoutComments,
         String fullSourceRoute, String identifier,
         List<String> domainParts, List<String> comments, List<String> sourceRoutes,
         boolean isIpAddress, boolean containsWhitespace) {
     this.localPart = localPart;
     this.localPartWithoutComments = localPartWithoutComments;
+    this.localPartWithoutQuotes = localPartWithoutQuotes;
     this.domain = domain;
     this.domainWithoutComments = domainWithoutComments;
     this.fullSourceRoute = fullSourceRoute;
@@ -49,6 +51,7 @@ public final class Email {
   Email(Email other, String identifier) {
     this.localPart = other.localPart;
     this.localPartWithoutComments = other.localPartWithoutComments;
+    this.localPartWithoutQuotes = other.localPartWithoutQuotes;
     this.domain = other.domain;
     this.domainWithoutComments = other.domainWithoutComments;
     this.fullSourceRoute = other.fullSourceRoute;
@@ -191,7 +194,7 @@ public final class Email {
   }
 
   /**
-   * Get whether or not this email address has an identifier. For example, the address
+   * Get whether this email address has an identifier. For example, the address
    * {@code "John Smith <test@server.com>"} will return {@code true}, but the address
    * {@code "test@example.com"} will return {@code false}.
    *
@@ -221,11 +224,29 @@ public final class Email {
    * @return the normalized version of this email address
    */
   public String normalized() {
+    //    if (System.getProperty("jmail.normalize.stripQuotes"))
+    return normalized(false);
+  }
+
+  /**
+   * Return a "normalized" version of this email address. The normalized version
+   * is the same as the original email address, except that all comments and optional
+   * parts (identifiers, source routing) are removed. For example, the address
+   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
+   *
+   * @param stripQuotes set to true if you want to remove all quotes within
+   * @return the normalized version of this email address
+   */
+  public String normalized(boolean stripQuotes) {
     String domain = isIpAddress
         ? "[" + this.domainWithoutComments + "]"
         : this.domainWithoutComments;
 
-    return localPartWithoutComments + "@" + domain;
+    String localPart = stripQuotes
+        ? localPartWithoutQuotes
+        : localPartWithoutComments;
+
+    return localPart + "@" + domain;
   }
 
   /**
@@ -253,6 +274,7 @@ public final class Email {
     Email email = (Email) o;
     return Objects.equals(localPart, email.localPart)
         && Objects.equals(localPartWithoutComments, email.localPartWithoutComments)
+        && Objects.equals(localPartWithoutQuotes, email.localPartWithoutQuotes)
         && Objects.equals(domain, email.domain)
         && Objects.equals(domainWithoutComments, email.domainWithoutComments)
         && Objects.equals(fullSourceRoute, email.fullSourceRoute)
@@ -269,8 +291,8 @@ public final class Email {
   @Override
   public int hashCode() {
     return Objects.hash(
-        localPart, localPartWithoutComments, domain, domainWithoutComments, fullSourceRoute,
-        identifier, domainParts, sourceRoutes, comments, isIpAddress, containsWhitespace,
-        hasIdentifier, tld);
+        localPart, localPartWithoutComments, localPartWithoutQuotes, domain, domainWithoutComments,
+        fullSourceRoute, identifier, domainParts, sourceRoutes, comments, isIpAddress,
+        containsWhitespace, hasIdentifier, tld);
   }
 }
