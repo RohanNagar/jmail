@@ -188,6 +188,7 @@ public final class JMail {
     boolean previousComment = false;       // set to true if the last character was the end comment
     boolean requireAngledBracket = false;  // set to true if we need an angled bracket before the @
     boolean containsWhiteSpace = false;    // set to true if the email contains whitespace anywhere
+    boolean isAscii = true;                // set to false if the email contains non-ascii chars
 
     boolean removableQuotePair = true;     // set to false if the current quote could not be removed
     boolean previousQuotedDot = false;     // set to true if the previous character is '.' in quotes
@@ -209,6 +210,8 @@ public final class JMail {
 
     for (int i = 0; i < size; i++) {
       char c = email.charAt(i);
+
+      if (c >= 128) isAscii = false;
 
       if (c == '<' && !inQuotes && !previousBackslash) {
         // could be "phrase <address>" format. If not, it's not allowed
@@ -532,7 +535,7 @@ public final class JMail {
         localPart.toString(), localPartWithoutComments.toString(),
         localPartWithoutQuotes.toString(), domain.toString(), domainWithoutComments.toString(),
         fullSourceRoute, null, domainParts, comments, sourceRoutes, isIpAddress,
-        containsWhiteSpace);
+        containsWhiteSpace, isAscii);
 
     return EmailValidationResult.success(parsed);
   }

@@ -21,6 +21,7 @@ public final class Email {
   private final List<String> sourceRoutes;
   private final boolean isIpAddress;
   private final boolean containsWhitespace;
+  private final boolean isAscii;
   private final boolean hasIdentifier;
   private final TopLevelDomain tld;
 
@@ -28,7 +29,7 @@ public final class Email {
         String domain, String domainWithoutComments,
         String fullSourceRoute, String identifier,
         List<String> domainParts, List<String> comments, List<String> sourceRoutes,
-        boolean isIpAddress, boolean containsWhitespace) {
+        boolean isIpAddress, boolean containsWhitespace, boolean isAscii) {
     this.localPart = localPart;
     this.localPartWithoutComments = localPartWithoutComments;
     this.localPartWithoutQuotes = localPartWithoutQuotes;
@@ -41,6 +42,7 @@ public final class Email {
     this.sourceRoutes = Collections.unmodifiableList(sourceRoutes);
     this.isIpAddress = isIpAddress;
     this.containsWhitespace = containsWhitespace;
+    this.isAscii = isAscii;
     this.hasIdentifier = identifier != null && identifier.length() > 0;
 
     this.tld = domainParts.size() > 1
@@ -61,6 +63,7 @@ public final class Email {
     this.sourceRoutes = other.sourceRoutes;
     this.isIpAddress = other.isIpAddress;
     this.containsWhitespace = other.containsWhitespace;
+    this.isAscii = other.isAscii;
     this.hasIdentifier = identifier != null && identifier.length() > 0;
     this.tld = other.tld;
   }
@@ -194,6 +197,17 @@ public final class Email {
   }
 
   /**
+   * Get whether this email address contains only ASCII characters. For example, the address
+   * {@code "test12@gmail.com"} will return {@code true}, but the address
+   * {@code "jørn@test.com"} will return {@code false}.
+   *
+   * @return true if this email contains only ASCII characters, false otherwise
+   */
+  public boolean isAscii() {
+    return isAscii;
+  }
+
+  /**
    * Get whether this email address has an identifier. For example, the address
    * {@code "John Smith <test@server.com>"} will return {@code true}, but the address
    * {@code "test@example.com"} will return {@code false}.
@@ -284,6 +298,7 @@ public final class Email {
         && Objects.equals(comments, email.comments)
         && Objects.equals(isIpAddress, email.isIpAddress)
         && Objects.equals(containsWhitespace, email.containsWhitespace)
+        && Objects.equals(isAscii, email.isAscii)
         && Objects.equals(hasIdentifier, email.hasIdentifier)
         && Objects.equals(tld, email.tld);
   }
@@ -293,6 +308,6 @@ public final class Email {
     return Objects.hash(
         localPart, localPartWithoutComments, localPartWithoutQuotes, domain, domainWithoutComments,
         fullSourceRoute, identifier, domainParts, sourceRoutes, comments, isIpAddress,
-        containsWhitespace, hasIdentifier, tld);
+        containsWhitespace, isAscii, hasIdentifier, tld);
   }
 }

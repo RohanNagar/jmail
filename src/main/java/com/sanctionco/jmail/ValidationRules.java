@@ -168,6 +168,6 @@ public final class ValidationRules {
    * @return true if this email address only contains ASCII characters, or false if it does not
    */
   public static boolean requireOnlyAscii(Email email) {
-    return email.toString().chars().allMatch(c -> c < 128);
+    return email.isAscii();
   }
 }
