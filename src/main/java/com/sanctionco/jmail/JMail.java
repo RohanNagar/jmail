@@ -192,7 +192,7 @@ public final class JMail {
 
     boolean removableQuotePair = true;     // set to false if the current quote could not be removed
     boolean previousQuotedDot = false;     // set to true if the previous character is '.' in quotes
-    boolean requireQuotedAtOrDot = false;
+    boolean requireQuotedAtOrDot = false;  // set to true if we need an @ or . for a removable quote
 
     StringBuilder localPart = new StringBuilder(size);
     StringBuilder localPartWithoutComments = new StringBuilder(size);
@@ -281,6 +281,7 @@ public final class JMail {
         }
       }
 
+      // Additional logic to check if the current quote could be removable
       if (requireQuotedAtOrDot && inQuotes) {
         if (c != '.' && c != '@' && c != '(' && !isWhitespace(c) && c != '"') {
           removableQuotePair = false;

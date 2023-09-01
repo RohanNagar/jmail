@@ -209,6 +209,9 @@ Optional<String> normalized = JMail.tryParse("\"test.1\"@mysite.org")
 // normalized == Optional.of("test.1@mysite.org")
 ```
 
+> **Note:** You can also set the `jmail.normalized.strip.quotes` JVM property to
+strip quotes when calling `normalized()` without parameters.
+
 ### Additional Validation Rules
 
 #### Disallow IP Address Domain

@@ -48,6 +48,21 @@ class EmailTest {
         .returns("first@test.org", Email::normalized);
   }
 
+  @Test
+  void ensureNormalizedStripsQuotesWhenPropertyIsSet() {
+    System.setProperty("jmail.normalize.strip.quotes", "true");
+
+    assertThat(Email.of("\"test.1\"@example.org"))
+        .isPresent().get()
+        .returns("test.1@example.org", Email::normalized);
+
+    System.setProperty("jmail.normalize.strip.quotes", "false");
+
+    assertThat(Email.of("\"test.1\"@example.org"))
+        .isPresent().get()
+        .returns("\"test.1\"@example.org", Email::normalized);
+  }
+
   @ParameterizedTest(name = "{0}")
   @MethodSource("provideValidForStripQuotes")
   void ensureNormalizedStripsQuotes(String address, String expected) {

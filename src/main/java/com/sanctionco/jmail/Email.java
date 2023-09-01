@@ -238,8 +238,7 @@ public final class Email {
    * @return the normalized version of this email address
    */
   public String normalized() {
-    //    if (System.getProperty("jmail.normalize.stripQuotes"))
-    return normalized(false);
+    return normalized(JmailProperties.stripQuotes());
   }
 
   /**
