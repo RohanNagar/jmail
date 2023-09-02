@@ -215,7 +215,7 @@ class EmailValidatorTest {
     @ValueSource(strings = {
         "jørn@test.com", "我買@屋企.香港", "Pelé@example.com", "xyz@🙏.kz"})
     void rejectsNonAsciiEmails(String email) {
-      runInvalidTest(JMail.validator().requireOnlyAsciiCharacters(), email);
+      runInvalidTest(JMail.validator().requireAscii(), email);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -223,7 +223,7 @@ class EmailValidatorTest {
         "test@domain.test.org", "hello@world", "user%uucp!path@berkeley.edu",
         "\"John Michael\" <tester@test.net>", "(comment)test@test.org"})
     void allowsOtherAddresses(String email) {
-      runValidTest(JMail.validator().requireOnlyAsciiCharacters(), email);
+      runValidTest(JMail.validator().requireAscii(), email);
     }
   }
 

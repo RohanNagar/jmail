@@ -143,20 +143,21 @@ boolean invalidWithoutAllowed = validator.isValid("invalid@test.com");
 JMail also includes an `Email` object that makes working with
 email addresses easier. The `Email` object has the following properties:
 
-| Property getter | Description | Example using `test(hello)@(world)example.one.com` |
-| --------------- | ----------- | ------------------------------------ |
-| localPart() | The local-part of the email address | `test(hello)` |
-| localPartWithoutComments()  | The local-part of the email address without comments | `test` |
-| domain() | The domain of the email address | `(world)example.one.com` |
-| domainWithoutComments() | The domain of the email address without comments | `example.one.com` |
-| domainParts() | A list of the parts of the domain | `[example, one, com]` |
-| identifier() | The identifier of the email address, if it has one. | `null`<br/>(For `Admin <test@server.com>`, it would be `Admin`) |
-| comments() | A list of the comments in the email address | `[hello, world]` |
-| explicitSourceRoutes() | A list of explicit source routes in the address, if present | `[]`<br/>(For `@1st.relay,@2nd.relay:user@final.domain`, it would be `[1st.relay, 2nd.relay]`) |
-| isIpAddress() | Whether the domain is an IP address | `false` |
-| containsWhitespace() | Whether the address contains obsolete whitespace | `false` |
-| hasIdentifier() | Whether the address has an identifier | `false` |
-| topLevelDomain() | The `TopLevelDomain` of the email address, or `TopLevelDomain.OTHER` if it is unknown | `TopLevelDomain.DOT_COM` |
+| Property getter            | Description                                                                           | Example using `test(hello)@(world)example.one.com`                                             |
+|----------------------------|---------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| localPart()                | The local-part of the email address                                                   | `test(hello)`                                                                                  |
+| localPartWithoutComments() | The local-part of the email address without comments                                  | `test`                                                                                         |
+| domain()                   | The domain of the email address                                                       | `(world)example.one.com`                                                                       |
+| domainWithoutComments()    | The domain of the email address without comments                                      | `example.one.com`                                                                              |
+| domainParts()              | A list of the parts of the domain                                                     | `[example, one, com]`                                                                          |
+| identifier()               | The identifier of the email address, if it has one.                                   | `null`<br/>(For `Admin <test@server.com>`, it would be `Admin`)                                |
+| comments()                 | A list of the comments in the email address                                           | `[hello, world]`                                                                               |
+| explicitSourceRoutes()     | A list of explicit source routes in the address, if present                           | `[]`<br/>(For `@1st.relay,@2nd.relay:user@final.domain`, it would be `[1st.relay, 2nd.relay]`) |
+| isIpAddress()              | Whether the domain is an IP address                                                   | `false`                                                                                        |
+| containsWhitespace()       | Whether the address contains obsolete whitespace                                      | `false`                                                                                        |
+| isAscii()                  | Whether the address contains **only** ASCII characters                                    | `true`                                                                                         |
+| hasIdentifier()            | Whether the address has an identifier                                                 | `false`                                                                                        |
+| topLevelDomain()           | The `TopLevelDomain` of the email address, or `TopLevelDomain.OTHER` if it is unknown | `TopLevelDomain.DOT_COM`                                                                       |
 
 To create a new instance of `Email` from a string, use the `tryParse(String email)`
 method, either the default version or on your own `EmailValidator` instance:
@@ -198,6 +199,18 @@ Optional<String> normalized = JMail.tryParse("admin(comment)@mysite.org")
 
 // normalized == Optional.of("admin@mysite.org")
 ```
+
+```java
+// Get a normalized email address and strip quotes if the address would
+// still be valid
+Optional<String> normalized = JMail.tryParse("\"test.1\"@mysite.org")
+        .map(e -> e.normalized(true));
+
+// normalized == Optional.of("test.1@mysite.org")
+```
+
+> **Note:** You can also set the `-Djmail.normalize.strip.quotes=true` JVM property to
+strip quotes when calling `normalized()` without parameters.
 
 ### Additional Validation Rules
 
@@ -297,6 +310,16 @@ JMail.validator().requireValidMXRecord();
 
 // Or, customize the timeout and retries
 JMail.validator().requireValidMXRecord(50, 2);
+```
+
+#### Require the address to be ASCII
+
+Some older email servers cannot yet accept non-ASCII email addresses. You can
+require that your `EmailValidator` reject all email addresses that contain characters
+other than ASCII characters.
+
+```java
+JMail.validator().requireAscii();
 ```
 
 ### Bonus: IP Address Validation

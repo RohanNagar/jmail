@@ -116,6 +116,7 @@ mymail\@hello@hotmail.com,mymail\@hello,hotmail.com,
 Abc\@def@test.org,Abc\@def,test.org,
 Fred\ Bloggs@test.org,Fred\ Bloggs,test.org,
 Joe.\\Blow@test.org,Joe.\\Blow,test.org,
+test\<angled@mytest.edu,test\<angled,mytest.edu,
 {^c\@**Dog^}@cartoon.com,{^c\@**Dog^},cartoon.com,
 phil.h\@\@ck@haacked.com,phil.h\@\@ck,haacked.com,Escaped @ symbols are allowed
 abc\\@test.org,abc\\,test.org,Escaped backslash is allowed

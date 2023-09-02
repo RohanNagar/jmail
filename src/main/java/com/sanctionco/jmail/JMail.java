@@ -185,11 +185,18 @@ public final class JMail {
     boolean requireAtDotOrComment = false; // set to true if the next character should be @ . or (
     boolean whitespace = false;            // set to true if we are currently within whitespace
     boolean previousComment = false;       // set to true if the last character was the end comment
-    boolean requireAngledBracket = false;
+    boolean requireAngledBracket = false;  // set to true if we need an angled bracket before the @
     boolean containsWhiteSpace = false;    // set to true if the email contains whitespace anywhere
+    boolean isAscii = true;                // set to false if the email contains non-ascii chars
+
+    boolean removableQuotePair = true;     // set to false if the current quote could not be removed
+    boolean previousQuotedDot = false;     // set to true if the previous character is '.' in quotes
+    boolean requireQuotedAtOrDot = false;  // set to true if we need an @ or . for a removable quote
 
     StringBuilder localPart = new StringBuilder(size);
     StringBuilder localPartWithoutComments = new StringBuilder(size);
+    StringBuilder localPartWithoutQuotes = new StringBuilder(size);
+    StringBuilder currentQuote = new StringBuilder();
     StringBuilder domain = new StringBuilder(size);
     StringBuilder domainWithoutComments = new StringBuilder(size);
     StringBuilder currentDomainPart = new StringBuilder();
@@ -203,6 +210,8 @@ public final class JMail {
     for (int i = 0; i < size; i++) {
       char c = email.charAt(i);
 
+      if (c >= 128) isAscii = false;
+
       if (c == '<' && !inQuotes && !previousBackslash) {
         // could be "phrase <address>" format. If not, it's not allowed
         if (!(email.charAt(size - 1) == '>')) {
@@ -211,14 +220,11 @@ public final class JMail {
 
         EmailValidationResult innerResult = validateInternal(email.substring(i + 1, size - 1));
 
-        // If the address passed validation, return success with the identifier included
-        if (innerResult.getEmail().isPresent()) {
-          return EmailValidationResult
-              .success(new Email(innerResult.getEmail().get(), localPart.toString()));
-        }
-
+        // If the address passed validation, return success with the identifier included.
         // Otherwise, just return the failed internal result
-        return innerResult;
+        return innerResult.getEmail()
+            .map(e -> EmailValidationResult.success(new Email(e, localPart.toString())))
+            .orElse(innerResult);
       }
 
       if (c == '@' && !inQuotes && !previousBackslash) {
@@ -274,6 +280,21 @@ public final class JMail {
         }
       }
 
+      // Additional logic to check if the current quote could be removable
+      if (requireQuotedAtOrDot && inQuotes) {
+        if (c != '.' && c != '@' && !isWhitespace(c) && c != '"') {
+          removableQuotePair = false;
+        } else if (!isWhitespace(c) && c != '"') {
+          requireQuotedAtOrDot = false;
+        }
+      }
+
+      // If we tried to remove a quote with a comment it would change the
+      // meaning of the address
+      if (c == '(' && inQuotes && !previousBackslash) {
+        removableQuotePair = false;
+      }
+
       if (c == '(' && !inQuotes) {
         // validate comment
         Optional<String> comment = validateComment(email.substring(i));
@@ -287,11 +308,11 @@ public final class JMail {
 
         // Now, what do we need surrounding the comment to make it valid?
         if (!atFound && (i != 0 && !previousDot)) {
-          // if at beginning of local part or we had a dot, ok.
+          // if at beginning of local part, or we had a dot, ok.
           // if not, we need to be at the end of the local part '@' or get a dot
           requireAtOrDot = true;
         } else if (atFound && !firstDomainChar && !previousDot) {
-          // if at beginning of domain or we had a dot, ok.
+          // if at beginning of domain, or we had a dot, ok.
           // if not, we need to be at the end of the domain or get a dot
           if (!(i + commentStrLen == size)) requireAtOrDot = true;
         }
@@ -313,8 +334,12 @@ public final class JMail {
       }
 
       // If we find two dots outside of quotes, fail
-      if (c == '.' && previousDot && !inQuotes) {
-        return EmailValidationResult.failure(FailureReason.MULTIPLE_DOT_SEPARATORS);
+      if (c == '.' && previousDot) {
+        if (!inQuotes) {
+          return EmailValidationResult.failure(FailureReason.MULTIPLE_DOT_SEPARATORS);
+        } else {
+          removableQuotePair = false;
+        }
       }
 
       if (!atFound) {
@@ -332,6 +357,11 @@ public final class JMail {
           return EmailValidationResult.failure(FailureReason.DISALLOWED_UNQUOTED_CHARACTER);
         }
 
+        // If we are in quotes and the character requires quotes, mark the pair as not removable
+        if (mustBeQuoted && inQuotes && !previousBackslash && c != '"') {
+          removableQuotePair = false;
+        }
+
         // If we previously saw a backslash, we must make sure it is being used to quote something
         if (!inQuotes && previousBackslash && !mustBeQuoted && c != ' ' && c != '\\') {
           return EmailValidationResult.failure(FailureReason.UNUSED_BACKSLASH_ESCAPE);
@@ -340,13 +370,25 @@ public final class JMail {
         if (inQuotes) {
           // if we are in quotes, we need to make sure that if the character requires
           // a backlash escape, that it is there
-          if (JMail.ALLOWED_QUOTED_WITH_ESCAPE.contains(c) && !previousBackslash) {
-            return EmailValidationResult.failure(FailureReason.MISSING_BACKSLASH_ESCAPE);
+          if (JMail.ALLOWED_QUOTED_WITH_ESCAPE.contains(c)) {
+            if (!previousBackslash) {
+              return EmailValidationResult.failure(FailureReason.MISSING_BACKSLASH_ESCAPE);
+            }
+
+            removableQuotePair = false;
           }
         }
 
         localPart.append(c);
         localPartWithoutComments.append(c);
+
+        if (c != '"') {
+          if (inQuotes) {
+            currentQuote.append(c);
+          } else {
+            localPartWithoutQuotes.append(c);
+          }
+        }
       } else {
         // We're in the domain
         if (firstDomainChar && c == '[') {
@@ -401,8 +443,27 @@ public final class JMail {
         firstDomainChar = false;
       }
 
+      final boolean quotedWhitespace = isWhitespace(c) && inQuotes;
+
       if (c == '"' && !previousBackslash) {
-        if (inQuotes) requireAtDotOrComment = true; // closing quote, make sure next char is . or @
+        if (inQuotes) {
+          requireAtDotOrComment = true; // closing quote, make sure next char is . or @
+
+          if (currentQuote.length() == 0) {
+            removableQuotePair = false;
+          }
+
+          if (removableQuotePair) {
+            localPartWithoutQuotes.append(currentQuote);
+          } else {
+            localPartWithoutQuotes.append('"');
+            localPartWithoutQuotes.append(currentQuote);
+            localPartWithoutQuotes.append('"');
+          }
+        } else { // opening quote
+          removableQuotePair = true;
+          currentQuote = new StringBuilder();
+        }
 
         inQuotes = !inQuotes;
       }
@@ -415,6 +476,18 @@ public final class JMail {
 
       if (!whitespace) {
         previousDot = c == '.';
+      }
+
+      if (!quotedWhitespace) {
+        previousQuotedDot = c == '.';
+      }
+
+      // For whitespace within quotes we need some special checks to see
+      // if this quote would be removable
+      if (quotedWhitespace) {
+        if (!previousQuotedDot && !previousBackslash) {
+          requireQuotedAtOrDot = true;
+        }
       }
 
       // if we already had a prev backslash, this backslash is escaped
@@ -466,8 +539,9 @@ public final class JMail {
 
     Email parsed = new Email(
         localPart.toString(), localPartWithoutComments.toString(),
-        domain.toString(), domainWithoutComments.toString(), fullSourceRoute, null,
-        domainParts, comments, sourceRoutes, isIpAddress, containsWhiteSpace);
+        localPartWithoutQuotes.toString(), domain.toString(), domainWithoutComments.toString(),
+        fullSourceRoute, null, domainParts, comments, sourceRoutes, isIpAddress,
+        containsWhiteSpace, isAscii);
 
     return EmailValidationResult.success(parsed);
   }
