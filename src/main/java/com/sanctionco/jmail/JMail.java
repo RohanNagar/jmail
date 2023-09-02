@@ -443,7 +443,7 @@ public final class JMail {
         firstDomainChar = false;
       }
 
-      boolean quotedWhitespace = isWhitespace(c) && inQuotes;
+      final boolean quotedWhitespace = isWhitespace(c) && inQuotes;
 
       if (c == '"' && !previousBackslash) {
         if (inQuotes) {
