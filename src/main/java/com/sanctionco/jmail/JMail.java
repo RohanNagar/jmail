@@ -283,7 +283,7 @@ public final class JMail {
 
       // Additional logic to check if the current quote could be removable
       if (requireQuotedAtOrDot && inQuotes) {
-        if (c != '.' && c != '@' && c != '(' && !isWhitespace(c) && c != '"') {
+        if (c != '.' && c != '@' && !isWhitespace(c) && c != '"') {
           removableQuotePair = false;
         } else if (!isWhitespace(c) && c != '"') {
           requireQuotedAtOrDot = false;
@@ -486,7 +486,7 @@ public final class JMail {
       // For whitespace within quotes we need some special checks to see
       // if this quote would be removable
       if (quotedWhitespace) {
-        if (!previousQuotedDot && !previousComment && !previousBackslash) {
+        if (!previousQuotedDot && !previousBackslash) {
           requireQuotedAtOrDot = true;
         }
       }

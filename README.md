@@ -319,7 +319,7 @@ require that your `EmailValidator` reject all email addresses that contain chara
 other than ASCII characters.
 
 ```java
-JMail.validator().requireOnlyAsciiCharacters();
+JMail.validator().requireAscii();
 ```
 
 ### Bonus: IP Address Validation
