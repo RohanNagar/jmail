@@ -167,7 +167,7 @@ public final class ValidationRules {
    * @param email the email address to validate
    * @return true if this email address only contains ASCII characters, or false if it does not
    */
-  public static boolean requireOnlyAscii(Email email) {
+  public static boolean requireAscii(Email email) {
     return email.isAscii();
   }
 }
