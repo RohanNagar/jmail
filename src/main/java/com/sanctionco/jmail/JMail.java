@@ -290,6 +290,12 @@ public final class JMail {
         }
       }
 
+      // If we tried to remove a quote with a comment it would change the
+      // meaning of the address
+      if (c == '(' && inQuotes && !previousBackslash) {
+        removableQuotePair = false;
+      }
+
       if (c == '(' && !inQuotes) {
         // validate comment
         Optional<String> comment = validateComment(email.substring(i));
