@@ -184,7 +184,6 @@ public final class JMail {
     boolean requireAtOrDot = false;        // set to true if the next character should be @ or .
     boolean requireAtDotOrComment = false; // set to true if the next character should be @ . or (
     boolean whitespace = false;            // set to true if we are currently within whitespace
-    boolean quotedWhitespace = false;      // set to true if we are currently within "" whitespace
     boolean previousComment = false;       // set to true if the last character was the end comment
     boolean requireAngledBracket = false;  // set to true if we need an angled bracket before the @
     boolean containsWhiteSpace = false;    // set to true if the email contains whitespace anywhere
@@ -444,7 +443,7 @@ public final class JMail {
         firstDomainChar = false;
       }
 
-      quotedWhitespace = isWhitespace(c) && inQuotes;
+      boolean quotedWhitespace = isWhitespace(c) && inQuotes;
 
       if (c == '"' && !previousBackslash) {
         if (inQuotes) {
