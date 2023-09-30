@@ -1,6 +1,6 @@
 # JMail Changelog
 
-## i1.6.0
+## 1.6.0
 
 - Add a new rule `requireAscii()` that considers an email address containing non-ASCII characters to be invalid. (Thanks @frodeto for suggesting!)
 - Add new property `isAscii()` on `Email` objects that returns if the email address only contains ASCII characters or not.
