@@ -61,7 +61,7 @@ class ComparisonTest {
       .asList(jmailImpl, apacheImpl, javaMailImpl, rfc2822Impl);
 
   @BeforeAll
-  @SuppressWarnings({"unused", "BeforeOrAfterWithIncorrectSignature"})
+  @SuppressWarnings({"unused"})
   void setupFile() throws Exception {
     Files.write(htmlFile, "".getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -87,7 +87,7 @@ class ComparisonTest {
   }
 
   @AfterAll
-  @SuppressWarnings({"unused", "BeforeOrAfterWithIncorrectSignature"})
+  @SuppressWarnings({"unused"})
   void addTotals() throws Exception {
     StringBuilder totals = new StringBuilder().append("    <tr>\n"
         + "      <th scope=\"row\">Totals</th>\n");

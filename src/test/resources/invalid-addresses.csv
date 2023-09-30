@@ -32,14 +32,14 @@ x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x2345678
 "\"@iana.org ;                                                                         A single backslash is invalid
 first\\@last@iana.org ;                                                                The extra @ must be quote-escaped
 first.last@ ;                                                                          The domain cannot be missing
-test@example.com&#10; ;                                                                Invalid characters in the domain are not allowed
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777] ;                                 IPv6 address does not have enough segments)
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888:9999] ;                       IPv6 address has too many segments)
-first.last@[IPv6:1111:2222::3333::4444:5555:6666] ;                                    The IPv6 format is invalid (Only one set of :: is allowed)
-first.last@[IPv6:1111:2222:333x::4444:5555] ;                                          The IPv6 format is invalid (x is not a valid hexadecimal character)
-first.last@[IPv6:1111:2222:33333::4444:5555] ;                                         The IPv6 format is invalid (33333 is not a valid segment)
-first.last@[IPv6::] ;                                                                  The IPv6 format is invalid (: is invalid)
-first.last@[IPv6::::] ;                                                                The IPv6 format is invalid (::: is invalid)
+test@example.com&#10; ;                                                                The line feed character is not allowed in the domain
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777] ;                                 IPv6 address does not have enough segments
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888:9999] ;                       IPv6 address has too many segments
+first.last@[IPv6:1111:2222::3333::4444:5555:6666] ;                                    IPv6 domain literal must be valid (Only one set of :: is allowed)
+first.last@[IPv6:1111:2222:333x::4444:5555] ;                                          IPv6 domain literal must be valid (x is not a valid hexadecimal character)
+first.last@[IPv6:1111:2222:33333::4444:5555] ;                                         IPv6 domain literal must be valid (33333 is not a valid segment)
+first.last@[IPv6::] ;                                                                  IPv6 domain literal must be valid (: is invalid)
+first.last@[IPv6::::] ;                                                                IPv6 domain literal must be valid (::: is invalid)
 first.last@[IPv6::b4] ;                                                                The IPv6 format is invalid
 first.last@[IPv6::::b4] ;                                                              The IPv6 format is invalid
 first.last@[IPv6::b3:b4] ;                                                             The IPv6 format is invalid
@@ -124,8 +124,8 @@ foo@[\1.2.3.4] ;                                                                
 first\last@test.org ;                                                                  The \ character is not escaping anything
 first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno).(abc("def".ghi).mno)com(abc("def".ghi).mno) ; The first comment is not dot separated
 first(middle)last@test.org ;                                                           Comments in the middle of the local-part must be dot separated
-"Unicode NULL ␀"@char.com ;                                                           The unicode null character must be escaped within quotes
-Unicode NULL \␀@char.com ;                                                            The escaped unicode null character is only allowed within quotes
+"Unicode NULL ␀"@char.com ;                                                            The unicode null character must be escaped within quotes
+Unicode NULL \␀@char.com ;                                                             The escaped unicode null character is only allowed within quotes
 "test"test@test.com ;                                                                  Quotes must be dot separated
 ()@test.com ;                                                                          Empty comment is not allowed
 test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames ; The top level domain can only be 63 characters long

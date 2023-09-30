@@ -1,4 +1,4 @@
-Format: email-to-test,expected-local-part,expected-domain,Description
+File format: email-to-test,expected-local-part,expected-domain,description
 simple@example.com,simple,example.com,A simple valid email address
 very.common@example.com,very.common,example.com,A simple address with a dot separator
 very.common@example.org,very.common,example.org,A simple address ending in .org
@@ -110,13 +110,13 @@ first(abc.def).last@test.org,first(abc.def).last,test.org,
 first(a"bc.def).last@test.org,first(a"bc.def).last,test.org,
 first.(")middle.last(")@test.org,first.(")middle.last("),test.org,
 first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com,first.last,x(1234567890123456789012345678901234567890123456789012345678901234567890).com,
-user%uucp!path@berkeley.edu,user%uucp!path,berkeley.edu,
-first().last@test.org,first().last,test.org,
-mymail\@hello@hotmail.com,mymail\@hello,hotmail.com,
-Abc\@def@test.org,Abc\@def,test.org,
-Fred\ Bloggs@test.org,Fred\ Bloggs,test.org,
+user%uucp!path@berkeley.edu,user%uucp!path,berkeley.edu,The % and ! symbols are valid in the local-part
+first().last@test.org,first().last,test.org,Empty comments are valid
+mymail\@hello@hotmail.com,mymail\@hello,hotmail.com,Escaped @ symbols are allowed
+Abc\@def@test.org,Abc\@def,test.org,Escaped @ symbols are allowed
+Fred\ Bloggs@test.org,Fred\ Bloggs,test.org,Whitespace is allowed when quoted or between parts
 Joe.\\Blow@test.org,Joe.\\Blow,test.org,
-test\<angled@mytest.edu,test\<angled,mytest.edu,
+test\<angled@mytest.edu,test\<angled,mytest.edu,Angled bracket is allowed when quoted
 {^c\@**Dog^}@cartoon.com,{^c\@**Dog^},cartoon.com,
 phil.h\@\@ck@haacked.com,phil.h\@\@ck,haacked.com,Escaped @ symbols are allowed
 abc\\@test.org,abc\\,test.org,Escaped backslash is allowed
