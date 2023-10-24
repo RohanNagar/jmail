@@ -43,7 +43,7 @@
 
     <!-- Plugin versions -->
     <checkstyle.version>10.12.4</checkstyle.version>
-    <checkstyle-plugin.version>3.3.0</checkstyle-plugin.version>
+    <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <gpg-plugin.version>3.1.0</gpg-plugin.version>
     <jacoco.version>0.8.11</jacoco.version>
@@ -51,7 +51,7 @@
     <nexus-plugin.version>1.6.13</nexus-plugin.version>
     <release-plugin.version>3.0.1</release-plugin.version>
     <source-plugin.version>3.3.0</source-plugin.version>
-    <surefire.version>3.1.2</surefire.version>
+    <surefire.version>3.2.1</surefire.version>
 
     <!-- Test dependency versions -->
     <equalsverifier.version>3.15.2</equalsverifier.version>
