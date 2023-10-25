@@ -17,6 +17,7 @@ class FailureReasonTest {
         Arguments.of("te[st@test.com", FailureReason.DISALLOWED_UNQUOTED_CHARACTER),
         Arguments.of("test@", FailureReason.DOMAIN_MISSING),
         Arguments.of("test@test-.com", FailureReason.DOMAIN_PART_ENDS_WITH_DASH),
+        Arguments.of("email@example.com-", FailureReason.DOMAIN_PART_ENDS_WITH_DASH),
         Arguments.of("test@my.-test.com", FailureReason.DOMAIN_PART_STARTS_WITH_DASH),
         Arguments.of(
             "first.last@x234567890123456789012345678901234567890123456789012345678901234.test.org",

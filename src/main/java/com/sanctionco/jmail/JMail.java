@@ -170,9 +170,14 @@ public final class JMail {
     // email cannot start with '.'
     if (email.charAt(0) == '.') return EmailValidationResult.failure(FailureReason.STARTS_WITH_DOT);
 
-    // email cannot end with '.' or '-'
-    if (email.charAt(size - 1) == '.' || email.charAt(size - 1) == '-') {
+    // email cannot end with '.'
+    if (email.charAt(size - 1) == '.') {
       return EmailValidationResult.failure(FailureReason.ENDS_WITH_DOT);
+    }
+
+    // email cannot end with '-'
+    if (email.charAt(size - 1) == '-') {
+      return EmailValidationResult.failure(FailureReason.DOMAIN_PART_ENDS_WITH_DASH);
     }
 
     boolean atFound = false;               // set to true when the '@' character is found
