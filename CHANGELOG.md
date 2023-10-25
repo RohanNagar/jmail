@@ -1,5 +1,10 @@
 # JMail Changelog
 
+## 1.6.1
+
+- Fix bug so that email addresses that end in a dash `-` character now correctly fail validation with the reason `FailureReason.DOMAIN_PART_ENDS_WITH_DASH` instead of incorrectly returning `FailureReason.ENDS_WITH_DOT`. (Thanks @tbatchlear for reporting!)
+
+---
 ## 1.6.0
 
 - Add a new rule `requireAscii()` that considers an email address containing non-ASCII characters to be invalid. (Thanks @frodeto for suggesting!)
