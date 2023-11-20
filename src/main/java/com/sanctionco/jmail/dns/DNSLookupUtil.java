@@ -13,6 +13,7 @@ import javax.naming.directory.InitialDirContext;
 public final class DNSLookupUtil {
   private static final int DEFAULT_INITIAL_TIMEOUT = 100;
   private static final int DEFAULT_RETRIES = 2;
+  private static final String NO_SERVICE_MX_PR_RDATA = "0 .";
 
   /**
    * Private constructor to prevent instantiation.
@@ -48,7 +49,7 @@ public final class DNSLookupUtil {
       DirContext ctx = new InitialDirContext(env);
       Attribute attr = ctx.getAttributes(domain, new String[]{"MX"}).get("MX");
 
-      return attr != null && attr.size() > 0;
+      return attr != null && attr.size() > 0 && !attr.get(0).equals(NO_SERVICE_MX_PR_RDATA);
     } catch (NamingException e) {
       return false;
     }
