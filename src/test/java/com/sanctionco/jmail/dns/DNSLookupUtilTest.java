@@ -21,6 +21,11 @@ class DNSLookupUtilTest {
   }
 
   @Test
+  void failsToNoServiceMXRecord() {
+    assertThat(DNSLookupUtil.hasMXRecord("gmail.de")).isFalse();
+  }
+
+  @Test
   void customTimeoutWorksAsExpected() {
     long startTime = System.currentTimeMillis();
     assertThat(DNSLookupUtil.hasMXRecord("coolio.com", 10, 1)).isFalse();
