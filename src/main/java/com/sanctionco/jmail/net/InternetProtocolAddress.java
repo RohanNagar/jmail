@@ -89,7 +89,7 @@ public final class InternetProtocolAddress {
         continue;
       }
 
-      if (!Character.isDigit(c)) return Optional.empty();
+      if (c < '0' || c > '9') return Optional.empty();
 
       currentPart.append(c);
     }

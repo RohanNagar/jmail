@@ -29,7 +29,7 @@ class InternetProtocolAddressTest {
   @ParameterizedTest(name = "{0}")
   @ValueSource(strings = {
       "1.2.3", "1.2.3.", "1.2.3.4.5", "256.255.255.255", "255.4.6.256", "notanip", "1234.1.2.3",
-      "-1.2.3.4"})
+      "-1.2.3.4", "1২7.0.0.1"})
   void testInvalidIpv4Address(String ip) {
     assertThat(InternetProtocolAddress.validate(ip))
         .isNotPresent();
@@ -72,7 +72,8 @@ class InternetProtocolAddressTest {
       "::1234:5678:1.2.3.256",
       "2001:db8:3333:4444:5555:6666:7777:888J",
       "2001:db8:::",
-      "notanip"
+      "notanip",
+      "2001:db8:3333:4444:5555:6666:1.২.3.4"
   })
   void testInvalidIpv6Address(String ip) {
     assertThat(InternetProtocolAddress.validate(ip))
