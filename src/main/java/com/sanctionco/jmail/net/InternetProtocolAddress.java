@@ -200,6 +200,9 @@ public final class InternetProtocolAddress {
   }
 
   private static boolean isInvalidIpv4Part(String part) {
+    // IPv4 can only have 3 digits in a single part
+    if (part.length() > 3) return true;
+
     try {
       // The int cannot be less than zero since we check isDigit earlier on
       if (Integer.parseInt(part) > 255) return true;
