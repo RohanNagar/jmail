@@ -4,7 +4,7 @@
 
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>1.6.2-SNAPSHOT</version>
+  <version>1.6.2</version>
   <packaging>jar</packaging>
 
   <name>jmail</name>
@@ -15,7 +15,7 @@
     <url>https://github.com/RohanNagar/jmail</url>
     <connection>scm:git:git@github.com:RohanNagar/jmail.git</connection>
     <developerConnection>scm:git:git@github.com:RohanNagar/jmail.git</developerConnection>
-    <tag>v1.6.1</tag>
+    <tag>v1.6.2</tag>
   </scm>
 
   <licenses>
