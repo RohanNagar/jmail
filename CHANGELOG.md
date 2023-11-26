@@ -1,5 +1,12 @@
 # JMail Changelog
 
+## 1.6.2
+
+- Fix bug where IPv4 addresses with non-arabic numerals would incorrectly be considered valid. (Thanks @harrel56 for reporting!)
+- Fix bug where IPv4 addresses with extraneous leading zeros would incorrectly be considered valid. (Thanks @harrel56 for reporting!)
+- The `requireValidMXRecord()` validation rule now correctly fails validation for domains that use a "Null MX" record. (Thanks @elmolm for contributing! 🎉)
+
+---
 ## 1.6.1
 
 - Fix bug so that email addresses that end in a dash `-` character now correctly fail validation with the reason `FailureReason.DOMAIN_PART_ENDS_WITH_DASH` instead of incorrectly returning `FailureReason.ENDS_WITH_DOT`. (Thanks @tbatchlear for reporting!)
