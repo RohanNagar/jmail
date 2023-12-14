@@ -18,7 +18,7 @@ jobs:
         uses: JetBrains/qodana-action@v2023.3.0
 
       - name: Upload Result to Github Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
 
@@ -37,6 +37,6 @@ jobs:
           args: --sarif-file-output=snyk.sarif
 
       - name: Upload Result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk.sarif
