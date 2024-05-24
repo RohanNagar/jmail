@@ -1,5 +1,11 @@
 # JMail Changelog
 
+## 1.6.3
+
+- Fix bug where email addresses containing control characters in the local-part were incorrectly considered valid. (Thanks @PascalSchumacher for reporting!)
+- Add new methods `ifValid(Consumer<Email> action)` and `ifValidOrElse(Consumer<Email> action, Consumer<FailureReason> failureAction)` to the `EmailValidationResult` object.
+
+---
 ## 1.6.2
 
 - Fix bug where IPv4 addresses with non-arabic numerals would incorrectly be considered valid. (Thanks @harrel56 for reporting!)

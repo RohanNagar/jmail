@@ -3,6 +3,7 @@ package com.sanctionco.jmail;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 /**
  * Contains information about an email address validation, including success or failure,
@@ -62,6 +63,33 @@ public final class EmailValidationResult {
    */
   public FailureReason getFailureReason() {
     return failureReason;
+  }
+
+  /**
+   * If the email address is valid, performs the given action with the valid email address,
+   * otherwise does nothing.
+   *
+   * @param action the action to be performed, if the email address is valid
+   */
+  public void ifValid(Consumer<Email> action) {
+    if (emailAddress != null) {
+      action.accept(emailAddress);
+    }
+  }
+
+  /**
+   * If the email address is valid, performs the given action with the valid email address,
+   * otherwise performs the given failure action with the failure reason.
+   *
+   * @param action the action to be performed, if the email address is valid
+   * @param failureAction the action to be performed, if the email address is invalid
+   */
+  public void ifValidOrElse(Consumer<Email> action, Consumer<FailureReason> failureAction) {
+    if (emailAddress != null) {
+      action.accept(emailAddress);
+    } else {
+      failureAction.accept(failureReason);
+    }
   }
 
   @Override
