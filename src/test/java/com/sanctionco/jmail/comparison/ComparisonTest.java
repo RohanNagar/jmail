@@ -115,7 +115,9 @@ class ComparisonTest {
   }
 
   @ParameterizedTest(name = "{0}")
-  @MethodSource("com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails")
+  @MethodSource({
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails",
+      "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidControlEmails"})
   @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;", numLinesToSkip = 1)
   void compareInvalid(String email, String description) throws Exception {
     runTest(email, false, description == null ? null : description.trim());

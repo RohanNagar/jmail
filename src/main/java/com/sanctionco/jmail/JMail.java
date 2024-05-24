@@ -699,7 +699,10 @@ public final class JMail {
 
   // Set of characters that are not allowed in the local-part outside of quotes
   private static final Set<Character> DISALLOWED_UNQUOTED_CHARACTERS = new HashSet<>(
-      Arrays.asList('\t', '(', ')', ',', ':', ';', '<', '>', '@', '[', ']', '"'));
+      Arrays.asList('\t', '(', ')', ',', ':', ';', '<', '>', '@', '[', ']', '"',
+          // Control characters 1-8, 11, 12, 14-31
+          '␁', '␂', '␃', '␄', '␅', '␆', '␇', '␈', '␋', '␌', '␎', '␏', '␐', '␑',
+          '␒', '␓', '␔', '␕', '␖', '␗', '␘', '␙', '␚', '␛', '␜', '␝', '␟', '␁'));
 
   // Set of characters that are allowed in the domain
   private static final Set<Character> ALLOWED_DOMAIN_CHARACTERS = new HashSet<>(
