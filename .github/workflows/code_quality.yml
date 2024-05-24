@@ -6,22 +6,6 @@ on:
     branches: [ master ]
 
 jobs:
-  qodana:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Qodana Scan
-        uses: JetBrains/qodana-action@v2024.1.5
-
-      - name: Upload Result to Github Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: ${{ runner.temp }}/qodana/results/qodana.sarif.json
-
   snyk:
     runs-on: ubuntu-latest
 
