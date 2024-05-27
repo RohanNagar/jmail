@@ -42,7 +42,7 @@
     <java.minimum.version>1.9</java.minimum.version>
 
     <!-- Plugin versions -->
-    <checkstyle.version>10.16.0</checkstyle.version>
+    <checkstyle.version>10.17.0</checkstyle.version>
     <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
     <compiler-plugin.version>3.13.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.4</gpg-plugin.version>
@@ -309,7 +309,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.25.3</version>
+      <version>3.26.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
