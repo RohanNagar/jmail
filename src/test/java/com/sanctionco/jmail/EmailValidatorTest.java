@@ -186,7 +186,8 @@ class EmailValidatorTest {
   class RequireValidMXRecord {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {
-        "test@domain.test", "test@domain.example", "test@domain.invalid", "test@domain.localhost"})
+        "test@domain.test", "test@domain.example", "test@domain.invalid",
+        "test@domain.localhost", "test@gmail.co"})
     void rejectsDomainsWithoutMXRecord(String email) {
       runInvalidTest(JMail.validator().requireValidMXRecord(), email);
     }

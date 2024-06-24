@@ -66,7 +66,7 @@ class EmailTest {
   }
 
   @Test
-  void ensureNormalizedLowerCaseWhenPropertyIsSet() {
+  void ensureNormalizedConvertsToLowerCaseWhenPropertyIsSet() {
     System.setProperty("jmail.normalize.lower.case", "true");
 
     assertThat(Email.of("TEST.1@example.org"))
@@ -85,12 +85,12 @@ class EmailTest {
   void ensureNormalizedStripsQuotes(String address, String expected) {
     assertThat(Email.of(address))
           .isPresent().get()
-          .returns(expected, email -> email.normalized(true, false));
+          .returns(expected, email -> email.normalized(true));
   }
 
   @ParameterizedTest(name = "{0}")
   @MethodSource("provideValidForLowerCase")
-  void ensureNormalizedLowerCase(String address, String expected) {
+  void ensureNormalizedConvertsToLowerCase(String address, String expected) {
     assertThat(Email.of(address))
             .isPresent().get()
             .returns(expected, email -> email.normalized(false, true));

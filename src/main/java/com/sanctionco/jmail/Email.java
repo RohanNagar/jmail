@@ -248,7 +248,20 @@ public final class Email {
    * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
    *
    * @param stripQuotes set to true if you want to remove all quotes within
-   * @param lowerCase set to false if you want to save current case
+   * @return the normalized version of this email address
+   */
+  public String normalized(boolean stripQuotes) {
+    return normalized(stripQuotes, JmailProperties.lowerCase());
+  }
+
+  /**
+   * Return a "normalized" version of this email address. The normalized version
+   * is the same as the original email address, except that all comments and optional
+   * parts (identifiers, source routing) are removed. For example, the address
+   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
+   *
+   * @param stripQuotes set to true if you want to remove all quotes within
+   * @param lowerCase set to true if you want to convert the local-part to lowercase characters
    * @return the normalized version of this email address
    */
   public String normalized(boolean stripQuotes, boolean lowerCase) {
