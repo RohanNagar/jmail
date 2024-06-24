@@ -248,8 +248,8 @@ public final class Email {
    * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
    *
    * @param stripQuotes set to true if you want to remove all quotes within
-   * @return the normalized version of this email address
    * @param lowerCase set to false if you want to save current case
+   * @return the normalized version of this email address
    */
   public String normalized(boolean stripQuotes, boolean lowerCase) {
     String domain = isIpAddress
