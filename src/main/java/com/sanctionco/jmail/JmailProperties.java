@@ -12,6 +12,6 @@ class JmailProperties {
   }
 
   static boolean lowerCase() {
-    return Boolean.parseBoolean(System.getProperty(LOWER_CASE, "true"));
+    return Boolean.parseBoolean(System.getProperty(LOWER_CASE, "false"));
   }
 }
