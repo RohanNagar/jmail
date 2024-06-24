@@ -238,7 +238,7 @@ public final class Email {
    * @return the normalized version of this email address
    */
   public String normalized() {
-    return normalized(JmailProperties.stripQuotes());
+    return normalized(JmailProperties.stripQuotes(), JmailProperties.lowerCase());
   }
 
   /**
@@ -249,8 +249,9 @@ public final class Email {
    *
    * @param stripQuotes set to true if you want to remove all quotes within
    * @return the normalized version of this email address
+   * @param lowerCase set to false if you want to save current case
    */
-  public String normalized(boolean stripQuotes) {
+  public String normalized(boolean stripQuotes, boolean lowerCase) {
     String domain = isIpAddress
         ? "[" + this.domainWithoutComments + "]"
         : this.domainWithoutComments;
@@ -258,6 +259,10 @@ public final class Email {
     String localPart = stripQuotes
         ? localPartWithoutQuotes
         : localPartWithoutComments;
+
+    localPart = lowerCase
+            ? localPart.toLowerCase()
+            : localPart;
 
     return localPart + "@" + domain;
   }

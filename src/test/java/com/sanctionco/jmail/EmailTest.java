@@ -65,12 +65,35 @@ class EmailTest {
         .returns("\"test.1\"@example.org", Email::normalized);
   }
 
+  @Test
+  void ensureNormalizedLowerCaseWhenPropertyIsSet() {
+    System.setProperty("jmail.normalize.lower.case", "true");
+
+    assertThat(Email.of("TEST.1@example.org"))
+            .isPresent().get()
+            .returns("test.1@example.org", Email::normalized);
+
+    System.setProperty("jmail.normalize.lower.case", "false");
+
+    assertThat(Email.of("Test.1@example.org"))
+            .isPresent().get()
+            .returns("Test.1@example.org", Email::normalized);
+  }
+
   @ParameterizedTest(name = "{0}")
   @MethodSource("provideValidForStripQuotes")
   void ensureNormalizedStripsQuotes(String address, String expected) {
     assertThat(Email.of(address))
           .isPresent().get()
-          .returns(expected, email -> email.normalized(true));
+          .returns(expected, email -> email.normalized(true, false));
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("provideValidForLowerCase")
+  void ensureNormalizedLowerCase(String address, String expected) {
+    assertThat(Email.of(address))
+            .isPresent().get()
+            .returns(expected, email -> email.normalized(false, true));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -89,7 +112,7 @@ class EmailTest {
 
     assertThat(Email.of(quoted))
         .isPresent().get()
-        .returns(validated.normalized(), email -> email.normalized(true));
+        .returns(validated.normalized(), email -> email.normalized(true, false));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -100,7 +123,7 @@ class EmailTest {
   void ensureNormalizedDoesNotStripQuotesIfInvalid(String address) {
     assertThat(Email.of(address))
         .isPresent().get()
-        .returns(address, email -> email.normalized(true));
+        .returns(address, email -> email.normalized(true, false));
   }
 
   static Stream<Arguments> provideValidForStripQuotes() {
@@ -117,6 +140,20 @@ class EmailTest {
         Arguments.of("\"test. 1\"@example.org", "test. 1@example.org"),
         Arguments.of("\"first .last  \"@test .org", "first .last  @test .org"),
         Arguments.of("\"hello\\(world\"@test.com", "hello\\(world@test.com")
+    );
+  }
+
+  static Stream<Arguments> provideValidForLowerCase() {
+    return Stream.of(
+            Arguments.of("TEST.1@example.org", "test.1@example.org"),
+            Arguments.of("emAil@example.com", "email@example.com"),
+            Arguments.of("first\\\\Last@test.org", "first\\\\last@test.org"),
+            Arguments.of("AbC\\@dEf@test.org", "abc\\@def@test.org"),
+            Arguments.of("Fred\\ Bloggs@test.org", "fred\\ bloggs@test.org"),
+            Arguments.of("first.Middle.last@test.org", "first.middle.last@test.org"),
+            Arguments.of("tESt.1@example.org", "test.1@example.org"),
+            Arguments.of("tesT. 1@example.org", "test. 1@example.org"),
+            Arguments.of("fiRst .Last  @test .org", "first .last  @test .org")
     );
   }
 }
