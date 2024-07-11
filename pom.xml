@@ -51,7 +51,7 @@
     <nexus-plugin.version>1.7.0</nexus-plugin.version>
     <release-plugin.version>3.1.0</release-plugin.version>
     <source-plugin.version>3.3.1</source-plugin.version>
-    <surefire.version>3.3.0</surefire.version>
+    <surefire.version>3.3.1</surefire.version>
 
     <!-- Test dependency versions -->
     <equalsverifier.version>3.16.1</equalsverifier.version>
