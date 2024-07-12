@@ -80,6 +80,21 @@ class EmailTest {
             .returns("Test.1@example.org", Email::normalized);
   }
 
+  @Test
+  void ensureNormalizedDotsWhenPropertyIsSet() {
+    System.setProperty("jmail.normalize.dots", "true");
+
+    assertThat(Email.of("t.e.s.t.1@example.org"))
+            .isPresent().get()
+            .returns("test1@example.org", Email::normalized);
+
+    System.setProperty("jmail.normalize.dots", "false");
+
+    assertThat(Email.of("t.e.s.t.1@example.org"))
+            .isPresent().get()
+            .returns("t.e.s.t.1@example.org", Email::normalized);
+  }
+
   @ParameterizedTest(name = "{0}")
   @MethodSource("provideValidForStripQuotes")
   void ensureNormalizedStripsQuotes(String address, String expected) {
@@ -93,7 +108,15 @@ class EmailTest {
   void ensureNormalizedConvertsToLowerCase(String address, String expected) {
     assertThat(Email.of(address))
             .isPresent().get()
-            .returns(expected, email -> email.normalized(false, true));
+            .returns(expected, email -> email.normalized(false, true, false));
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("provideValidForDots")
+  void ensureNormalizedDots(String address, String expected) {
+    assertThat(Email.of(address))
+            .isPresent().get()
+            .returns(expected, email -> email.normalized(false, false, true));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -112,7 +135,7 @@ class EmailTest {
 
     assertThat(Email.of(quoted))
         .isPresent().get()
-        .returns(validated.normalized(), email -> email.normalized(true, false));
+        .returns(validated.normalized(), email -> email.normalized(true, false, false));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -123,7 +146,7 @@ class EmailTest {
   void ensureNormalizedDoesNotStripQuotesIfInvalid(String address) {
     assertThat(Email.of(address))
         .isPresent().get()
-        .returns(address, email -> email.normalized(true, false));
+        .returns(address, email -> email.normalized(true, false, false));
   }
 
   static Stream<Arguments> provideValidForStripQuotes() {
@@ -154,6 +177,15 @@ class EmailTest {
             Arguments.of("tESt.1@example.org", "test.1@example.org"),
             Arguments.of("tesT. 1@example.org", "test. 1@example.org"),
             Arguments.of("fiRst .Last  @test .org", "first .last  @test .org")
+    );
+  }
+
+  public Stream<Arguments> provideValidForDots() {
+    return Stream.of(
+            Arguments.of("t.es.t@example.org", "test@example.org"),
+            Arguments.of("f.i.r.s.t@test.com", "first@test.com"),
+            Arguments.of("O.r.w.e.l.l@test.com", "Orwell@test.com"),
+            Arguments.of("e.ma.il@example.com", "email@example.com")
     );
   }
 }
