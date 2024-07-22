@@ -47,7 +47,7 @@
     <compiler-plugin.version>3.13.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.4</gpg-plugin.version>
     <jacoco.version>0.8.12</jacoco.version>
-    <javadoc-plugin.version>3.7.0</javadoc-plugin.version>
+    <javadoc-plugin.version>3.8.0</javadoc-plugin.version>
     <nexus-plugin.version>1.7.0</nexus-plugin.version>
     <release-plugin.version>3.1.1</release-plugin.version>
     <source-plugin.version>3.3.1</source-plugin.version>
