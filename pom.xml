@@ -43,7 +43,7 @@
 
     <!-- Plugin versions -->
     <checkstyle.version>10.17.0</checkstyle.version>
-    <checkstyle-plugin.version>3.4.0</checkstyle-plugin.version>
+    <checkstyle-plugin.version>3.5.0</checkstyle-plugin.version>
     <compiler-plugin.version>3.13.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.5</gpg-plugin.version>
     <jacoco.version>0.8.12</jacoco.version>
@@ -54,7 +54,7 @@
     <surefire.version>3.4.0</surefire.version>
 
     <!-- Test dependency versions -->
-    <equalsverifier.version>3.16.1</equalsverifier.version>
+    <equalsverifier.version>3.16.2</equalsverifier.version>
     <junit.version>5.11.0</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
     <mockneat.version>0.4.8</mockneat.version>
