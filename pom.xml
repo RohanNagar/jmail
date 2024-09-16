@@ -45,7 +45,7 @@
     <checkstyle.version>10.18.1</checkstyle.version>
     <checkstyle-plugin.version>3.5.0</checkstyle-plugin.version>
     <compiler-plugin.version>3.13.0</compiler-plugin.version>
-    <gpg-plugin.version>3.2.5</gpg-plugin.version>
+    <gpg-plugin.version>3.2.6</gpg-plugin.version>
     <jacoco.version>0.8.12</jacoco.version>
     <javadoc-plugin.version>3.10.0</javadoc-plugin.version>
     <nexus-plugin.version>1.7.0</nexus-plugin.version>
