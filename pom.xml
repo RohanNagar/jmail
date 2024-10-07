@@ -51,11 +51,11 @@
     <nexus-plugin.version>1.7.0</nexus-plugin.version>
     <release-plugin.version>3.1.1</release-plugin.version>
     <source-plugin.version>3.3.1</source-plugin.version>
-    <surefire.version>3.5.0</surefire.version>
+    <surefire.version>3.5.1</surefire.version>
 
     <!-- Test dependency versions -->
     <equalsverifier.version>3.17.1</equalsverifier.version>
-    <junit.version>5.11.1</junit.version>
+    <junit.version>5.11.2</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
     <mockneat.version>0.4.8</mockneat.version>
   </properties>
