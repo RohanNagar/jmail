@@ -96,7 +96,7 @@ try {
   JMail.enforceValid(email);
   
   // Work with your email string
-} catch (InvalidEmailException) {
+} catch (InvalidEmailException _) {
   // Handle invalid email
 }
 ```
