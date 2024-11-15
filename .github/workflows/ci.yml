@@ -24,7 +24,7 @@ jobs:
         run: mvn package jacoco:report
 
       - name: Upload Codecov report
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           directory: .
 
