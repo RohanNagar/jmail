@@ -42,7 +42,7 @@
     <java.minimum.version>1.9</java.minimum.version>
 
     <!-- Plugin versions -->
-    <checkstyle.version>10.20.1</checkstyle.version>
+    <checkstyle.version>10.20.2</checkstyle.version>
     <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
     <compiler-plugin.version>3.13.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.7</gpg-plugin.version>
@@ -54,7 +54,7 @@
     <surefire.version>3.5.2</surefire.version>
 
     <!-- Test dependency versions -->
-    <equalsverifier.version>3.17.3</equalsverifier.version>
+    <equalsverifier.version>3.17.4</equalsverifier.version>
     <junit.version>5.11.3</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
     <mockneat.version>0.4.8</mockneat.version>
