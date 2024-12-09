@@ -47,14 +47,14 @@
     <compiler-plugin.version>3.13.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.7</gpg-plugin.version>
     <jacoco.version>0.8.12</jacoco.version>
-    <javadoc-plugin.version>3.11.1</javadoc-plugin.version>
+    <javadoc-plugin.version>3.11.2</javadoc-plugin.version>
     <nexus-plugin.version>1.7.0</nexus-plugin.version>
     <release-plugin.version>3.1.1</release-plugin.version>
     <source-plugin.version>3.3.1</source-plugin.version>
     <surefire.version>3.5.2</surefire.version>
 
     <!-- Test dependency versions -->
-    <equalsverifier.version>3.17.4</equalsverifier.version>
+    <equalsverifier.version>3.17.5</equalsverifier.version>
     <junit.version>5.11.3</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
     <mockneat.version>0.4.8</mockneat.version>
