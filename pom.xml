@@ -54,7 +54,7 @@
     <surefire.version>3.5.2</surefire.version>
 
     <!-- Test dependency versions -->
-    <equalsverifier.version>3.18</equalsverifier.version>
+    <equalsverifier.version>3.18.1</equalsverifier.version>
     <junit.version>5.11.4</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
     <mockneat.version>0.4.8</mockneat.version>
