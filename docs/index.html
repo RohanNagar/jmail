@@ -21,6 +21,10 @@
             display:none;
         }
 
+        #loading-spinner {
+            display: none;
+        }
+
         .section-divider {
             height: 8rem;
             background-color: rgba(0, 0, 0, .1);
@@ -100,6 +104,11 @@
     <div class="row py-3 justify-content-center">
         <div class="col-sm-3">
             <div id="result" class="py-1">
+                <svg id="loading-spinner" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#e49c42" d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z">
+                    <animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/>
+                  </path>
+                </svg>
                 <div id="res-success" class="alert alert-success validation-success" role="alert">
                     The email address is valid!
                 </div>
@@ -145,6 +154,11 @@
     });
 
     $('#validate').on('click', function(event) {
+        // clear previous state and start loading new state
+        $('.validation-success').hide();
+        $('.validation-failure').hide();
+        $('#loading-spinner').show();
+
         var email = $('#email').val();
         var encoded = encodeURIComponent(email);
 
@@ -163,11 +177,13 @@
             'complete': function(response) {
                 if (response.status === 200) {
                     $('.validation-failure').hide();
+                    $('#loading-spinner').hide();
                     $('.validation-success').show();
                 } else {
                     var failureReason = response.getResponseHeader('validation-failure-reason');
                     $('.validation-failure').html('The email address is invalid.<br>Reason: ' + failureReason);
                     $('.validation-success').hide();
+                    $('#loading-spinner').hide();
                     $('.validation-failure').show();
                 }
             }
