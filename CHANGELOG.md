@@ -4,10 +4,14 @@
 
 ### Email Address Normalization Improvements
 
-- Add option to lowercase the local-part of the address when normalizing (Thanks @Sprokof for contributing! 🎉).
+- Add option to lowercase the address when normalizing (Thanks @Sprokof for contributing! 🎉).
   This option is disabled by default. To enable this option, either:
   - Use `Email#normalize(boolean, boolean)` and pass in `true` for the second parameter.
   - Set the `-Djmail.normalize.lower.case=true` JVM property at runtime.
+  - **Additionally**, you can specify which parts of the address to lowercase using JVM properties. By default,
+    the entire address will be lowercased if this option is enabled. To disable lowercasing the local-part, set the
+    `-Djmail.normalize.lower.case.localpart=false` JVM property at runtime. To disable lowercasing the domain,
+    set the `-Djmail.normalize.lower.case.domain=false` JVM property at runtime.
 - Add option to remove dots from the local-part of the address when normalizing (Thanks @Sprokof for contributing! 🎉).
   This option is disabled by default.  To enable this option, either:
     - Use `Email#normalize(boolean, boolean, boolean)` and pass in `true` for the third parameter.

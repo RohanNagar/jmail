@@ -81,6 +81,50 @@ class EmailTest {
   }
 
   @Test
+  void ensureNormalizedLowerCasesBothLocalPartAndDomain() {
+    System.setProperty("jmail.normalize.lower.case", "true");
+
+    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
+        .isPresent().get()
+        .returns("test.1@example.org", Email::normalized);
+
+    System.setProperty("jmail.normalize.lower.case", "false");
+
+    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
+        .isPresent().get()
+        .returns("TEST.1@EXAMPLE.ORG", Email::normalized);
+  }
+
+  @Test
+  void ensureNormalizedLowerCasesCorrectPartBasedOnOptions() {
+    System.setProperty("jmail.normalize.lower.case", "true");
+    System.setProperty("jmail.normalize.lower.case.localpart", "true");
+    System.setProperty("jmail.normalize.lower.case.domain", "false");
+
+    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
+        .isPresent().get()
+        .returns("test.1@EXAMPLE.ORG", Email::normalized);
+
+    System.setProperty("jmail.normalize.lower.case.localpart", "false");
+    System.setProperty("jmail.normalize.lower.case.domain", "true");
+
+    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
+        .isPresent().get()
+        .returns("TEST.1@example.org", Email::normalized);
+
+    System.setProperty("jmail.normalize.lower.case.localpart", "false");
+    System.setProperty("jmail.normalize.lower.case.domain", "false");
+
+    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
+        .isPresent().get()
+        .returns("TEST.1@EXAMPLE.ORG", Email::normalized);
+
+    System.clearProperty("jmail.normalize.lower.case");
+    System.clearProperty("jmail.normalize.lower.case.localpart");
+    System.clearProperty("jmail.normalize.lower.case.domain");
+  }
+
+  @Test
   void ensureNormalizedRemovesDotsWhenPropertyIsSet() {
     System.setProperty("jmail.normalize.remove.dots", "true");
 

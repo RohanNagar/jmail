@@ -248,7 +248,8 @@ public final class Email {
    * parts (identifiers, source routing) are removed. For example, the address
    * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
    *
-   * @param stripQuotes set to true if you want to remove all quotes within
+   * @param stripQuotes set to true if you want to remove all quotes
+   *                    within the local-part of the address
    * @return the normalized version of this email address
    */
   public String normalized(boolean stripQuotes) {
@@ -261,8 +262,15 @@ public final class Email {
    * parts (identifiers, source routing) are removed. For example, the address
    * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
    *
-   * @param stripQuotes set to true if you want to remove all quotes within
-   * @param lowerCase set to true if you want to convert the local-part to lowercase characters
+   * @param stripQuotes set to true if you want to remove all quotes
+   *                    within the local-part of the address
+   * @param lowerCase set to true if you want to convert the address to lowercase characters.
+   *                  Note that you can adjust which part of the address (local-part
+   *                  or domain or both) is lowercased using the system properties
+   *                  {@code jmail.normalize.lower.case.localpart} and
+   *                  {@code jmail.normalize.lower.case.domain}. By default,
+   *                  setting the {@code lowerCase} option to {@code true} will lowercase
+   *                  the entire address (both the local-part and the domain).
    * @return the normalized version of this email address
    */
   public String normalized(boolean stripQuotes, boolean lowerCase) {
@@ -275,9 +283,16 @@ public final class Email {
    * parts (identifiers, source routing) are removed. For example, the address
    * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
    *
-   * @param stripQuotes set to true if you want to remove all quotes within
-   * @param lowerCase set to true if you want to convert the local-part to lowercase characters
-   * @param removeDots set to true if you want to remove all dots from local-part
+   * @param stripQuotes set to true if you want to remove all quotes
+   *                    within the local-part of the address
+   * @param lowerCase set to true if you want to convert the address to lowercase characters.
+   *                  Note that you can adjust which part of the address (local-part
+   *                  or domain or both) is lowercased using the system properties
+   *                  {@code jmail.normalize.lower.case.localpart} and
+   *                  {@code jmail.normalize.lower.case.domain}. By default,
+   *                  setting the {@code lowerCase} option to {@code true} will lowercase
+   *                  the entire address (both the local-part and the domain).
+   * @param removeDots set to true if you want to remove all dots from the local-part of the address
    * @return the normalized version of this email address
    */
   public String normalized(boolean stripQuotes, boolean lowerCase, boolean removeDots) {
@@ -289,9 +304,15 @@ public final class Email {
         ? localPartWithoutQuotes
         : localPartWithoutComments;
 
-    localPart = lowerCase
-        ? localPart.toLowerCase()
-        : localPart;
+    if (lowerCase) {
+      if (JmailProperties.lowerCaseLocalPart()) {
+        localPart = localPart.toLowerCase();
+      }
+
+      if (JmailProperties.lowerCaseDomain()) {
+        domain = domain.toLowerCase();
+      }
+    }
 
     localPart = removeDots
         ? localPart.replaceAll("(\\.)", "")
