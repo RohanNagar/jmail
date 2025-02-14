@@ -3,7 +3,7 @@ package com.sanctionco.jmail;
 class JmailProperties {
   private static final String STRIP_QUOTES = "jmail.normalize.strip.quotes";
   private static final String LOWER_CASE = "jmail.normalize.lower.case";
-  private static final String DOTS = "jmail.normalize.dots";
+  private static final String REMOVE_DOTS = "jmail.normalize.remove.dots";
 
   private JmailProperties() {
   }
@@ -16,7 +16,7 @@ class JmailProperties {
     return Boolean.parseBoolean(System.getProperty(LOWER_CASE, "false"));
   }
 
-  static boolean dots() {
-    return Boolean.parseBoolean(System.getProperty(DOTS, "false"));
+  static boolean removeDots() {
+    return Boolean.parseBoolean(System.getProperty(REMOVE_DOTS, "false"));
   }
 }

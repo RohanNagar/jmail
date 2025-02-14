@@ -81,14 +81,14 @@ class EmailTest {
   }
 
   @Test
-  void ensureNormalizedDotsWhenPropertyIsSet() {
-    System.setProperty("jmail.normalize.dots", "true");
+  void ensureNormalizedRemovesDotsWhenPropertyIsSet() {
+    System.setProperty("jmail.normalize.remove.dots", "true");
 
     assertThat(Email.of("t.e.s.t.1@example.org"))
             .isPresent().get()
             .returns("test1@example.org", Email::normalized);
 
-    System.setProperty("jmail.normalize.dots", "false");
+    System.setProperty("jmail.normalize.remove.dots", "false");
 
     assertThat(Email.of("t.e.s.t.1@example.org"))
             .isPresent().get()
@@ -108,12 +108,12 @@ class EmailTest {
   void ensureNormalizedConvertsToLowerCase(String address, String expected) {
     assertThat(Email.of(address))
             .isPresent().get()
-            .returns(expected, email -> email.normalized(false, true, false));
+            .returns(expected, email -> email.normalized(false, true));
   }
 
   @ParameterizedTest(name = "{0}")
   @MethodSource("provideValidForDots")
-  void ensureNormalizedDots(String address, String expected) {
+  void ensureNormalizedRemovesDots(String address, String expected) {
     assertThat(Email.of(address))
             .isPresent().get()
             .returns(expected, email -> email.normalized(false, false, true));
@@ -180,7 +180,7 @@ class EmailTest {
     );
   }
 
-  public Stream<Arguments> provideValidForDots() {
+  static Stream<Arguments> provideValidForDots() {
     return Stream.of(
             Arguments.of("t.es.t@example.org", "test@example.org"),
             Arguments.of("f.i.r.s.t@test.com", "first@test.com"),

@@ -238,8 +238,8 @@ public final class Email {
    * @return the normalized version of this email address
    */
   public String normalized() {
-    return normalized(JmailProperties.stripQuotes(), JmailProperties.lowerCase(),
-            JmailProperties.dots());
+    return normalized(
+        JmailProperties.stripQuotes(), JmailProperties.lowerCase(), JmailProperties.removeDots());
   }
 
   /**
@@ -252,7 +252,7 @@ public final class Email {
    * @return the normalized version of this email address
    */
   public String normalized(boolean stripQuotes) {
-    return normalized(stripQuotes, JmailProperties.lowerCase(), JmailProperties.dots());
+    return normalized(stripQuotes, JmailProperties.lowerCase(), JmailProperties.removeDots());
   }
 
   /**
@@ -263,10 +263,24 @@ public final class Email {
    *
    * @param stripQuotes set to true if you want to remove all quotes within
    * @param lowerCase set to true if you want to convert the local-part to lowercase characters
-   * @param dots set to true if you want to remove all dots from local-part
    * @return the normalized version of this email address
    */
-  public String normalized(boolean stripQuotes, boolean lowerCase, boolean dots) {
+  public String normalized(boolean stripQuotes, boolean lowerCase) {
+    return normalized(stripQuotes, lowerCase, JmailProperties.removeDots());
+  }
+
+  /**
+   * Return a "normalized" version of this email address. The normalized version
+   * is the same as the original email address, except that all comments and optional
+   * parts (identifiers, source routing) are removed. For example, the address
+   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
+   *
+   * @param stripQuotes set to true if you want to remove all quotes within
+   * @param lowerCase set to true if you want to convert the local-part to lowercase characters
+   * @param removeDots set to true if you want to remove all dots from local-part
+   * @return the normalized version of this email address
+   */
+  public String normalized(boolean stripQuotes, boolean lowerCase, boolean removeDots) {
     String domain = isIpAddress
         ? "[" + this.domainWithoutComments + "]"
         : this.domainWithoutComments;
@@ -276,12 +290,12 @@ public final class Email {
         : localPartWithoutComments;
 
     localPart = lowerCase
-            ? localPart.toLowerCase()
-            : localPart;
+        ? localPart.toLowerCase()
+        : localPart;
 
-    localPart = dots
-            ? localPart.replaceAll("(\\.)", "")
-            : localPart;
+    localPart = removeDots
+        ? localPart.replaceAll("(\\.)", "")
+        : localPart;
 
     return localPart + "@" + domain;
   }

@@ -1,5 +1,19 @@
 # JMail Changelog
 
+## 2.0.0 (Upcoming)
+
+### Email Address Normalization Improvements
+
+- Add option to lowercase the local-part of the address when normalizing (Thanks @Sprokof for contributing! 🎉).
+  This option is disabled by default. To enable this option, either:
+  - Use `Email#normalize(boolean, boolean)` and pass in `true` for the second parameter.
+  - Set the `-Djmail.normalize.lower.case=true` JVM property at runtime.
+- Add option to remove dots from the local-part of the address when normalizing (Thanks @Sprokof for contributing! 🎉).
+  This option is disabled by default.  To enable this option, either:
+    - Use `Email#normalize(boolean, boolean, boolean)` and pass in `true` for the third parameter.
+    - Set the `-Djmail.normalize.remove.dots=true` JVM property at runtime.
+
+---
 ## 1.6.3
 
 - Fix bug where email addresses containing control characters in the local-part were incorrectly considered valid. (Thanks @PascalSchumacher for reporting!)
