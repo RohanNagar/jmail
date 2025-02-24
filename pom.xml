@@ -42,9 +42,9 @@
     <java.minimum.version>1.9</java.minimum.version>
 
     <!-- Plugin versions -->
-    <checkstyle.version>10.21.2</checkstyle.version>
+    <checkstyle.version>10.21.3</checkstyle.version>
     <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
-    <compiler-plugin.version>3.13.0</compiler-plugin.version>
+    <compiler-plugin.version>3.14.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.7</gpg-plugin.version>
     <jacoco.version>0.8.12</jacoco.version>
     <javadoc-plugin.version>3.11.2</javadoc-plugin.version>
@@ -55,7 +55,7 @@
 
     <!-- Test dependency versions -->
     <equalsverifier.version>3.19.1</equalsverifier.version>
-    <junit.version>5.11.4</junit.version>
+    <junit.version>5.12.0</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
     <mockneat.version>0.4.8</mockneat.version>
   </properties>
