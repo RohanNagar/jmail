@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NormalizationCaseOptionTest {
+class CaseOptionTest {
   private static final String ADDRESS = "tEsT12@gMaIl.com";
 
   @Test

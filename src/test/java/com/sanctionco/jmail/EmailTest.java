@@ -53,114 +53,6 @@ class EmailTest {
         .returns("first@test.org", Email::normalized);
   }
 
-  @Test
-  void ensureNormalizedStripsQuotesWhenPropertyIsSet() {
-    System.setProperty("jmail.normalize.strip.quotes", "true");
-
-    assertThat(Email.of("\"test.1\"@example.org"))
-        .isPresent().get()
-        .returns("test.1@example.org", Email::normalized);
-
-    System.setProperty("jmail.normalize.strip.quotes", "false");
-
-    assertThat(Email.of("\"test.1\"@example.org"))
-        .isPresent().get()
-        .returns("\"test.1\"@example.org", Email::normalized);
-  }
-
-  @Test
-  void ensureNormalizedConvertsToUpperCaseWhenPropertyIsSet() {
-    System.setProperty("jmail.normalize.case", "UPPERCASE");
-
-    assertThat(Email.of("Test.1@example.org"))
-            .isPresent().get()
-            .returns("TEST.1@EXAMPLE.ORG", Email::normalized);
-
-    System.setProperty("jmail.normalize.case", "NO_CHANGE");
-
-    assertThat(Email.of("Test.1@example.org"))
-            .isPresent().get()
-            .returns("Test.1@example.org", Email::normalized);
-  }
-
-  @Test
-  void ensureNormalizedLowerCasesBothLocalPartAndDomain() {
-    System.setProperty("jmail.normalize.case", "LOWERCASE");
-
-    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
-        .isPresent().get()
-        .returns("test.1@example.org", Email::normalized);
-
-    System.setProperty("jmail.normalize.case", "NO_CHANGE");
-
-    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
-        .isPresent().get()
-        .returns("TEST.1@EXAMPLE.ORG", Email::normalized);
-  }
-
-  @Test
-  void ensureNormalizedLowerCasesCorrectPartBasedOnOptions() {
-    System.setProperty("jmail.normalize.case", "LOWERCASE_LOCAL_PART_ONLY");
-
-    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
-        .isPresent().get()
-        .returns("test.1@EXAMPLE.ORG", Email::normalized);
-
-    System.setProperty("jmail.normalize.case", "LOWERCASE_DOMAIN_ONLY");
-
-    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
-        .isPresent().get()
-        .returns("TEST.1@example.org", Email::normalized);
-
-    System.setProperty("jmail.normalize.case", "NO_CHANGE");
-
-    assertThat(Email.of("TEST.1@EXAMPLE.ORG"))
-        .isPresent().get()
-        .returns("TEST.1@EXAMPLE.ORG", Email::normalized);
-
-    System.clearProperty("jmail.normalize.case");
-  }
-
-  @Test
-  void ensureNormalizedRemovesDotsWhenPropertyIsSet() {
-    System.setProperty("jmail.normalize.remove.dots", "true");
-
-    assertThat(Email.of("t.e.s.t.1@example.org"))
-            .isPresent().get()
-            .returns("test1@example.org", Email::normalized);
-
-    System.setProperty("jmail.normalize.remove.dots", "false");
-
-    assertThat(Email.of("t.e.s.t.1@example.org"))
-            .isPresent().get()
-            .returns("t.e.s.t.1@example.org", Email::normalized);
-  }
-
-  @Test
-  void ensureNormalizedRemovesSubAddressBasedOnOptions() {
-    System.setProperty("jmail.normalize.remove.subaddress", "true");
-
-    assertThat(Email.of("test+example@tt.edu"))
-        .isPresent().get()
-        .returns("test@tt.edu", Email::normalized);
-
-    assertThat(Email.of("test-example@tt.edu"))
-        .isPresent().get()
-        .returns("test-example@tt.edu", Email::normalized);
-
-    System.setProperty("jmail.normalize.subaddress.separator", "-");
-
-    assertThat(Email.of("test+example@tt.edu"))
-        .isPresent().get()
-        .returns("test+example@tt.edu", Email::normalized);
-
-    assertThat(Email.of("test-example@tt.edu"))
-        .isPresent().get()
-        .returns("test@tt.edu", Email::normalized);
-
-    System.clearProperty("jmail.normalize.remove.subaddress");
-  }
-
   @ParameterizedTest(name = "{0}")
   @MethodSource("provideValidForStripQuotes")
   void ensureNormalizedStripsQuotes(String address, String expected) {
@@ -168,6 +60,12 @@ class EmailTest {
           .isPresent().get()
           .returns(expected, email -> email.normalized(
               NormalizationOptions.builder().stripQuotes().build()));
+
+    // Check that nothing happens when stripQuotes is false
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(address, email -> email.normalized(
+            NormalizationOptions.builder().build()));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -177,6 +75,12 @@ class EmailTest {
             .isPresent().get()
             .returns(expected, email -> email.normalized(
                 NormalizationOptions.builder().adjustCase(CaseOption.LOWERCASE).build()));
+
+    // Check that nothing happens when adjustCase is NO_CHANGE
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(address, email -> email.normalized(
+            NormalizationOptions.builder().build()));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -186,6 +90,12 @@ class EmailTest {
             .isPresent().get()
             .returns(expected, email -> email.normalized(
                 NormalizationOptions.builder().removeDots().build()));
+
+    // Check that nothing happens when removeDots is false
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(address, email -> email.normalized(
+            NormalizationOptions.builder().build()));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -195,6 +105,12 @@ class EmailTest {
         .isPresent().get()
         .returns(expected, email -> email.normalized(
             NormalizationOptions.builder().removeSubAddress().build()));
+
+    // Check that nothing happens when removeSubAddress is false
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(address, email -> email.normalized(
+            NormalizationOptions.builder().build()));
   }
 
   @ParameterizedTest(name = "{0}")
