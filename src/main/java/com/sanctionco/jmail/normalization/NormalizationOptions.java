@@ -11,28 +11,18 @@ package com.sanctionco.jmail.normalization;
  * {@link #builder()}</p>
  */
 public class NormalizationOptions {
-  private final boolean stripQuotes;
   private final CaseOption caseOption;
   private final boolean removeDots;
+  private final boolean removeSubAddress;
+  private final boolean stripQuotes;
+  private final String subAddressSeparator;
 
   NormalizationOptions(NormalizationOptionsBuilder builder) {
-    this.stripQuotes = builder.stripQuotes;
     this.caseOption = builder.caseOption;
     this.removeDots = builder.removeDots;
-  }
-
-  /**
-   * <p>Whether to strip all unnecessary quotes contained in the local-part of
-   * the email address.</p>
-   *
-   * <p>By default, this is {@code false}. Use the {@code jmail.normalize.strip.quotes}
-   * JVM system property to adjust this default value or build your own {@code NormalizationOptions}
-   * using {@link #builder()}</p>
-   *
-   * @return true if unnecessary quotes should be stripped, or false otherwise
-   */
-  public boolean shouldStripQuotes() {
-    return stripQuotes;
+    this.removeSubAddress = builder.removeSubAddress;
+    this.stripQuotes = builder.stripQuotes;
+    this.subAddressSeparator = builder.subAddressSeparator;
   }
 
   /**
@@ -61,6 +51,46 @@ public class NormalizationOptions {
    */
   public boolean shouldRemoveDots() {
     return removeDots;
+  }
+
+  /**
+   * <p>Whether to remove any sub-addressing (or tagged-addressing) contained in the address.</p>
+   *
+   * <p>By default, this is {@code false}. Use the {@code jmail.normalize.remove.subaddress}
+   * JVM system property to adjust this default value or build your own {@code NormalizationOptions}
+   * using {@link #builder()}.</p>
+   *
+   * @return true if any sub-address in the local-part should be removed, or false otherwise
+   */
+  public boolean shouldRemoveSubAddress() {
+    return removeSubAddress;
+  }
+
+  /**
+   * <p>Whether to strip all unnecessary quotes contained in the local-part of
+   * the email address.</p>
+   *
+   * <p>By default, this is {@code false}. Use the {@code jmail.normalize.strip.quotes}
+   * JVM system property to adjust this default value or build your own {@code NormalizationOptions}
+   * using {@link #builder()}</p>
+   *
+   * @return true if unnecessary quotes should be stripped, or false otherwise
+   */
+  public boolean shouldStripQuotes() {
+    return stripQuotes;
+  }
+
+  /**
+   * <p>The separator that separates the local-part of an email address from the sub-address.</p>
+   *
+   * <p>By default, this is {@code "+"}. Use the {@code jmail.normalize.subaddress.separator}
+   * JVM system property to adjust this default value or build your own {@code NormalizationOptions}
+   * using {@link #builder()}.</p>
+   *
+   * @return the separator string
+   */
+  public String getSubAddressSeparator() {
+    return subAddressSeparator;
   }
 
   /**

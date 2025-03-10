@@ -69,12 +69,12 @@ class EmailTest {
   }
 
   @Test
-  void ensureNormalizedConvertsToLowerCaseWhenPropertyIsSet() {
-    System.setProperty("jmail.normalize.case", "LOWERCASE");
+  void ensureNormalizedConvertsToUpperCaseWhenPropertyIsSet() {
+    System.setProperty("jmail.normalize.case", "UPPERCASE");
 
-    assertThat(Email.of("TEST.1@example.org"))
+    assertThat(Email.of("Test.1@example.org"))
             .isPresent().get()
-            .returns("test.1@example.org", Email::normalized);
+            .returns("TEST.1@EXAMPLE.ORG", Email::normalized);
 
     System.setProperty("jmail.normalize.case", "NO_CHANGE");
 
@@ -136,6 +136,31 @@ class EmailTest {
             .returns("t.e.s.t.1@example.org", Email::normalized);
   }
 
+  @Test
+  void ensureNormalizedRemovesSubAddressBasedOnOptions() {
+    System.setProperty("jmail.normalize.remove.subaddress", "true");
+
+    assertThat(Email.of("test+example@tt.edu"))
+        .isPresent().get()
+        .returns("test@tt.edu", Email::normalized);
+
+    assertThat(Email.of("test-example@tt.edu"))
+        .isPresent().get()
+        .returns("test-example@tt.edu", Email::normalized);
+
+    System.setProperty("jmail.normalize.subaddress.separator", "-");
+
+    assertThat(Email.of("test+example@tt.edu"))
+        .isPresent().get()
+        .returns("test+example@tt.edu", Email::normalized);
+
+    assertThat(Email.of("test-example@tt.edu"))
+        .isPresent().get()
+        .returns("test@tt.edu", Email::normalized);
+
+    System.clearProperty("jmail.normalize.remove.subaddress");
+  }
+
   @ParameterizedTest(name = "{0}")
   @MethodSource("provideValidForStripQuotes")
   void ensureNormalizedStripsQuotes(String address, String expected) {
@@ -161,6 +186,24 @@ class EmailTest {
             .isPresent().get()
             .returns(expected, email -> email.normalized(
                 NormalizationOptions.builder().removeDots().build()));
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("provideValidForSubAddress")
+  void ensureNormalizedRemovesSubAddresses(String address, String expected) {
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(expected, email -> email.normalized(
+            NormalizationOptions.builder().removeSubAddress().build()));
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("provideValidForSubAddressSeparator")
+  void ensureNormalizedRemovesSubAddressesWithCustomSeparator(String address, String expected) {
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(expected, email -> email.normalized(
+            NormalizationOptions.builder().removeSubAddress("%%").build()));
   }
 
   @ParameterizedTest(name = "{0}")
@@ -232,6 +275,25 @@ class EmailTest {
             Arguments.of("f.i.r.s.t@test.com", "first@test.com"),
             Arguments.of("O.r.w.e.l.l@test.com", "Orwell@test.com"),
             Arguments.of("e.ma.il@example.com", "email@example.com")
+    );
+  }
+
+  static Stream<Arguments> provideValidForSubAddress() {
+    return Stream.of(
+        Arguments.of("test+sample@example.org", "test@example.org"),
+        Arguments.of("First.last+hello@test.com", "First.last@test.com"),
+        Arguments.of("Oswald@test.com", "Oswald@test.com"),
+        Arguments.of("woah_dude-test@example.com", "woah_dude-test@example.com")
+    );
+  }
+
+  static Stream<Arguments> provideValidForSubAddressSeparator() {
+    return Stream.of(
+        Arguments.of("test%%sample@example.org", "test@example.org"),
+        Arguments.of("First.last%%hello@test.com", "First.last@test.com"),
+        Arguments.of("Oswald@test.com", "Oswald@test.com"),
+        Arguments.of("woah_dude-test@example.com", "woah_dude-test@example.com"),
+        Arguments.of("hello+test@example.com", "hello+test@example.com")
     );
   }
 }

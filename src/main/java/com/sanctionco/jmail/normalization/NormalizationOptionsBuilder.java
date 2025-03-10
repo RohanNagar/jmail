@@ -6,9 +6,11 @@ package com.sanctionco.jmail.normalization;
  * {@link com.sanctionco.jmail.Email#normalized(NormalizationOptions)} to adjust its behavior.
  */
 public class NormalizationOptionsBuilder {
-  boolean stripQuotes = NormalizationProperties.stripQuotes();
   CaseOption caseOption = NormalizationProperties.caseOption();
+  boolean stripQuotes = NormalizationProperties.stripQuotes();
   boolean removeDots = NormalizationProperties.removeDots();
+  boolean removeSubAddress = NormalizationProperties.removeSubAddress();
+  String subAddressSeparator = NormalizationProperties.subAddressSeparator();
 
   NormalizationOptionsBuilder() {
   }
@@ -64,6 +66,73 @@ public class NormalizationOptionsBuilder {
     return this;
   }
 
+  /**
+   * <p>Remove any sub-addressing (or tagged-addressing) contained in the email address.</p>
+   *
+   * <p>Many mail servers support adding to the end of the local-part a {@code +} character
+   * (or in rare cases a {@code -} character, or even more rare an arbitrary character),
+   * followed by addtional characters, and the mail will be sent to the same address
+   * as if the sub-address was never added.</p>
+   *
+   * <p>For example, {@code test+subaddress@gmail.com} and {@code test+additional@gmail.com}
+   * route to the same mailbox.</p>
+   *
+   * <p>It can be beneficial to remove these sub-addresses as part of normalization
+   * since they ultimately route to the same address.</p>
+   *
+   * <p>The default normalization behavior does <strong>not</strong> remove sub-addressing.
+   * You can change the default by using the JVM system property
+   * {@code jmail.normalize.remove.subaddress}.</p>
+   *
+   * <p>Additionally, the default sub-address separator is the {@code +} "plus" character. You
+   * can change the default by using the JVM system property
+   * {@code jmail.normalize.subaddress.separator} or by specifying it using the
+   * {@link #removeSubAddress(String)} method instead of this one.</p>
+   *
+   * @return this
+   */
+  public NormalizationOptionsBuilder removeSubAddress() {
+    this.removeSubAddress = true;
+    return this;
+  }
+
+  /**
+   * <p>Remove any sub-addressing (or tagged-addressing) contained in the email address.</p>
+   *
+   * <p>Many mail servers support adding to the end of the local-part a {@code +} character
+   * (or in rare cases a {@code -} character, or even more rare an arbitrary character),
+   * followed by addtional characters, and the mail will be sent to the same address
+   * as if the sub-address was never added.</p>
+   *
+   * <p>For example, {@code test+subaddress@gmail.com} and {@code test+additional@gmail.com}
+   * route to the same mailbox.</p>
+   *
+   * <p>It can be beneficial to remove these sub-addresses as part of normalization
+   * since they ultimately route to the same address.</p>
+   *
+   * <p>The default normalization behavior does <strong>not</strong> remove sub-addressing.
+   * You can change the default by using the JVM system property
+   * {@code jmail.normalize.remove.subaddress}.</p>
+   *
+   * <p>Additionally, the default sub-address separator is the {@code +} "plus" character. You
+   * can change the default by using the JVM system property
+   * {@code jmail.normalize.subaddress.separator}.</p>
+   *
+   * @param separator the separator string or character that separates the local-part from the
+   *                  sub-address
+   * @return this
+   */
+  public NormalizationOptionsBuilder removeSubAddress(String separator) {
+    this.removeSubAddress = true;
+    this.subAddressSeparator = separator;
+    return this;
+  }
+
+  /**
+   * Build the new {@code NormalizationOptions} instance.
+   *
+   * @return the new {@link NormalizationOptions} instance
+   */
   public NormalizationOptions build() {
     return new NormalizationOptions(this);
   }

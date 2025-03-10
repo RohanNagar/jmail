@@ -298,22 +298,30 @@ public final class Email {
    * @return the normalized version of this email address
    */
   public String normalized(NormalizationOptions options) {
-    String domain = isIpAddress
-        ? "[" + this.domainWithoutComments + "]"
-        : this.domainWithoutComments;
-
     String localPart = options.shouldStripQuotes()
         ? localPartWithoutQuotes
         : localPartWithoutComments;
+
+    if (options.shouldRemoveSubAddress()) {
+      int separatorIndex = localPart.indexOf(options.getSubAddressSeparator());
+
+      if (separatorIndex != -1) {
+        localPart = localPart.substring(0, separatorIndex);
+      }
+    }
+
+    localPart = options.shouldRemoveDots()
+        ? localPart.replace(".", "")
+        : localPart;
+
+    String domain = isIpAddress
+        ? "[" + this.domainWithoutComments + "]"
+        : this.domainWithoutComments;
 
     // Adjust casing
     CaseOption caseOption = options.getCaseOption();
     localPart = caseOption.adjustLocalPart(localPart);
     domain = caseOption.adjustDomain(domain);
-
-    localPart = options.shouldRemoveDots()
-        ? localPart.replace(".", "")
-        : localPart;
 
     return localPart + "@" + domain;
   }
