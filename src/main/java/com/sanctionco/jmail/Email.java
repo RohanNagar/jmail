@@ -1,5 +1,6 @@
 package com.sanctionco.jmail;
 
+import com.sanctionco.jmail.normalization.CaseOption;
 import com.sanctionco.jmail.normalization.NormalizationOptions;
 import com.sanctionco.jmail.normalization.NormalizationOptionsBuilder;
 
@@ -305,26 +306,13 @@ public final class Email {
         ? localPartWithoutQuotes
         : localPartWithoutComments;
 
-    switch (options.getCaseOption()) {
-      case LOWERCASE:
-        localPart = localPart.toLowerCase();
-        domain = domain.toLowerCase();
-        break;
-
-      case LOWERCASE_LOCAL_PART_ONLY:
-        localPart = localPart.toLowerCase();
-        break;
-
-      case LOWERCASE_DOMAIN_ONLY:
-        domain = domain.toLowerCase();
-        break;
-
-      default:
-        break;
-    }
+    // Adjust casing
+    CaseOption caseOption = options.getCaseOption();
+    localPart = caseOption.adjustLocalPart(localPart);
+    domain = caseOption.adjustDomain(domain);
 
     localPart = options.shouldRemoveDots()
-        ? localPart.replaceAll("(\\.)", "")
+        ? localPart.replace(".", "")
         : localPart;
 
     return localPart + "@" + domain;
