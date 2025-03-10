@@ -4,18 +4,33 @@
 
 ### Email Address Normalization Improvements
 
-- Add option to lowercase the address when normalizing (Thanks @Sprokof for contributing! 🎉).
-  This option is disabled by default. To enable this option, either:
-  - Use `Email#normalize(boolean, boolean)` and pass in `true` for the second parameter.
-  - Set the `-Djmail.normalize.lower.case=true` JVM property at runtime.
-  - **Additionally**, you can specify which parts of the address to lowercase using JVM properties. By default,
-    the entire address will be lowercased if this option is enabled. To disable lowercasing the local-part, set the
-    `-Djmail.normalize.lower.case.localpart=false` JVM property at runtime. To disable lowercasing the domain,
-    set the `-Djmail.normalize.lower.case.domain=false` JVM property at runtime.
-- Add option to remove dots from the local-part of the address when normalizing (Thanks @Sprokof for contributing! 🎉).
-  This option is disabled by default.  To enable this option, either:
-    - Use `Email#normalize(boolean, boolean, boolean)` and pass in `true` for the third parameter.
-    - Set the `-Djmail.normalize.remove.dots=true` JVM property at runtime.
+#### Breaking changes
+
+None, yet.
+
+#### New Normalization Methods
+
+This version introduces a new `NormalizationOptions` class that is used to provide
+configuration of the behavior of the `Email#normalize()` method. See the table below to see
+all the new and existing options.
+
+In v2.0, you can use either `Email#normalize()` (with no parameters) or `Email#normalize(NormalizationOptions options)`.
+
+The first method without parameters will return a normalized email address based on the default
+normalization options. These defaults can also be changed for your application by setting the relevant system properties.
+
+The second method allows you to provide your own `NormalizationOptions` at runtime depending on your needs.
+The custom normalization options can be created using the `NormalizationOptions#builder()` method.
+
+#### Normalization Options
+
+Thanks, @Sprokof, for contributing (introducing removeDots and adjustCase options)! 🎉
+
+| Option      | Description                                                                                                                                | NormalizationOptions Builder Method                      | JVM System Property to Adjust Default |
+|-------------|--------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------|---------------------------------------|
+| stripQuotes | Remove all unnecessary quotes in the local-part of the address                                                                             | `NormalizationOptions.builder().stripQuotes()`           | `jmail.normalize.strip.quotes=true`   |
+| adjustCase  | Adjust the case of the email address. Possible options are: `NO_CHANGE`, `LOWERCASE`, `LOWERCASE_LOCAL_PART_ONLY`, `LOWERCASE_DOMAIN_ONLY` | `NormalizationOptions.builder().stripQuotes(CaseOption)` | `jmail.normalize.case=LOWERCASE`      |
+| removeDots  | Remove all dots from the local-part of the address                                                                                         | `NormalizationOptions.builder().removeDots()`            | `jmail.normalize.remove.dots=true`    |
 
 ---
 ## 1.6.3

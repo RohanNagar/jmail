@@ -1,5 +1,8 @@
 package com.sanctionco.jmail;
 
+import com.sanctionco.jmail.normalization.NormalizationOptions;
+import com.sanctionco.jmail.normalization.NormalizationOptionsBuilder;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -230,91 +233,97 @@ public final class Email {
   }
 
   /**
-   * Return a "normalized" version of this email address. The normalized version
-   * is the same as the original email address, except that all comments and optional
-   * parts (identifiers, source routing) are removed. For example, the address
-   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
+   * <p>Return a "normalized" version of this email address. The actual result of normalization
+   * depends on the configured normalization options (see {@link NormalizationOptions}),
+   * but in general this method returns a version of the email address that is the same as
+   * the original email address, except that all comments and optional parts
+   * (identifiers, source routing) are removed. For example, the address
+   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.</p>
+   *
+   * <p>This method uses the default set of {@link NormalizationOptions}. This default set
+   * of options can be adjusted using system properties. See {@link NormalizationOptions}
+   * for more details on which properties to set to adjust the defaults.</p>
+   *
+   * <p>Alternatively, one can use the {@link Email#normalized(NormalizationOptions)} method
+   * and pass in a custom set of options to adjust the behavior.</p>
    *
    * @return the normalized version of this email address
    */
   public String normalized() {
-    return normalized(
-        JmailProperties.stripQuotes(), JmailProperties.lowerCase(), JmailProperties.removeDots());
+    return normalized(NormalizationOptions.builder().build());
   }
 
   /**
-   * Return a "normalized" version of this email address. The normalized version
-   * is the same as the original email address, except that all comments and optional
-   * parts (identifiers, source routing) are removed. For example, the address
-   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
+   * <p>Return a "normalized" version of this email address. The actual result of normalization
+   * depends on the configured normalization options (see {@link NormalizationOptions}),
+   * but in general this method returns a version of the email address that is the same as
+   * the original email address, except that all comments and optional parts
+   * (identifiers, source routing) are removed. For example, the address
+   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.</p>
    *
-   * @param stripQuotes set to true if you want to remove all quotes
-   *                    within the local-part of the address
+   * <p>This method uses the default set of {@link NormalizationOptions}. This default set
+   * of options can be adjusted using system properties. See {@link NormalizationOptions}
+   * for more details on which properties to set to adjust the defaults.</p>
+   *
+   * <p>Alternatively, one can use the {@link Email#normalized(NormalizationOptions)} method
+   * and pass in a custom set of options to adjust the behavior.</p>
+   *
+   * @param stripQuotes set to true if you want to remove all unnecessary quotes within the
+   *                    local-part of the email address
    * @return the normalized version of this email address
    */
+  @Deprecated
   public String normalized(boolean stripQuotes) {
-    return normalized(stripQuotes, JmailProperties.lowerCase(), JmailProperties.removeDots());
+    NormalizationOptionsBuilder optionsBuilder = NormalizationOptions.builder();
+
+    if (stripQuotes) {
+      optionsBuilder.stripQuotes();
+    }
+
+    return normalized(optionsBuilder.build());
   }
 
   /**
-   * Return a "normalized" version of this email address. The normalized version
-   * is the same as the original email address, except that all comments and optional
-   * parts (identifiers, source routing) are removed. For example, the address
-   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
+   * <p>Return a "normalized" version of this email address. The actual result of normalization
+   * depends on the configured normalization options, but in general this method returns
+   * a version of the email address that is the same as the original email address, except
+   * that all comments and optional parts (identifiers, source routing) are removed.
+   * For example, the address {@code "test@(comment)example.com"} will return
+   * {@code "test@example.com"}.</p>
    *
-   * @param stripQuotes set to true if you want to remove all quotes
-   *                    within the local-part of the address
-   * @param lowerCase set to true if you want to convert the address to lowercase characters.
-   *                  Note that you can adjust which part of the address (local-part
-   *                  or domain or both) is lowercased using the system properties
-   *                  {@code jmail.normalize.lower.case.localpart} and
-   *                  {@code jmail.normalize.lower.case.domain}. By default,
-   *                  setting the {@code lowerCase} option to {@code true} will lowercase
-   *                  the entire address (both the local-part and the domain).
+   * <p>See {@link NormalizationOptions} for more details on all of the configurable options.</p>
+   *
+   * @param options the {@link NormalizationOptions} to use when normalizing
    * @return the normalized version of this email address
    */
-  public String normalized(boolean stripQuotes, boolean lowerCase) {
-    return normalized(stripQuotes, lowerCase, JmailProperties.removeDots());
-  }
-
-  /**
-   * Return a "normalized" version of this email address. The normalized version
-   * is the same as the original email address, except that all comments and optional
-   * parts (identifiers, source routing) are removed. For example, the address
-   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.
-   *
-   * @param stripQuotes set to true if you want to remove all quotes
-   *                    within the local-part of the address
-   * @param lowerCase set to true if you want to convert the address to lowercase characters.
-   *                  Note that you can adjust which part of the address (local-part
-   *                  or domain or both) is lowercased using the system properties
-   *                  {@code jmail.normalize.lower.case.localpart} and
-   *                  {@code jmail.normalize.lower.case.domain}. By default,
-   *                  setting the {@code lowerCase} option to {@code true} will lowercase
-   *                  the entire address (both the local-part and the domain).
-   * @param removeDots set to true if you want to remove all dots from the local-part of the address
-   * @return the normalized version of this email address
-   */
-  public String normalized(boolean stripQuotes, boolean lowerCase, boolean removeDots) {
+  public String normalized(NormalizationOptions options) {
     String domain = isIpAddress
         ? "[" + this.domainWithoutComments + "]"
         : this.domainWithoutComments;
 
-    String localPart = stripQuotes
+    String localPart = options.shouldStripQuotes()
         ? localPartWithoutQuotes
         : localPartWithoutComments;
 
-    if (lowerCase) {
-      if (JmailProperties.lowerCaseLocalPart()) {
+    switch (options.getCaseOption()) {
+      case LOWERCASE:
         localPart = localPart.toLowerCase();
-      }
-
-      if (JmailProperties.lowerCaseDomain()) {
         domain = domain.toLowerCase();
-      }
+        break;
+
+      case LOWERCASE_LOCAL_PART_ONLY:
+        localPart = localPart.toLowerCase();
+        break;
+
+      case LOWERCASE_DOMAIN_ONLY:
+        domain = domain.toLowerCase();
+        break;
+
+      default:
+        break;
     }
 
-    localPart = removeDots
+    localPart = options.shouldRemoveDots()
         ? localPart.replaceAll("(\\.)", "")
         : localPart;
 

@@ -9,4 +9,5 @@ open module com.sanctionco.jmail {
   exports com.sanctionco.jmail;
   exports com.sanctionco.jmail.dns;
   exports com.sanctionco.jmail.net;
+  exports com.sanctionco.jmail.normalization;
 }

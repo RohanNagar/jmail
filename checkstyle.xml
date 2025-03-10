@@ -225,7 +225,6 @@
     <module name="SummaryJavadoc">
       <property name="forbiddenSummaryFragments" value="^@return the *|^This method returns |^This class |^A [{]@code [a-zA-Z0-9]+[}]( is a )"/>
     </module>
-    <module name="JavadocParagraph"/>
     <module name="JavadocStyle">
       <property name="checkEmptyJavadoc" value="true"/>
     </module>
