@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +33,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 @Disabled
 class ComparisonTest {
   private final Path htmlFile = Paths.get(".", "docs", "results.html").toAbsolutePath();
+  private final Path lastUpdatedFile = Paths.get(".", "docs", "lastupdated.html").toAbsolutePath();
 
   private int totalTests = 0;
 
@@ -105,6 +108,15 @@ class ComparisonTest {
     Files.write(htmlFile,
         "  </tbody>\n</table>".getBytes(StandardCharsets.UTF_8),
         StandardOpenOption.APPEND);
+
+    // Update timestamp
+    String prefix = "Comparison last ran at: ";
+    String timeString = prefix + LocalDateTime
+        .now(ZoneOffset.UTC)
+        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + " UTC";
+
+    Files.write(lastUpdatedFile, timeString.getBytes(StandardCharsets.UTF_8),
+        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
   }
 
   @ParameterizedTest(name = "{0}")

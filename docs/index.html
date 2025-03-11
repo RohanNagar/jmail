@@ -129,6 +129,7 @@
 <div class="container-fluid text-center px-4 py-5">
     <div class="row justify-content-center px-5">
         <h3 class="display-7">Comparison to Other Java Libraries</h3>
+        <small class="text-muted" id="updated-time"></small>
         <small class="text-muted">Scroll to the right to see results on mobile.</small>
         <div class="col-auto">
             <div class="pt-5 table-responsive" id="results-table"></div>
@@ -145,6 +146,10 @@
 <script type="text/javascript">
     $(function(){
       $("#results-table").load("results.html");
+    });
+
+    $(function(){
+      $("#updated-time").load("lastupdated.html");
     });
 
     $(document).ready(function() {
