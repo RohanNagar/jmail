@@ -1,11 +1,13 @@
 package com.sanctionco.jmail.normalization;
 
+import java.text.Normalizer;
+
 /**
  * <p>This class provides all configurable options to the email address normalization method
  * {@link com.sanctionco.jmail.Email#normalized(NormalizationOptions)} to adjust its behavior.</p>
  *
- * <p>Look at each method in this class to see all of the available options, their default
- * values, and the JVM system property that can be used to adjust the default values on startup.</p>
+ * <p>Look at each method in this class to see all of the available options and their default
+ * values.</p>
  *
  * <p>You can build a custom NormalizationOptions object to pass into the normalize method using
  * {@link #builder()}</p>
@@ -16,6 +18,8 @@ public class NormalizationOptions {
   private final boolean removeSubAddress;
   private final boolean stripQuotes;
   private final String subAddressSeparator;
+  private final boolean performUnicodeNormalization;
+  private final Normalizer.Form unicodeNormalizationForm;
 
   NormalizationOptions(NormalizationOptionsBuilder builder) {
     this.caseOption = builder.caseOption;
@@ -23,14 +27,15 @@ public class NormalizationOptions {
     this.removeSubAddress = builder.removeSubAddress;
     this.stripQuotes = builder.stripQuotes;
     this.subAddressSeparator = builder.subAddressSeparator;
+    this.performUnicodeNormalization = builder.performUnicodeNormalization;
+    this.unicodeNormalizationForm = builder.unicodeNormalizationForm;
   }
 
   /**
    * <p>How to adjust the casing of the email address.</p>
    *
    * <p>By default, this is {@link CaseOption#NO_CHANGE}, which does not change the casing
-   * of the email address. Use the {@code jmail.normalize.case} JVM system property to adjust
-   * this default value or build your own {@code NormalizationOptions} using {@link #builder()}.</p>
+   * of the email address.</p>
    *
    * @return the {@link CaseOption} describing how to adjust the case
    *
@@ -43,9 +48,7 @@ public class NormalizationOptions {
   /**
    * <p>Whether to remove all dots in the local-part of the email address.</p>
    *
-   * <p>By default, this is {@code false}. Use the {@code jmail.normalize.remove.dots}
-   * JVM system property to adjust this default value or build your own {@code NormalizationOptions}
-   * using {@link #builder()}.</p>
+   * <p>By default, this is {@code false}.</p>
    *
    * @return true if dots in the local-part of the email address should be removed, false otherwise
    */
@@ -56,9 +59,7 @@ public class NormalizationOptions {
   /**
    * <p>Whether to remove any sub-addressing (or tagged-addressing) contained in the address.</p>
    *
-   * <p>By default, this is {@code false}. Use the {@code jmail.normalize.remove.subaddress}
-   * JVM system property to adjust this default value or build your own {@code NormalizationOptions}
-   * using {@link #builder()}.</p>
+   * <p>By default, this is {@code false}.</p>
    *
    * @return true if any sub-address in the local-part should be removed, or false otherwise
    */
@@ -70,9 +71,7 @@ public class NormalizationOptions {
    * <p>Whether to strip all unnecessary quotes contained in the local-part of
    * the email address.</p>
    *
-   * <p>By default, this is {@code false}. Use the {@code jmail.normalize.strip.quotes}
-   * JVM system property to adjust this default value or build your own {@code NormalizationOptions}
-   * using {@link #builder()}</p>
+   * <p>By default, this is {@code false}.</p>
    *
    * @return true if unnecessary quotes should be stripped, or false otherwise
    */
@@ -83,14 +82,35 @@ public class NormalizationOptions {
   /**
    * <p>The separator that separates the local-part of an email address from the sub-address.</p>
    *
-   * <p>By default, this is {@code "+"}. Use the {@code jmail.normalize.subaddress.separator}
-   * JVM system property to adjust this default value or build your own {@code NormalizationOptions}
-   * using {@link #builder()}.</p>
+   * <p>By default, this is {@code "+"}.</p>
    *
    * @return the separator string
    */
   public String getSubAddressSeparator() {
     return subAddressSeparator;
+  }
+
+  /**
+   * <p>Whether to perform unicode normalization on the local-part of the email address.</p>
+   *
+   * <p>By default, this is {@code false}.</p>
+   *
+   * @return true if unicode normalization should be performed, or false otherwise
+   */
+  public boolean shouldPerformUnicodeNormalization() {
+    return performUnicodeNormalization;
+  }
+
+  /**
+   * <p>The {@link Normalizer.Form} to use if performing unicode normalization on the
+   * local-part of the email address.</p>
+   *
+   * <p>By default, this is {@link Normalizer.Form#NFKC}.</p>
+   *
+   * @return the unicode normalization form to use
+   */
+  public Normalizer.Form getUnicodeNormalizationForm() {
+    return unicodeNormalizationForm;
   }
 
   /**

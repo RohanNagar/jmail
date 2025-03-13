@@ -14,7 +14,7 @@ This version introduces a new `NormalizationOptions` class that is used to provi
 configuration of the behavior of the `Email#normalize()` method. See the table below to see
 all the new and existing options.
 
-In v2.0, you can use either `Email#normalize()` (with no parameters) or `Email#normalize(NormalizationOptions options)`.
+In v2.0.0, you can use either `Email#normalize()` (with no parameters) or `Email#normalize(NormalizationOptions options)`.
 
 The first method without parameters will return a normalized email address based on the default
 normalization options. The second method allows you to provide your own `NormalizationOptions` at runtime
@@ -23,14 +23,15 @@ method.
 
 #### Normalization Options
 
-Thanks, @Sprokof, for contributing (introducing removeDots and adjustCase options)! 🎉
+Thanks, @Sprokof, for contributing (introducing `removeDots` and `adjustCase` options)! 🎉
 
-| Option           | Description                                                                                                                                                                                                   | NormalizationOptions Builder Method                    |
-|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
-| stripQuotes      | Remove all unnecessary quotes in the local-part of the address                                                                                                                                                | `NormalizationOptionsBuilder#stripQuotes()`            |
-| adjustCase       | Adjust the case of the email address. Possible options are: `NO_CHANGE`, `LOWERCASE`, `LOWERCASE_LOCAL_PART_ONLY`, `LOWERCASE_DOMAIN_ONLY`, `UPPERCASE`, `UPPERCASE_LOCAL_PART_ONLY`, `UPPERCASE_DOMAIN_ONLY` | `NormalizationOptionsBuilder#stripQuotes(CaseOption)`  |
-| removeDots       | Remove all dots from the local-part of the address                                                                                                                                                            | `NormalizationOptionsBuilder#removeDots()`             |
-| removeSubAddress | Remove any sub-addressing (or tagged-addressing) from the local-part of the address. For example, `first.last+test@gmail.com` will become `first.last@gmail.com`                                              | `NormalizationOptionsBuilder#removeSubAddress(String)` |
+| Option                      | Description                                                                                                                                                                                                   | `NormalizationOptionsBuilder` Method                                              |
+|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| stripQuotes                 | Remove all unnecessary quotes in the local-part of the address                                                                                                                                                | `stripQuotes()`                                                                   |
+| adjustCase                  | Adjust the case of the email address. Possible options are: `NO_CHANGE`, `LOWERCASE`, `LOWERCASE_LOCAL_PART_ONLY`, `LOWERCASE_DOMAIN_ONLY`, `UPPERCASE`, `UPPERCASE_LOCAL_PART_ONLY`, `UPPERCASE_DOMAIN_ONLY` | `adjustCase(CaseOption)`                                                          |
+| removeDots                  | Remove all dots from the local-part of the address                                                                                                                                                            | `removeDots()`                                                                    |
+| removeSubAddress            | Remove any sub-addressing (or tagged-addressing) from the local-part of the address. For example, `first.last+test@gmail.com` will become `first.last@gmail.com`                                              | `removeSubAddress()` or `removeSubAddress(String)`                                |
+| performUnicodeNormalization | Perform unicode normalization on the local-part of the email address                                                                                                                                          | `performUnicodeNormalization()` or `performUnicodeNormalization(Normalizer.Form)` |
 
 ---
 ## 1.6.3

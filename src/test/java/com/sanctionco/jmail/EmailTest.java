@@ -3,6 +3,7 @@ package com.sanctionco.jmail;
 import com.sanctionco.jmail.normalization.CaseOption;
 import com.sanctionco.jmail.normalization.NormalizationOptions;
 
+import java.text.Normalizer;
 import java.util.stream.Stream;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -120,6 +121,28 @@ class EmailTest {
         .isPresent().get()
         .returns(expected, email -> email.normalized(
             NormalizationOptions.builder().removeSubAddress("%%").build()));
+  }
+
+  @Test
+  void ensureNormalizedPerformsUnicodeNormalization() {
+    String address = "Äffintest½@gmail.com";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns("Äffintest1⁄2@gmail.com", email -> email.normalized(
+            NormalizationOptions.builder().performUnicodeNormalization().build()));
+  }
+
+  @Test
+  void ensureNormalizedPerformsUnicodeNormalizationWithCustomForm() {
+    String address = "Äffintest½@gmail.com";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns("Äffintest½@gmail.com", email -> email.normalized(
+            NormalizationOptions.builder()
+                .performUnicodeNormalization(Normalizer.Form.NFC)
+                .build()));
   }
 
   @ParameterizedTest(name = "{0}")

@@ -4,6 +4,7 @@ import com.sanctionco.jmail.normalization.CaseOption;
 import com.sanctionco.jmail.normalization.NormalizationOptions;
 import com.sanctionco.jmail.normalization.NormalizationOptionsBuilder;
 
+import java.text.Normalizer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -322,6 +323,10 @@ public final class Email {
     CaseOption caseOption = options.getCaseOption();
     localPart = caseOption.adjustLocalPart(localPart);
     domain = caseOption.adjustDomain(domain);
+
+    if (options.shouldPerformUnicodeNormalization()) {
+      localPart = Normalizer.normalize(localPart, options.getUnicodeNormalizationForm());
+    }
 
     return localPart + "@" + domain;
   }
