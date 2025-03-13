@@ -6,7 +6,7 @@
 
 #### Breaking changes
 
-None, yet.
+- The `jmail.normalize.strip.quotes` JVM system property no longer does anything. Use `NormalizationOptionsBuilder#stripQuotes()` instead.
 
 #### New Normalization Methods
 
@@ -17,21 +17,20 @@ all the new and existing options.
 In v2.0, you can use either `Email#normalize()` (with no parameters) or `Email#normalize(NormalizationOptions options)`.
 
 The first method without parameters will return a normalized email address based on the default
-normalization options. These defaults can also be changed for your application by setting the relevant system properties.
-
-The second method allows you to provide your own `NormalizationOptions` at runtime depending on your needs.
-The custom normalization options can be created using the `NormalizationOptions#builder()` method.
+normalization options. The second method allows you to provide your own `NormalizationOptions` at runtime
+depending on your needs. The custom normalization options can be created using the `NormalizationOptions#builder()`
+method.
 
 #### Normalization Options
 
 Thanks, @Sprokof, for contributing (introducing removeDots and adjustCase options)! 🎉
 
-| Option           | Description                                                                                                                                                                                                   | NormalizationOptions Builder Method                       | JVM System Property to Adjust Default                                                                                |
-|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
-| stripQuotes      | Remove all unnecessary quotes in the local-part of the address                                                                                                                                                | `NormalizationOptions.builder().stripQuotes()`            | `jmail.normalize.strip.quotes=true`                                                                                  |
-| adjustCase       | Adjust the case of the email address. Possible options are: `NO_CHANGE`, `LOWERCASE`, `LOWERCASE_LOCAL_PART_ONLY`, `LOWERCASE_DOMAIN_ONLY`, `UPPERCASE`, `UPPERCASE_LOCAL_PART_ONLY`, `UPPERCASE_DOMAIN_ONLY` | `NormalizationOptions.builder().stripQuotes(CaseOption)`  | `jmail.normalize.case=LOWERCASE`                                                                                     |
-| removeDots       | Remove all dots from the local-part of the address                                                                                                                                                            | `NormalizationOptions.builder().removeDots()`             | `jmail.normalize.remove.dots=true`                                                                                   |
-| removeSubAddress | Remove any sub-addressing (or tagged-addressing) from the local-part of the address. For example, `first.last+test@gmail.com` will become `first.last@gmail.com`                                              | `NormalizationOptions.builder().removeSubAddress(String)` | `jmail.normalize.remove.subaddress=true` and optionally `jmail.normalize.subaddress.separator=CUSTOM_SEPARATOR_HERE` |
+| Option           | Description                                                                                                                                                                                                   | NormalizationOptions Builder Method                    |
+|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
+| stripQuotes      | Remove all unnecessary quotes in the local-part of the address                                                                                                                                                | `NormalizationOptionsBuilder#stripQuotes()`            |
+| adjustCase       | Adjust the case of the email address. Possible options are: `NO_CHANGE`, `LOWERCASE`, `LOWERCASE_LOCAL_PART_ONLY`, `LOWERCASE_DOMAIN_ONLY`, `UPPERCASE`, `UPPERCASE_LOCAL_PART_ONLY`, `UPPERCASE_DOMAIN_ONLY` | `NormalizationOptionsBuilder#stripQuotes(CaseOption)`  |
+| removeDots       | Remove all dots from the local-part of the address                                                                                                                                                            | `NormalizationOptionsBuilder#removeDots()`             |
+| removeSubAddress | Remove any sub-addressing (or tagged-addressing) from the local-part of the address. For example, `first.last+test@gmail.com` will become `first.last@gmail.com`                                              | `NormalizationOptionsBuilder#removeSubAddress(String)` |
 
 ---
 ## 1.6.3

@@ -6,11 +6,11 @@ package com.sanctionco.jmail.normalization;
  * {@link com.sanctionco.jmail.Email#normalized(NormalizationOptions)} to adjust its behavior.
  */
 public class NormalizationOptionsBuilder {
-  CaseOption caseOption = NormalizationProperties.caseOption();
-  boolean stripQuotes = NormalizationProperties.stripQuotes();
-  boolean removeDots = NormalizationProperties.removeDots();
-  boolean removeSubAddress = NormalizationProperties.removeSubAddress();
-  String subAddressSeparator = NormalizationProperties.subAddressSeparator();
+  CaseOption caseOption = CaseOption.NO_CHANGE;
+  boolean stripQuotes = false;
+  boolean removeDots = false;
+  boolean removeSubAddress = false;
+  String subAddressSeparator = "+";
 
   NormalizationOptionsBuilder() {
   }
