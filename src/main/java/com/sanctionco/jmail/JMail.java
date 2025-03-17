@@ -517,7 +517,7 @@ public final class JMail {
 
     // Ensure the TLD is not empty or greater than 63 chars
     if (currentDomainPart.length() <= 0) {
-      return EmailValidationResult.failure(FailureReason.MISSING_TOP_LEVEL_DOMAIN);
+      return EmailValidationResult.failure(FailureReason.MISSING_FINAL_DOMAIN_PART);
     }
 
     if (currentDomainPart.length() > 63) {

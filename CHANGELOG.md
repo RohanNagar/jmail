@@ -2,11 +2,44 @@
 
 ## 2.0.0 (Upcoming)
 
+### Breaking Changes
+
+- The `jmail.normalize.strip.quotes` JVM system property no longer does anything.
+  Use `NormalizationOptionsBuilder#stripQuotes()` instead.
+
+
+- `FailureReason` was switched from an enum to a class in order to support custom failure reasons, so you cannot
+  use it in a `switch` statement.
+
+
+- `FailureReason.MISSING_TOP_LEVEL_DOMAIN` was changed to `FailureReason.MISSING_FINAL_DOMAIN_PART`.
+  `MISSING_TOP_LEVEL_DOMAIN` was previously used for email addresses that failed validation because
+  they ended the email address with a comment. This `FailureReason` was potentially misleading, for example
+  enabling `requireTopLevelDomain()` on your `EmailValidator`.
+
+
+- Email addresses that fail validation due to additional rules added to the `EmailValidator` (such as
+  `disallowIpDomain()` or `requireValidMXRecord()`) no longer returns a generic `FailureReason.FAILED_CUSTOM_VALIDATION`
+  in the `EmailValidationResult`. Instead, it returns a more specific `FailureReason` depending on the rule. 
+
+### FailureReason Improvements
+
+#### Changes to the FailureReason supplied for additional rules
+
+The `FailureReason` returned in the `EmailValidationResult` is useful to understand why a specific
+email address failed validation. In v2.0.0, the `FailureReason` returned for email addresses that failed
+one of the additional validation rules added to your `EmailValidator` (such as `disallowIpDomain()` or
+`requireValidMXRecord()`) now return more specific and useful reasons.
+
+#### Option to provide FailureReason for custom rules
+
+Additionally, you can specify your own `FailureReason` for any custom validation rules that you add
+to your `EmailValidator`. Use the new `withRule(Predicate<Email>, FailureReason)` or
+`withRules(Map<Predicate<Email>, FailureReason>)` methods to specify the failure reason for each
+of your custom rules. If no failure reason is supplied, then the rule will default to the
+`FailureReason.FAILED_CUSTOM_VALIDATION` reason.
+
 ### Email Address Normalization Improvements
-
-#### Breaking changes
-
-- The `jmail.normalize.strip.quotes` JVM system property no longer does anything. Use `NormalizationOptionsBuilder#stripQuotes()` instead.
 
 #### New Normalization Methods
 

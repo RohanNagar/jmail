@@ -2,7 +2,7 @@ package com.sanctionco.jmail;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.Set;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import org.assertj.core.api.Condition;
@@ -46,7 +46,8 @@ class EmailValidatorTest {
         .getDeclaredField("validationPredicates");
     predicatesField.setAccessible(true);
 
-    Set<Predicate<String>> predicates = (Set<Predicate<String>>) predicatesField.get(validator);
+    Map<Predicate<Email>, FailureReason> predicates
+        = (Map<Predicate<Email>, FailureReason>) predicatesField.get(validator);
 
     assertThat(predicates).hasSize(1);
   }
@@ -71,7 +72,8 @@ class EmailValidatorTest {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = { "email@[123.123.123.123]", "first.last@[12.34.56.78]" })
     void rejectsIpAddressEmails(String email) {
-      runInvalidTest(JMail.validator().disallowIpDomain(), email);
+      runInvalidTest(JMail.validator()
+          .disallowIpDomain(), email, FailureReason.CONTAINS_IP_DOMAIN);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -86,7 +88,8 @@ class EmailValidatorTest {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"admin@mailserver1", "test@example", "test@server"})
     void rejectsDotlessAddresses(String email) {
-      runInvalidTest(JMail.validator().requireTopLevelDomain(), email);
+      runInvalidTest(JMail.validator()
+          .requireTopLevelDomain(), email, FailureReason.MISSING_TOP_LEVEL_DOMAIN);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -101,7 +104,8 @@ class EmailValidatorTest {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"@1st.relay,@2nd.relay:user@final.domain", "@a:user@final.domain"})
     void rejectsAddressesWithExplicitSourceRouting(String email) {
-      runInvalidTest(JMail.validator().disallowExplicitSourceRouting(), email);
+      runInvalidTest(JMail.validator()
+          .disallowExplicitSourceRouting(), email, FailureReason.CONTAINS_EXPLICIT_SOURCE_ROUTING);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -116,7 +120,8 @@ class EmailValidatorTest {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"John Smith <test@server.com>", "ABC <123t@abc.net>"})
     void rejectsAddressesWithQuotedIdentifiers(String email) {
-      runInvalidTest(JMail.validator().disallowQuotedIdentifiers(), email);
+      runInvalidTest(JMail.validator()
+          .disallowQuotedIdentifiers(), email, FailureReason.CONTAINS_QUOTED_IDENTIFIER);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -127,29 +132,14 @@ class EmailValidatorTest {
   }
 
   @Nested
-  class RequireOnlyTopLevelDomains {
-    @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"test@123.123.123.org", "first.last@example.net"})
-    void rejects(String email) {
-      runInvalidTest(JMail.validator().requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM), email);
-    }
-
-    @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"test@123.123.123.com", "first.last@example.com", "x@test.edu"})
-    void allows(String email) {
-      runValidTest(JMail.validator()
-          .requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM, TopLevelDomain.DOT_EDU), email);
-    }
-  }
-
-  @Nested
   class DisallowReservedDomains {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {
         "test@domain.test", "test@domain.example", "test@domain.invalid", "test@domain.localhost",
         "test@example.com", "test@example.org", "test@example.net", "test@sub.example.com"})
     void rejectsReservedDomains(String email) {
-      runInvalidTest(JMail.validator().disallowReservedDomains(), email);
+      runInvalidTest(JMail.validator()
+          .disallowReservedDomains(), email, FailureReason.CONTAINS_RESERVED_DOMAIN);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -162,6 +152,25 @@ class EmailValidatorTest {
   }
 
   @Nested
+  class RequireOnlyTopLevelDomains {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"test@123.123.123.org", "first.last@example.net"})
+    void rejects(String email) {
+      runInvalidTest(
+          JMail.validator().requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM),
+          email,
+          FailureReason.INVALID_TOP_LEVEL_DOMAIN);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"test@123.123.123.com", "first.last@example.com", "x@test.edu"})
+    void allows(String email) {
+      runValidTest(JMail.validator()
+          .requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM, TopLevelDomain.DOT_EDU), email);
+    }
+  }
+
+  @Nested
   class DisallowObsoleteWhitespace {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {
@@ -170,7 +179,8 @@ class EmailValidatorTest {
         "\r\n (\r\n x \r\n ) \r\n first\r\n ( \r\n x\r\n ) \r\n .\r\n ( \r\n x) \r\n "
             + "last \r\n (  x \r\n ) \r\n @test.org"})
     void rejectsObsoleteWhitespace(String email) {
-      runInvalidTest(JMail.validator().disallowObsoleteWhitespace(), email);
+      runInvalidTest(JMail.validator()
+          .disallowObsoleteWhitespace(), email, FailureReason.CONTAINS_OBSOLETE_WHITESPACE);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -189,7 +199,8 @@ class EmailValidatorTest {
         "test@domain.test", "test@domain.example", "test@domain.invalid",
         "test@domain.localhost", "test@gmail.co"})
     void rejectsDomainsWithoutMXRecord(String email) {
-      runInvalidTest(JMail.validator().requireValidMXRecord(), email);
+      runInvalidTest(JMail.validator()
+          .requireValidMXRecord(), email, FailureReason.INVALID_MX_RECORD);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -203,7 +214,8 @@ class EmailValidatorTest {
     @Test
     void correctlyCustomizesTimeoutAndRetries() {
       long startTime = System.currentTimeMillis();
-      runInvalidTest(JMail.validator().requireValidMXRecord(10, 1), "test@coolio.com");
+      runInvalidTest(JMail.validator()
+          .requireValidMXRecord(10, 1), "test@coolio.com", FailureReason.INVALID_MX_RECORD);
       long endTime = System.currentTimeMillis();
 
       assertThat(endTime - startTime).isLessThan(500);
@@ -216,7 +228,8 @@ class EmailValidatorTest {
     @ValueSource(strings = {
         "jørn@test.com", "我買@屋企.香港", "Pelé@example.com", "xyz@🙏.kz"})
     void rejectsNonAsciiEmails(String email) {
-      runInvalidTest(JMail.validator().requireAscii(), email);
+      runInvalidTest(JMail.validator()
+          .requireAscii(), email, FailureReason.NON_ASCII_ADDRESS);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -239,7 +252,19 @@ class EmailValidatorTest {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"first.last@tes.com", "first.last@example.com"})
     void invalidatesCorrectly(String email) {
-      runInvalidTest(JMail.validator().withRule(e -> e.domain().startsWith("test")), email);
+      runInvalidTest(JMail.validator().withRule(e -> e.domain().startsWith("test")), email,
+          FailureReason.FAILED_CUSTOM_VALIDATION);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"first.last@tes.com", "first.last@example.com"})
+    void invalidatesCorrectlyWithCustomFailureReason(String email) {
+      FailureReason failureReason = new FailureReason("DOES_NOT_START_WITH_TEST");
+
+      runInvalidTest(
+          JMail.validator().withRule(e -> e.domain().startsWith("test"), failureReason),
+          email,
+          failureReason);
     }
 
     @ParameterizedTest(name = "{0}")
@@ -247,6 +272,20 @@ class EmailValidatorTest {
     void validatesCorrectlyWithCollection(String email) {
       Predicate<Email> rule = e -> e.domain().startsWith("test");
       runValidTest(JMail.validator().withRules(Collections.singletonList(rule)), email);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"first.last@tes.com", "first.last@example.com"})
+    void invalidatesCorrectlyWithMap(String email) {
+      FailureReason failureReason = new FailureReason("DOES_NOT_START_WITH_TEST");
+
+      runInvalidTest(
+          JMail.validator()
+              .withRules(Collections.singletonMap(
+                  e -> e.domain().startsWith("test"),
+                  failureReason)),
+          email,
+          failureReason);
     }
   }
 
@@ -259,7 +298,9 @@ class EmailValidatorTest {
     assertThat(validator.validate(email).isSuccess()).isTrue();
   }
 
-  private static void runInvalidTest(EmailValidator validator, String email) {
+  private static void runInvalidTest(EmailValidator validator,
+                                     String email,
+                                     FailureReason expectedFailureReason) {
     Condition<String> invalid = new Condition<>(validator::isInvalid, "invalid");
 
     assertThat(validator.tryParse(email)).isNotPresent();
@@ -268,6 +309,6 @@ class EmailValidatorTest {
         .isThrownBy(() -> validator.enforceValid(email));
     assertThat(validator.validate(email).isFailure()).isTrue();
     assertThat(validator.validate(email).getFailureReason())
-        .isEqualTo(FailureReason.FAILED_CUSTOM_VALIDATION);
+        .isEqualTo(expectedFailureReason);
   }
 }

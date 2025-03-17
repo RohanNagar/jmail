@@ -40,7 +40,7 @@ class FailureReasonTest {
             FailureReason.LOCAL_PART_TOO_LONG),
         Arguments.of("Abc.example.com", FailureReason.MISSING_AT_SYMBOL),
         Arguments.of("\"test\rblah\"@test.org", FailureReason.MISSING_BACKSLASH_ESCAPE),
-        Arguments.of("test@test.(comment)", FailureReason.MISSING_TOP_LEVEL_DOMAIN),
+        Arguments.of("test@test.(comment)", FailureReason.MISSING_FINAL_DOMAIN_PART),
         Arguments.of("A@b@c@example.com", FailureReason.MULTIPLE_AT_SYMBOLS),
         Arguments.of("test..mytest@test.com", FailureReason.MULTIPLE_DOT_SEPARATORS),
         Arguments.of(null, FailureReason.NULL_ADDRESS),
