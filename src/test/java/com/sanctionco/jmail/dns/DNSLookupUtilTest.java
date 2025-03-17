@@ -11,7 +11,7 @@ class DNSLookupUtilTest {
     assertThat(DNSLookupUtil.hasMXRecord("gmail.com")).isTrue();
     assertThat(DNSLookupUtil.hasMXRecord("yahoo.com")).isTrue();
     assertThat(DNSLookupUtil.hasMXRecord("hotmail.com")).isTrue();
-    assertThat(DNSLookupUtil.hasMXRecord("alaska.edu")).isTrue();
+    assertThat(DNSLookupUtil.hasMXRecord("utexas.edu")).isTrue();
   }
 
   @Test
