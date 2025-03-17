@@ -276,6 +276,13 @@ class EmailValidatorTest {
           JMail.validator().withRule(e -> e.domain().startsWith("test"), "MY_REASON"),
           email,
           failureReason);
+
+      EmailValidator validator = JMail.strictValidator()
+          .requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM);
+
+      EmailValidationResult result = validator.validate("test@test.org");
+
+      result.getFailureReason().equals(FailureReason.INVALID_TOP_LEVEL_DOMAIN);
     }
 
     @ParameterizedTest(name = "{0}")

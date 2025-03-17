@@ -11,7 +11,7 @@ class NormalizationOptionsBuilderTest {
   @Test
   void ensureDefaults() {
     assertThat(NormalizationOptions.builder().build())
-        .returns(false, NormalizationOptions::shouldStripQuotes)
+        .returns(true, NormalizationOptions::shouldStripQuotes)
         .returns(CaseOption.LOWERCASE, NormalizationOptions::getCaseOption)
         .returns(false, NormalizationOptions::shouldRemoveDots)
         .returns(false, NormalizationOptions::shouldRemoveSubAddress)
@@ -25,13 +25,13 @@ class NormalizationOptionsBuilderTest {
     NormalizationOptions options = NormalizationOptions.builder()
         .removeDots()
         .removeSubAddress("-")
-        .stripQuotes()
+        .keepQuotes()
         .adjustCase(CaseOption.UPPERCASE)
         .performUnicodeNormalization(Normalizer.Form.NFC)
         .build();
 
     assertThat(options)
-        .returns(true, NormalizationOptions::shouldStripQuotes)
+        .returns(false, NormalizationOptions::shouldStripQuotes)
         .returns(CaseOption.UPPERCASE, NormalizationOptions::getCaseOption)
         .returns(true, NormalizationOptions::shouldRemoveDots)
         .returns(true, NormalizationOptions::shouldRemoveSubAddress)

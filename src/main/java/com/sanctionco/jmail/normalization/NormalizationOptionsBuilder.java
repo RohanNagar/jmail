@@ -9,7 +9,7 @@ import java.text.Normalizer;
  */
 public class NormalizationOptionsBuilder {
   CaseOption caseOption = CaseOption.LOWERCASE;
-  boolean stripQuotes = false;
+  boolean stripQuotes = true;
   boolean removeDots = false;
   boolean removeSubAddress = false;
   String subAddressSeparator = "+";
@@ -20,14 +20,14 @@ public class NormalizationOptionsBuilder {
   }
 
   /**
-   * <p>Strip all unnecessary quotes contained in the local-part of the email address.</p>
-   *
-   * <p>The default normalization behavior does <strong>not</strong> strip quotes.</p>
+   * By default, normalization strips all unnecessary quotes contained in the local-part
+   * of the email address. This method will tell normalization to <strong>keep</strong> those
+   * extraneous quotes.
    *
    * @return this
    */
-  public NormalizationOptionsBuilder stripQuotes() {
-    this.stripQuotes = true;
+  public NormalizationOptionsBuilder keepQuotes() {
+    this.stripQuotes = false;
     return this;
   }
 

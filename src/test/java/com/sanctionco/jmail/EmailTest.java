@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 class EmailTest {
   private static final NormalizationOptions MINIMAL_NORMALIZATION = NormalizationOptions
       .builder()
+      .keepQuotes()
       .adjustCase(CaseOption.NO_CHANGE)
       .build();
 
@@ -61,11 +62,11 @@ class EmailTest {
   @ParameterizedTest(name = "{0}")
   @MethodSource("provideValidForStripQuotes")
   void ensureNormalizedStripsQuotes(String address, String expected) {
+    // Strip quotes is default
     assertThat(Email.of(address))
           .isPresent().get()
           .returns(expected, email -> email.normalized(NormalizationOptions.builder()
               .adjustCase(CaseOption.NO_CHANGE)
-              .stripQuotes()
               .build()));
 
     // Check that nothing happens when stripQuotes is false
@@ -178,7 +179,6 @@ class EmailTest {
             validated.normalized(MINIMAL_NORMALIZATION),
             email -> email.normalized(NormalizationOptions.builder()
                 .adjustCase(CaseOption.NO_CHANGE)
-                .stripQuotes()
                 .build()));
   }
 
@@ -212,7 +212,6 @@ class EmailTest {
         .isPresent().get()
         .returns(address, email -> email.normalized(NormalizationOptions.builder()
             .adjustCase(CaseOption.NO_CHANGE)
-            .stripQuotes()
             .build()));
   }
 
