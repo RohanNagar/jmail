@@ -9,6 +9,9 @@
 <a href="https://codecov.io/gh/RohanNagar/jmail">
   <img src="https://codecov.io/gh/RohanNagar/jmail/branch/master/graph/badge.svg" alt="Coverage Status">
 </a>
+<a href="https://search.maven.org/artifact/com.sanctionco.jmail/jmail">
+  <img src="https://img.shields.io/badge/monthly_downloads-110%2C503-green" alt="Monthly Downloads">
+</a>
 
 A modern, fast, zero-dependency library for working with email addresses
 and performing email address validation in Java.
