@@ -8,6 +8,10 @@
   Use `NormalizationOptionsBuilder#stripQuotes()` instead.
 
 
+- Removed `Email#normalized(boolean)` method which allowed for a normalized email with stripped quotes.
+  Use `myEmail.normalized(NormalizationOptions.builder().stripQuotes().build())` instead.
+
+
 - `FailureReason` was switched from an enum to a class in order to support custom failure reasons, so you cannot
   use it in a `switch` statement.
 

@@ -2,6 +2,9 @@ package com.sanctionco.jmail;
 
 import java.util.stream.Stream;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -59,5 +62,10 @@ class FailureReasonTest {
 
     assertThat(result.isFailure()).isTrue();
     assertThat(result.getFailureReason()).isEqualTo(failureReason);
+  }
+
+  @Test
+  void ensureEqualsContract() {
+    EqualsVerifier.forClass(FailureReason.class).verify();
   }
 }

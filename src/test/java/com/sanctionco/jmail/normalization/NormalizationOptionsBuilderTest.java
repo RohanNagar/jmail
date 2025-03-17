@@ -12,7 +12,7 @@ class NormalizationOptionsBuilderTest {
   void ensureDefaults() {
     assertThat(NormalizationOptions.builder().build())
         .returns(false, NormalizationOptions::shouldStripQuotes)
-        .returns(CaseOption.NO_CHANGE, NormalizationOptions::getCaseOption)
+        .returns(CaseOption.LOWERCASE, NormalizationOptions::getCaseOption)
         .returns(false, NormalizationOptions::shouldRemoveDots)
         .returns(false, NormalizationOptions::shouldRemoveSubAddress)
         .returns("+", NormalizationOptions::getSubAddressSeparator)

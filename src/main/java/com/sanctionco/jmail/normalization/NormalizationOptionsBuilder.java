@@ -8,7 +8,7 @@ import java.text.Normalizer;
  * {@link com.sanctionco.jmail.Email#normalized(NormalizationOptions)} to adjust its behavior.
  */
 public class NormalizationOptionsBuilder {
-  CaseOption caseOption = CaseOption.NO_CHANGE;
+  CaseOption caseOption = CaseOption.LOWERCASE;
   boolean stripQuotes = false;
   boolean removeDots = false;
   boolean removeSubAddress = false;
@@ -35,7 +35,7 @@ public class NormalizationOptionsBuilder {
    * <p>Adjust the case of the email address. See {@link CaseOption} to see all available casing
    * adjustments you can choose from.</p>
    *
-   * <p>The default normalization behavior does <strong>not</strong> adjust the case.</p>
+   * <p>The default normalization behavior uses {@link CaseOption#LOWERCASE}.</p>
    *
    * @param caseOption the {@link CaseOption} that should be used when adjusting the case
    * @return this

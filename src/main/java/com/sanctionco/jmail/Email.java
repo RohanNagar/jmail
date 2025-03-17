@@ -257,36 +257,6 @@ public final class Email {
 
   /**
    * <p>Return a "normalized" version of this email address. The actual result of normalization
-   * depends on the configured normalization options (see {@link NormalizationOptions}),
-   * but in general this method returns a version of the email address that is the same as
-   * the original email address, except that all comments and optional parts
-   * (identifiers, source routing) are removed. For example, the address
-   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.</p>
-   *
-   * <p>This method uses the default set of {@link NormalizationOptions}. This default set
-   * of options can be adjusted using system properties. See {@link NormalizationOptions}
-   * for more details on which properties to set to adjust the defaults.</p>
-   *
-   * <p>Alternatively, one can use the {@link Email#normalized(NormalizationOptions)} method
-   * and pass in a custom set of options to adjust the behavior.</p>
-   *
-   * @param stripQuotes set to true if you want to remove all unnecessary quotes within the
-   *                    local-part of the email address
-   * @return the normalized version of this email address
-   */
-  @Deprecated
-  public String normalized(boolean stripQuotes) {
-    NormalizationOptionsBuilder optionsBuilder = NormalizationOptions.builder();
-
-    if (stripQuotes) {
-      optionsBuilder.stripQuotes();
-    }
-
-    return normalized(optionsBuilder.build());
-  }
-
-  /**
-   * <p>Return a "normalized" version of this email address. The actual result of normalization
    * depends on the configured normalization options, but in general this method returns
    * a version of the email address that is the same as the original email address, except
    * that all comments and optional parts (identifiers, source routing) are removed.
@@ -311,18 +281,15 @@ public final class Email {
       }
     }
 
+    CaseOption caseOption = options.getCaseOption();
+
     localPart = options.shouldRemoveDots()
-        ? localPart.replace(".", "")
-        : localPart;
+        ? caseOption.adjustLocalPart(localPart.replace(".", ""))
+        : caseOption.adjustLocalPart(localPart);
 
     String domain = isIpAddress
         ? "[" + this.domainWithoutComments + "]"
-        : this.domainWithoutComments;
-
-    // Adjust casing
-    CaseOption caseOption = options.getCaseOption();
-    localPart = caseOption.adjustLocalPart(localPart);
-    domain = caseOption.adjustDomain(domain);
+        : caseOption.adjustDomain(this.domainWithoutComments);
 
     if (options.shouldPerformUnicodeNormalization()) {
       localPart = Normalizer.normalize(localPart, options.getUnicodeNormalizationForm());
