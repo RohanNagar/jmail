@@ -268,6 +268,17 @@ class EmailValidatorTest {
     }
 
     @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"first.last@tes.com", "first.last@example.com"})
+    void invalidatesCorrectlyWithCustomStringFailureReason(String email) {
+      FailureReason failureReason = new FailureReason("MY_REASON");
+
+      runInvalidTest(
+          JMail.validator().withRule(e -> e.domain().startsWith("test"), "MY_REASON"),
+          email,
+          failureReason);
+    }
+
+    @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"first.last@test.com", "x@test.two.com"})
     void validatesCorrectlyWithCollection(String email) {
       Predicate<Email> rule = e -> e.domain().startsWith("test");

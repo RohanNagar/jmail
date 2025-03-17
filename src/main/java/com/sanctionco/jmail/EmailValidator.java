@@ -65,11 +65,12 @@ public final class EmailValidator {
    *
    * <pre>
    * validator.withRules(Map.of(
-   *     email -> email.domain().startsWith("test"), new FailureReason("MUST_START_WITH_TEST"),
+   *     email -> email.domain().startsWith("test"), new FailureReason("MISSING_TEST_PREFIX"),
    *     email -> email.localPart.contains("hello"), new FailureReason("MUST_CONTAIN_HELLO"));
    * </pre>
    *
-   * @param rules a collection of requirements that make a valid email address
+   * @param rules a map of requirements that make a valid email address and each requirement's
+   *              {@link FailureReason}
    * @return the new {@code EmailValidator} instance
    */
   public EmailValidator withRules(Map<Predicate<Email>, FailureReason> rules) {
@@ -126,17 +127,38 @@ public final class EmailValidator {
    * <pre>
    * validator.withRule(
    *   email -> email.domain().startsWith("test"),
-   *   new FailureReason("DOES_NOT_START_WITH_TEST"));
+   *   new FailureReason("MISSING_TEST_PREFIX"));
    * </pre>
    *
    * @param rule the requirement for a valid email address. This must be a {@link Predicate} that
    *             accepts an {@link Email} object.
    * @param failureReason the {@link FailureReason} to return in the {@link EmailValidationResult}
-   *                      if an email fails to pass this rule.
+   *                      if an email address fails to pass this rule.
    * @return the new {@code EmailValidator} instance
    */
   public EmailValidator withRule(Predicate<Email> rule, FailureReason failureReason) {
     return withRules(Collections.singletonMap(rule, failureReason));
+  }
+
+  /**
+   * Create a new {@code EmailValidator} with all rules from the current instance and an
+   * additional provided custom validation rule.
+   *
+   * <p>Example usage:
+   *
+   * <pre>
+   * validator.withRule(
+   *   email -> email.domain().startsWith("test"), "MISSING_TEST_PREFIX");
+   * </pre>
+   *
+   * @param rule the requirement for a valid email address. This must be a {@link Predicate} that
+   *             accepts an {@link Email} object.
+   * @param failureReason the reason to return in the {@link EmailValidationResult} as the
+   *                      {@link FailureReason }if an email address fails to pass this rule.
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator withRule(Predicate<Email> rule, String failureReason) {
+    return withRules(Collections.singletonMap(rule, new FailureReason(failureReason)));
   }
 
   /**
