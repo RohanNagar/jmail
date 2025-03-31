@@ -2,8 +2,10 @@ package com.sanctionco.jmail;
 
 import com.sanctionco.jmail.normalization.CaseOption;
 import com.sanctionco.jmail.normalization.NormalizationOptions;
-import com.sanctionco.jmail.normalization.NormalizationOptionsBuilder;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
 import java.util.Collections;
 import java.util.List;
@@ -235,40 +237,178 @@ public final class Email {
   }
 
   /**
-   * <p>Return a "normalized" version of this email address. The actual result of normalization
-   * depends on the configured normalization options (see {@link NormalizationOptions}),
-   * but in general this method returns a version of the email address that is the same as
-   * the original email address, except that all comments and optional parts
-   * (identifiers, source routing) are removed. For example, the address
-   * {@code "test@(comment)example.com"} will return {@code "test@example.com"}.</p>
+   * <p>Return a "normalized" version of this email address. This method returns a version of the
+   * email address that is the same as the original email address, except:</p>
    *
-   * <p>This method uses the default set of {@link NormalizationOptions}. This default set
-   * of options can be adjusted using system properties. See {@link NormalizationOptions}
-   * for more details on which properties to set to adjust the defaults.</p>
+   * <ul>
+   *   <li>All comments are removed</li>
+   *   <li>All identifiers or source routing are removed</li>
+   *   <li>Any unnecessary quotes within the local-part are removed</li>
+   *   <li>The entire address is lowercased</li>
+   * </ul>
    *
-   * <p>Alternatively, one can use the {@link Email#normalized(NormalizationOptions)} method
-   * and pass in a custom set of options to adjust the behavior.</p>
+   * <p>For example, the address {@code "tEST@(comment)example.com"} will return
+   * {@code "test@example.com"}.</p>
+   *
+   * <p>This method uses the default set of {@link NormalizationOptions} when performing
+   * normalization. Use {@link #normalized(NormalizationOptions)} instead of this method
+   * to further customize how normalization behaves.</p>
    *
    * @return the normalized version of this email address
    */
   public String normalized() {
-    return normalized(NormalizationOptions.builder().build());
+    return normalized(NormalizationOptions.DEFAULT_OPTIONS);
   }
 
   /**
    * <p>Return a "normalized" version of this email address. The actual result of normalization
    * depends on the configured normalization options, but in general this method returns
-   * a version of the email address that is the same as the original email address, except
-   * that all comments and optional parts (identifiers, source routing) are removed.
-   * For example, the address {@code "test@(comment)example.com"} will return
+   * a version of the email address that is the same as the original email address, except:</p>
+   *
+   * <ul>
+   *   <li>All comments are removed</li>
+   *   <li>All identifiers or source routing are removed</li>
+   *   <li>Any unnecessary quotes within the local-part are removed</li>
+   *   <li>The entire address is lowercased</li>
+   * </ul>
+   *
+   * <p>For example, the address {@code "tEST@(comment)example.com"} will return
    * {@code "test@example.com"}.</p>
    *
    * <p>See {@link NormalizationOptions} for more details on all of the configurable options.</p>
    *
    * @param options the {@link NormalizationOptions} to use when normalizing
    * @return the normalized version of this email address
+   * @see NormalizationOptions
    */
   public String normalized(NormalizationOptions options) {
+    return normalizedLocalPart(options) + "@" + normalizedDomain(options);
+  }
+
+  /**
+   * <p>Returns an MD5 reference to the email address. This format can be useful to share references
+   * to the email address without sharing the actual address.</p>
+   *
+   * <p>The reference is calculated by first performing normalization on the address, and then
+   * taking the MD5 hash of the normalized address. See {@link #normalized()} for more details
+   * on how normalization works.</p>
+   *
+   * <p>This method uses the default {@link NormalizationOptions}. If you wish to customize how the
+   * normalization happens, use {@link #reference(NormalizationOptions)} instead.</p>
+   *
+   * @return the MD5 reference string for the address
+   * @throws NoSuchAlgorithmException if the MD5 algorithm is unable to be loaded
+   */
+  public String reference() throws NoSuchAlgorithmException {
+    return reference(NormalizationOptions.DEFAULT_OPTIONS);
+  }
+
+  /**
+   * <p>Returns an MD5 reference to the email address. This format can be useful to share references
+   * to the email address without sharing the actual address.</p>
+   *
+   * <p>The reference is calculated by first performing normalization on the address, and then
+   * taking the MD5 hash of the normalized address. See {@link #normalized(NormalizationOptions)}
+   * for more details on how normalization works.</p>
+   *
+   * @param options the {@link NormalizationOptions} to use when normalizing
+   * @return the MD5 reference string for the address
+   * @throws NoSuchAlgorithmException if the MD5 algorithm is unable to be loaded
+   */
+  public String reference(NormalizationOptions options) throws NoSuchAlgorithmException {
+    MessageDigest md = MessageDigest.getInstance("MD5");
+
+    byte[] normalized = normalized(options).getBytes(StandardCharsets.UTF_8);
+    byte[] digest = md.digest(normalized);
+
+    return toHexString(digest);
+  }
+
+  /**
+   * <p>Returns a redacted version of the email address in the format {@code "{local-part}@domain"}.
+   * This format can be useful when storing addresses in a data store (to avoid storing the original
+   * address).</p>
+   *
+   * <p>The redacted address is calculated by first performing normalization on the address, and
+   * then taking the SHA-1 hash of the local-part of the normalized address to construct the final
+   * redacted version of the address. See {@link #normalized()} for more details on how
+   * normalization works.</p>
+   *
+   * <p>This method uses the default {@link NormalizationOptions}. If you wish to customize how the
+   * normalization happens, use {@link #redacted(NormalizationOptions)} instead.</p>
+   *
+   * @return the redacted version of the email address
+   * @throws NoSuchAlgorithmException if the SHA-A algorithm is unable to be loaded
+   */
+  public String redacted() throws NoSuchAlgorithmException {
+    return redacted(NormalizationOptions.DEFAULT_OPTIONS);
+  }
+
+  /**
+   * <p>Returns a redacted version of the email address in the format {@code "{local-part}@domain"}.
+   * This format can be useful when storing addresses in a data store (to avoid storing the original
+   * address).</p>
+   *
+   * <p>The redacted address is calculated by first performing normalization on the address, and
+   * then taking the SHA-1 hash of the local-part of the normalized address to construct the final
+   * redacted version of the address. See {@link #normalized(NormalizationOptions)} for more
+   * details on how normalization works.</p>
+   *
+   * @param options the {@link NormalizationOptions} to use when normalizing
+   * @return the redacted version of the email address
+   * @throws NoSuchAlgorithmException if the SHA-1 algorithm is unable to be loaded
+   */
+  public String redacted(NormalizationOptions options) throws NoSuchAlgorithmException {
+    MessageDigest md = MessageDigest.getInstance("SHA1");
+
+    byte[] normalizedLocalPart = normalizedLocalPart(options).getBytes(StandardCharsets.UTF_8);
+    byte[] digest = md.digest(normalizedLocalPart);
+
+    return "{" + toHexString(digest) + "}@" + normalizedDomain(options);
+  }
+
+  /**
+   * <p>Returns a munged version of the email address in the format {@code "lo*****@do*****"}.
+   * This format can be useful when displaying addresses on a user account page.
+   *
+   * <p>The munged address is calculated by first performing normalization on the address, and
+   * then taking the first two characters of both the local-part and the domain, and adding
+   * five {@code *} characters to each. See {@link #normalized()} for more
+   * details on how normalization works.</p>
+   *
+   * <p>This method uses the default {@link NormalizationOptions}. If you wish to customize how the
+   * normalization happens, use {@link #munged(NormalizationOptions)} instead.</p>
+   *
+   * @return the munged version of the email address
+   */
+  public String munged() {
+    return munged(NormalizationOptions.DEFAULT_OPTIONS);
+  }
+
+
+  /**
+   * <p>Returns a munged version of the email address in the format {@code "lo*****@do*****"}.
+   * This format can be useful when displaying addresses on a user account page.
+   *
+   * <p>The munged address is calculated by first performing normalization on the address, and
+   * then taking the first two characters of both the local-part and the domain, and adding
+   * five {@code *} characters to each. See {@link #normalized(NormalizationOptions)} for more
+   * details on how normalization works.</p>
+   *
+   * @param options the {@link NormalizationOptions} to use when normalizing
+   * @return the munged version of the email address
+   */
+  public String munged(NormalizationOptions options) {
+    String localPart = normalizedLocalPart(options);
+    localPart = localPart.length() < 2 ? localPart : localPart.substring(0, 2);
+
+    String domain = normalizedDomain(options);
+    domain = domain.length() < 2 ? domain : domain.substring(0, 2);
+
+    return localPart + "*****@" + domain + "*****";
+  }
+
+  private String normalizedLocalPart(NormalizationOptions options) {
     String localPart = options.shouldStripQuotes()
         ? localPartWithoutQuotes
         : localPartWithoutComments;
@@ -287,15 +427,34 @@ public final class Email {
         ? caseOption.adjustLocalPart(localPart.replace(".", ""))
         : caseOption.adjustLocalPart(localPart);
 
-    String domain = isIpAddress
-        ? "[" + this.domainWithoutComments + "]"
-        : caseOption.adjustDomain(this.domainWithoutComments);
-
     if (options.shouldPerformUnicodeNormalization()) {
       localPart = Normalizer.normalize(localPart, options.getUnicodeNormalizationForm());
     }
 
-    return localPart + "@" + domain;
+    return localPart;
+  }
+
+  private String normalizedDomain(NormalizationOptions options) {
+    CaseOption caseOption = options.getCaseOption();
+
+    return isIpAddress
+        ? "[" + this.domainWithoutComments + "]"
+        : caseOption.adjustDomain(this.domainWithoutComments);
+  }
+
+  private String toHexString(byte[] bytes) {
+    char[] hexArray = {
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'a', 'b', 'c', 'd', 'e', 'f'};
+    char[] hexChars = new char[bytes.length * 2];
+
+    for (int j = 0; j < bytes.length; j++) {
+      int v = bytes[j] & 0xFF;
+      hexChars[j * 2] = hexArray[v / 16];
+      hexChars[j * 2 + 1] = hexArray[v % 16];
+    }
+
+    return new String(hexChars);
   }
 
   /**

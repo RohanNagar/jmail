@@ -105,6 +105,32 @@ Thanks, @Sprokof, for contributing (introducing `removeDots` and `adjustCase` op
 | removeSubAddress            | Remove any sub-addressing (or tagged-addressing) from the local-part of the address. For example, `first.last+test@gmail.com` will become `first.last@gmail.com`                                              | `removeSubAddress()` or `removeSubAddress(String)`                                |
 | performUnicodeNormalization | Perform unicode normalization on the local-part of the email address                                                                                                                                          | `performUnicodeNormalization()` or `performUnicodeNormalization(Normalizer.Form)` |
 
+
+### Additional Address Formats
+
+Version 2.0.0 introduces new additional email address formats that can be obtained from
+the `Email` object (similar to the `normalize()` method).
+
+- `Email#reference()` returns an MD5 hash of the normalized email address.
+
+  ```
+    "test@gmail.com" => "1aedb8d9dc4751e229a335e371db8058"
+  ```
+
+- `Email#redacted()` returns a version of the normalized email address where the local-part
+  is replaced with the SHA-1 hash of the local-part.
+
+  ```
+    "test@gmail.com" => "{a94a8fe5ccb19ba61c4c0873d391e987982fbbd3}@gmail.com"
+  ```
+
+- `Email#munged()` returns a version of the normalized email address where the local-part
+  and domain are obfuscated with five asterisk characters.
+
+  ```
+    "test@gmail.com" => "te*****@gm*****"
+  ```
+
 ---
 ## 1.6.3
 

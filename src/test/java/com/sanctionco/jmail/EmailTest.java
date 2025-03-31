@@ -3,6 +3,7 @@ package com.sanctionco.jmail;
 import com.sanctionco.jmail.normalization.CaseOption;
 import com.sanctionco.jmail.normalization.NormalizationOptions;
 
+import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
 import java.util.stream.Stream;
 
@@ -213,6 +214,94 @@ class EmailTest {
         .returns(address, email -> email.normalized(NormalizationOptions.builder()
             .adjustCase(CaseOption.NO_CHANGE)
             .build()));
+  }
+
+  @Test
+  void ensureReferenceFormat() {
+    String address = "test@gmail.com";
+    String md5 = "1aedb8d9dc4751e229a335e371db8058";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(md5, e -> {
+          try {
+            return e.reference();
+          } catch (NoSuchAlgorithmException ex) {
+            return "NoSuchAlgorithmException";
+          }
+        });
+
+    // With custom options
+    String capitalizedMD5 = "e307f5ddc2a641dc63ace209e17b4f80";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(capitalizedMD5, e -> {
+          try {
+            return e.reference(NormalizationOptions.builder()
+                .adjustCase(CaseOption.UPPERCASE)
+                .build());
+          } catch (NoSuchAlgorithmException ex) {
+            return "NoSuchAlgorithmException";
+          }
+        });
+  }
+
+  @Test
+  void ensureRedactedFormat() {
+    String address = "test@gmail.com";
+    String redacted = "{a94a8fe5ccb19ba61c4c0873d391e987982fbbd3}@gmail.com";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(redacted, e -> {
+          try {
+            return e.redacted();
+          } catch (NoSuchAlgorithmException ex) {
+            return "NoSuchAlgorithmException";
+          }
+        });
+
+    // With custom options
+    String capitalizedRedacted = "{984816fd329622876e14907634264e6f332e9fb3}@GMAIL.COM";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(capitalizedRedacted, e -> {
+          try {
+            return e.redacted(NormalizationOptions.builder()
+                .adjustCase(CaseOption.UPPERCASE)
+                .build());
+          } catch (NoSuchAlgorithmException ex) {
+            return "NoSuchAlgorithmException";
+          }
+        });
+  }
+
+  @Test
+  void ensureMungedFormat() {
+    String address = "test@gmail.com";
+    String munged = "te*****@gm*****";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(munged, Email::munged);
+
+    // With custom options
+    String capitalizedMunged = "TE*****@GM*****";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(capitalizedMunged, e -> e.munged(NormalizationOptions.builder()
+            .adjustCase(CaseOption.UPPERCASE)
+            .build()));
+
+    // With a very short address
+    String shortAddress = "t@r";
+
+    assertThat(Email.of(shortAddress))
+        .isPresent().get()
+        .returns("t*****@r*****", Email::munged);
   }
 
   static Stream<Arguments> provideValidForStripQuotes() {

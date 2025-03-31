@@ -13,6 +13,11 @@ import java.text.Normalizer;
  * {@link #builder()}</p>
  */
 public class NormalizationOptions {
+  /**
+   * A default {@code NormalizationOptions} object.
+   */
+  public static final NormalizationOptions DEFAULT_OPTIONS = builder().build();
+
   private final CaseOption caseOption;
   private final boolean removeDots;
   private final boolean removeSubAddress;
