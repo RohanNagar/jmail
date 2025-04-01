@@ -94,20 +94,6 @@ public final class JMail {
   }
 
   /**
-   * Determine if the given email address is valid, returning a new {@link EmailValidationResult}
-   * object that contains details on the result of the validation. Use this method if you need to
-   * see the {@link FailureReason} upon validation failure. See {@link #tryParse(String)}
-   * for details on what is required of an email address within basic validation.
-   *
-   * @param email the email address to validate
-   * @return a {@link EmailValidationResult} containing success or failure, along with the parsed
-   *         {@link Email} object if successful, or the {@link FailureReason} if not
-   */
-  public static EmailValidationResult validate(String email) {
-    return validateInternal(email);
-  }
-
-  /**
    * Parse the given email address into a new {@link Email} object. This method does basic
    * validation on the input email address. This method does not claim to be 100%
    * accurate in determining if an email address is valid or invalid due to the
@@ -123,9 +109,35 @@ public final class JMail {
    *         is invalid
    */
   public static Optional<Email> tryParse(String email) {
-    EmailValidationResult result = validateInternal(email);
+    EmailValidationResult result = validate(email);
 
     return result.getEmail();
+  }
+
+  /**
+   * Determine if the given email address is valid, returning a new {@link EmailValidationResult}
+   * object that contains details on the result of the validation. Use this method if you need to
+   * see the {@link FailureReason} upon validation failure. See {@link #tryParse(String)}
+   * for details on what is required of an email address within basic validation.
+   *
+   * @param email the email address to validate
+   * @return a {@link EmailValidationResult} containing success or failure, along with the parsed
+   *         {@link Email} object if successful, or the {@link FailureReason} if not
+   */
+  public static EmailValidationResult validate(String email) {
+    return validateInternal(email, false);
+  }
+
+  /**
+   * Package-private validate method that exposes an additional option {@code allowGmailDots}.
+   *
+   * @param email the email address to parse and validate
+   * @param allowGmailDots true if a leading or trailing dot in the local-part should be allowed
+   * @return a {@link EmailValidationResult} containing success or failure, along with the parsed
+   *         {@link Email} object if successful, or the {@link FailureReason} if not
+   */
+  static EmailValidationResult validate(String email, boolean allowGmailDots) {
+    return validateInternal(email, allowGmailDots);
   }
 
   /**
@@ -134,7 +146,7 @@ public final class JMail {
    * @param email the email address to parse
    * @return a new {@link Email} instance if valid, empty if invalid
    */
-  private static EmailValidationResult validateInternal(String email) {
+  private static EmailValidationResult validateInternal(String email, boolean allowGmailDots) {
     // email cannot be null
     if (email == null) return EmailValidationResult.failure(FailureReason.NULL_ADDRESS);
 
@@ -168,7 +180,11 @@ public final class JMail {
     if (size > 320) return EmailValidationResult.failure(FailureReason.ADDRESS_TOO_LONG);
 
     // email cannot start with '.'
-    if (email.charAt(0) == '.') return EmailValidationResult.failure(FailureReason.STARTS_WITH_DOT);
+    // email cannot start with '.'
+    // unless we are configured to allow it (GMail doesn't care about a starting dot)
+    if (email.charAt(0) == '.' && !allowGmailDots) {
+      return EmailValidationResult.failure(FailureReason.STARTS_WITH_DOT);
+    }
 
     // email cannot end with '.'
     if (email.charAt(size - 1) == '.') {
@@ -223,7 +239,8 @@ public final class JMail {
           return EmailValidationResult.failure(FailureReason.UNQUOTED_ANGLED_BRACKET);
         }
 
-        EmailValidationResult innerResult = validateInternal(email.substring(i + 1, size - 1));
+        EmailValidationResult innerResult
+            = validateInternal(email.substring(i + 1, size - 1), allowGmailDots);
 
         // If the address passed validation, return success with the identifier included.
         // Otherwise, just return the failed internal result
@@ -512,7 +529,15 @@ public final class JMail {
 
     // Check that local-part does not end with '.'
     if (localPart.charAt(localPart.length() - 1) == '.') {
-      return EmailValidationResult.failure(FailureReason.LOCAL_PART_ENDS_WITH_DOT);
+      // unless we are configured to allow it (GMail doesn't care about a trailing dot)
+      if (!allowGmailDots) {
+        return EmailValidationResult.failure(FailureReason.LOCAL_PART_ENDS_WITH_DOT);
+      }
+
+      // if we allow a trailing dot, just make sure it's not the only thing in the local-part
+      if (localPartLen <= 1) {
+        return EmailValidationResult.failure(FailureReason.LOCAL_PART_MISSING);
+      }
     }
 
     // Ensure the TLD is not empty or greater than 63 chars

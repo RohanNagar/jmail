@@ -307,6 +307,42 @@ class EmailValidatorTest {
     }
   }
 
+  @Nested
+  class AllowGmailDots {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "..test@domain.test", "test..@domain.example", "test..again@domain.example"})
+    void rejectsInvalidDots(String email) {
+      runInvalidTest(JMail.validator().allowGmailDots(),
+          email, FailureReason.MULTIPLE_DOT_SEPARATORS);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        ".test@domain.test.org", "test.@domain.exmple.com", ".my.email.@gmail.com"})
+    void allowsGmailDots(String email) {
+      runValidTest(JMail.validator().allowGmailDots(), email);
+    }
+  }
+
+  @Nested
+  class DisallowIpDomainAllowGmailDotsCombination {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "test@[1.2.3.4]", "test@[5.6.7.8]"})
+    void rejects(String email) {
+      runInvalidTest(JMail.validator().allowGmailDots().disallowIpDomain(),
+          email, FailureReason.CONTAINS_IP_DOMAIN);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        ".test@domain.test.org", "test.@domain.exmple.com", ".my.email.@gmail.com"})
+    void allows(String email) {
+      runValidTest(JMail.validator().allowGmailDots().disallowIpDomain(), email);
+    }
+  }
+
   private static void runValidTest(EmailValidator validator, String email) {
     Condition<String> valid = new Condition<>(validator::isValid, "valid");
 

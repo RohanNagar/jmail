@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import net.andreinc.mockneat.MockNeat;
 
 import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -17,6 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class JMailTest {
   private final Condition<String> valid = new Condition<>(JMail::isValid, "valid");
@@ -206,5 +208,37 @@ class JMailTest {
   @Test
   void isInvalidCanValidate() {
     assertThat(JMail.isInvalid("test@test.com")).isFalse();
+  }
+
+  @Nested
+  class AllowGmailDots {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource({
+        "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails",
+        "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidWhitespaceEmails",
+        "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidControlEmails"})
+    @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;", numLinesToSkip = 1)
+    void ensureFailuresWhenAllowGmailDotsIsTrue(String email) {
+      // This test only works for addresses that will fail
+      // even when we allow a starting or trailing dot in the local-part
+      assumeTrue(email.charAt(0) != '.' && !email.contains(".@"));
+
+      assertThat(JMail.validate(email, true))
+          .returns(true, EmailValidationResult::isFailure);
+    }
+
+    @Test
+    void ensureOnlyDotFailsWhenAllowGmailDotsIsTrue() {
+      assertThat(JMail.validate(".@test.com", true))
+          .returns(true, EmailValidationResult::isFailure)
+          .returns(FailureReason.LOCAL_PART_MISSING, EmailValidationResult::getFailureReason);;
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {".test@test.org", "yes.@example.com"})
+    void ensureStartingAndTrailingDotsPass(String address) {
+      assertThat(JMail.validate(address, true).getEmail())
+          .isPresent().get().hasToString(address);
+    }
   }
 }

@@ -48,13 +48,16 @@ public final class EmailValidator {
       = ValidationRules::requireAscii;
 
   private final Map<Predicate<Email>, FailureReason> validationPredicates;
+  private final boolean allowGmailDots;
 
-  EmailValidator(Map<Predicate<Email>, FailureReason> validationPredicates) {
+  EmailValidator(Map<Predicate<Email>, FailureReason> validationPredicates,
+                 boolean allowGmailDots) {
     this.validationPredicates = Collections.unmodifiableMap(validationPredicates);
+    this.allowGmailDots = allowGmailDots;
   }
 
   EmailValidator() {
-    this(new HashMap<>());
+    this(new HashMap<>(), false);
   }
 
   /**
@@ -77,7 +80,7 @@ public final class EmailValidator {
     Map<Predicate<Email>, FailureReason> ruleMap = new HashMap<>(validationPredicates);
     ruleMap.putAll(rules);
 
-    return new EmailValidator(ruleMap);
+    return new EmailValidator(ruleMap, allowGmailDots);
   }
 
   /**
@@ -159,6 +162,23 @@ public final class EmailValidator {
    */
   public EmailValidator withRule(Predicate<Email> rule, String failureReason) {
     return withRules(Collections.singletonMap(rule, new FailureReason(failureReason)));
+  }
+
+  /**
+   * <p>Create a new {@code EmailValidator} (with all rules from the current instance) that
+   * allows email addresses to have a local-part that either starts with or ends with a dot
+   * {@code .} character.</p>
+   *
+   * <p>While not allowed according to RFC, a leading or trailing dot character in the local-part
+   * <strong>is allowed</strong> by GMail, hence the naming of this method.</p>
+   *
+   * <p>For example, {@code ".test@gmail.com"} would be considered valid if you use the
+   * {@code EmailValidator} returned by this method.</p>
+   *
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator allowGmailDots() {
+    return new EmailValidator(this.validationPredicates, true);
   }
 
   /**
@@ -341,7 +361,8 @@ public final class EmailValidator {
    * @return the result of the validation
    */
   public boolean isValid(String email) {
-    return JMail.tryParse(email)
+    return JMail.validate(email, allowGmailDots)
+        .getEmail()
         .filter(e -> !testPredicates(e).isPresent())
         .isPresent();
   }
@@ -383,7 +404,7 @@ public final class EmailValidator {
    *         {@link Email} object if successful, or the {@link FailureReason} if not
    */
   public EmailValidationResult validate(String email) {
-    EmailValidationResult result = JMail.validate(email);
+    EmailValidationResult result = JMail.validate(email, allowGmailDots);
 
     // If failed basic validation, just return it
     if (!result.getEmail().isPresent()) return result;
@@ -404,14 +425,16 @@ public final class EmailValidator {
    *         is invalid according to all registered validation rules
    */
   public Optional<Email> tryParse(String email) {
-    return JMail.tryParse(email).filter(e -> !testPredicates(e).isPresent());
+    return JMail.validate(email, allowGmailDots).getEmail()
+        .filter(e -> !testPredicates(e).isPresent());
   }
 
   /**
    * Test the given email address against all configured validation predicates.
    *
    * @param email the email address to test
-   * @return true if it passes the predicates, false otherwise
+   * @return an Optional that is either empty if all predicates passed or filled with the proper
+   *         FailureReason if one failed
    */
   private Optional<FailureReason> testPredicates(Email email) {
     return validationPredicates.entrySet().stream()
