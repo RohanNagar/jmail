@@ -28,96 +28,96 @@ firstname-lastname@example.com,firstname-lastname,example.com,A hyphen is allowe
 x@x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x2,x,x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x2,A domain under 256 characters is allowed
 1234567890123456789012345678901234567890123456789012345678@12345678901234567890123456789012345678901234567890123456789.12345678901234567890123456789012345678901234567890123456789.123456789012345678901234567890123456789012345678901234567890123.test.org,1234567890123456789012345678901234567890123456789012345678,12345678901234567890123456789012345678901234567890123456789.12345678901234567890123456789012345678901234567890123456789.123456789012345678901234567890123456789012345678901234567890123.test.org,A local-part under 65 characters is allowed
 first.last@3com.com,first.last,3com.com,The domain can start with a number
-first.last@123.test.org,first.last,123.test.org,
-first.last@x23456789012345678901234567890123456789012345678901234567890123.test.org,first.last,x23456789012345678901234567890123456789012345678901234567890123.test.org,
-1234567890123456789012345678901234567890123456789012345678901234@test.org,1234567890123456789012345678901234567890123456789012345678901234,test.org,
-email@[123.123.123.123],email,[123.123.123.123],
-first.last@[12.34.56.78],first.last,[12.34.56.78],
-user+mailbox@test.org,user+mailbox,test.org,
-customer/department=shipping@test.org,customer/department=shipping,test.org,
-$A12345@test.org,$A12345,test.org,
-!def!xyz%abc@test.org,!def!xyz%abc,test.org,
-_somename@test.org,_somename,test.org,
-dclo@us.ibm.com,dclo,us.ibm.com,
-test@xn--example.com,test,xn--example.com,
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888],first.last,[IPv6:1111:2222:3333:4444:5555:6666:7777:8888],
-first.last@[IPv6:1111:2222:3333::4444:5555:6666:7777],first.last,[IPv6:1111:2222:3333::4444:5555:6666:7777],
-first.last@[IPv6:::1111:2222:3333:4444:5555:6666],first.last,[IPv6:::1111:2222:3333:4444:5555:6666],
-first.last@[IPv6:1111:2222:3333::4444:5555:6666],first.last,[IPv6:1111:2222:3333::4444:5555:6666],
-first.last@[IPv6:1111:2222:3333:4444:5555:6666::],first.last,[IPv6:1111:2222:3333:4444:5555:6666::],
-first.last@[IPv6:::a2:a3:a4:b1:b2:b3:b4],first.last,[IPv6:::a2:a3:a4:b1:b2:b3:b4],
-first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3::],first.last,[IPv6:a1:a2:a3:a4:b1:b2:b3::],
-first.last@[IPv6:::],first.last,[IPv6:::],
-first.last@[IPv6:::b4],first.last,[IPv6:::b4],
-first.last@[IPv6:::b3:b4],first.last,[IPv6:::b3:b4],
-first.last@[IPv6:a1::b4],first.last,[IPv6:a1::b4],
-first.last@[IPv6:a1::],first.last,[IPv6:a1::],
-first.last@[IPv6:a1:a2::],first.last,[IPv6:a1:a2::],
-first.last@[IPv6:0123:4567:89ab:cdef::],first.last,[IPv6:0123:4567:89ab:cdef::],
-first.last@[IPv6:0123:4567:89ab:CDEF::],first.last,[IPv6:0123:4567:89ab:CDEF::],
-first.last@[IPv6:::12.34.56.78],first.last,[IPv6:::12.34.56.78],
-first.last@[IPv6:1111:2222:3333::4444:12.34.56.78],first.last,[IPv6:1111:2222:3333::4444:12.34.56.78],
-first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.56.78],first.last,[IPv6:1111:2222:3333:4444:5555:6666:12.34.56.78],
-first.last@[IPv6:1111:2222:3333::4444:5555:12.34.56.78],first.last,[IPv6:1111:2222:3333::4444:5555:12.34.56.78],
-aaa@[123.123.123.123],aaa,[123.123.123.123],
-first.last@[IPv6:::a3:a4:b1:ffff:11.22.33.44],first.last,[IPv6:::a3:a4:b1:ffff:11.22.33.44],
-first.last@[IPv6:::a2:a3:a4:b1:ffff:11.22.33.44],first.last,[IPv6:::a2:a3:a4:b1:ffff:11.22.33.44],
-first.last@[IPv6:a1:a2:a3:a4::11.22.33.44],first.last,[IPv6:a1:a2:a3:a4::11.22.33.44],
-first.last@[IPv6:a1:a2:a3:a4:b1::11.22.33.44],first.last,[IPv6:a1:a2:a3:a4:b1::11.22.33.44],
-first.last@[IPv6:a1::11.22.33.44],first.last,[IPv6:a1::11.22.33.44],
-first.last@[IPv6:a1:a2::11.22.33.44],first.last,[IPv6:a1:a2::11.22.33.44],
-first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.44],first.last,[IPv6:0123:4567:89ab:cdef::11.22.33.44],
-first.last@[IPv6:0123:4567:89ab:CDEF::11.22.33.44],first.last,[IPv6:0123:4567:89ab:CDEF::11.22.33.44],
-first.last@[IPv6:a1::b2:11.22.33.44],first.last,[IPv6:a1::b2:11.22.33.44],
-+@b.c,+,b.c,
-TEST@test.org,TEST,test.org,
-1234567890@test.org,1234567890,test.org,
-test-test@test.org,test-test,test.org,
-t*est@test.org,t*est,test.org,
-+1~1+@test.org,+1~1+,test.org,
-{_test_}@test.org,{_test_},test.org,
-test@123.123.123.x123,test,123.123.123.x123,
-cdburgess+!#$%&'*-/=?+_{}|~test@gmail.com,cdburgess+!#$%&'*-/=?+_{}|~test,gmail.com,
+first.last@123.test.org,first.last,123.test.org,The domain can have a fully numerical part
+first.last@x23456789012345678901234567890123456789012345678901234567890123.test.org,first.last,x23456789012345678901234567890123456789012345678901234567890123.test.org,The domain can have parts of length of 63 characters or less
+1234567890123456789012345678901234567890123456789012345678901234@test.org,1234567890123456789012345678901234567890123456789012345678901234,test.org,The local-part can have a length of 64 characters or less
+email@[123.123.123.123],email,[123.123.123.123],IPv4 domain is valid
+first.last@[12.34.56.78],first.last,[12.34.56.78],IPv4 domain is valid
+user+mailbox@test.org,user+mailbox,test.org,An address with sub-addressing in the local-part is valid
+customer/department=shipping@test.org,customer/department=shipping,test.org,Unusual characters / and = are allowed in the local-part
+$A12345@test.org,$A12345,test.org,Unusual character $ is allowed in the local-part
+!def!xyz%abc@test.org,!def!xyz%abc,test.org,Unusual characters ! and % are allowed in the local-part
+_somename@test.org,_somename,test.org,The local-part can start with an underscore
+dclo@us.ibm.com,dclo,us.ibm.com,A simple valid address
+test@xn--example.com,test,xn--example.com,An address with a punycode domain is valid
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888],first.last,[IPv6:1111:2222:3333:4444:5555:6666:7777:8888],IPv6 domain is valid
+first.last@[IPv6:1111:2222:3333::4444:5555:6666:7777],first.last,[IPv6:1111:2222:3333::4444:5555:6666:7777],IPv6 domain is valid
+first.last@[IPv6:::1111:2222:3333:4444:5555:6666],first.last,[IPv6:::1111:2222:3333:4444:5555:6666],IPv6 domain is valid
+first.last@[IPv6:1111:2222:3333::4444:5555:6666],first.last,[IPv6:1111:2222:3333::4444:5555:6666],IPv6 domain is valid
+first.last@[IPv6:1111:2222:3333:4444:5555:6666::],first.last,[IPv6:1111:2222:3333:4444:5555:6666::],IPv6 domain is valid
+first.last@[IPv6:::a2:a3:a4:b1:b2:b3:b4],first.last,[IPv6:::a2:a3:a4:b1:b2:b3:b4],IPv6 domain is valid
+first.last@[IPv6:a1:a2:a3:a4:b1:b2:b3::],first.last,[IPv6:a1:a2:a3:a4:b1:b2:b3::],IPv6 domain is valid
+first.last@[IPv6:::],first.last,[IPv6:::],An empty IPv6 domain is valid
+first.last@[IPv6:::b4],first.last,[IPv6:::b4],IPv6 domain is valid
+first.last@[IPv6:::b3:b4],first.last,[IPv6:::b3:b4],IPv6 domain is valid
+first.last@[IPv6:a1::b4],first.last,[IPv6:a1::b4],IPv6 domain is valid
+first.last@[IPv6:a1::],first.last,[IPv6:a1::],IPv6 domain is valid
+first.last@[IPv6:a1:a2::],first.last,[IPv6:a1:a2::],IPv6 domain is valid
+first.last@[IPv6:0123:4567:89ab:cdef::],first.last,[IPv6:0123:4567:89ab:cdef::],IPv6 domain is valid
+first.last@[IPv6:0123:4567:89ab:CDEF::],first.last,[IPv6:0123:4567:89ab:CDEF::],IPv6 domain is valid
+first.last@[IPv6:::12.34.56.78],first.last,[IPv6:::12.34.56.78],IPv6 domain is valid
+first.last@[IPv6:1111:2222:3333::4444:12.34.56.78],first.last,[IPv6:1111:2222:3333::4444:12.34.56.78],IPv6 domain is valid
+first.last@[IPv6:1111:2222:3333:4444:5555:6666:12.34.56.78],first.last,[IPv6:1111:2222:3333:4444:5555:6666:12.34.56.78],IPv6 domain is valid
+first.last@[IPv6:1111:2222:3333::4444:5555:12.34.56.78],first.last,[IPv6:1111:2222:3333::4444:5555:12.34.56.78],IPv6 domain is valid
+aaa@[123.123.123.123],aaa,[123.123.123.123],IPv4 domain is valid
+first.last@[IPv6:::a3:a4:b1:ffff:11.22.33.44],first.last,[IPv6:::a3:a4:b1:ffff:11.22.33.44],IPv6 domain is valid
+first.last@[IPv6:::a2:a3:a4:b1:ffff:11.22.33.44],first.last,[IPv6:::a2:a3:a4:b1:ffff:11.22.33.44],IPv6 domain is valid
+first.last@[IPv6:a1:a2:a3:a4::11.22.33.44],first.last,[IPv6:a1:a2:a3:a4::11.22.33.44],IPv6 domain is valid
+first.last@[IPv6:a1:a2:a3:a4:b1::11.22.33.44],first.last,[IPv6:a1:a2:a3:a4:b1::11.22.33.44],IPv6 domain is valid
+first.last@[IPv6:a1::11.22.33.44],first.last,[IPv6:a1::11.22.33.44],IPv6 domain is valid
+first.last@[IPv6:a1:a2::11.22.33.44],first.last,[IPv6:a1:a2::11.22.33.44],IPv6 domain is valid
+first.last@[IPv6:0123:4567:89ab:cdef::11.22.33.44],first.last,[IPv6:0123:4567:89ab:cdef::11.22.33.44],IPv6 domain is valid
+first.last@[IPv6:0123:4567:89ab:CDEF::11.22.33.44],first.last,[IPv6:0123:4567:89ab:CDEF::11.22.33.44],IPv6 domain is valid
+first.last@[IPv6:a1::b2:11.22.33.44],first.last,[IPv6:a1::b2:11.22.33.44],IPv6 domain is valid
++@b.c,+,b.c,A single + character is a valid local-part
+TEST@test.org,TEST,test.org,An all-uppercase local-part is valid
+1234567890@test.org,1234567890,test.org,An all-numeric local-part is valid
+test-test@test.org,test-test,test.org,A simple valid email address
+t*est@test.org,t*est,test.org,Unusual character * is allowed in the local-part
++1~1+@test.org,+1~1+,test.org,Unusual character ~ is allowed in the local-part
+{_test_}@test.org,{_test_},test.org,Unusual characters { } are allowed in the local-part
+test@123.123.123.x123,test,123.123.123.x123,An all-numeric domain (except for the TLD) is valid
+cdburgess+!#$%&'*-/=?+_{}|~test@gmail.com,cdburgess+!#$%&'*-/=?+_{}|~test,gmail.com,Unusual local-part characters are valid
 valid@about.museum,valid,about.museum,Simple valid address with unique TLD
-a@bar,a,bar,
-a-b@bar.com,a-b,bar.com,
+a@bar,a,bar,A valid local-part only needs at least one character
+a-b@bar.com,a-b,bar.com,A simple valid address
 +@b.com,+,b.com,The plus symbol is a valid local-part
-cal(foo\@bar)@iamcal.com,cal(foo\@bar),iamcal.com,
-(comment)test@test.org,(comment)test,test.org,
-(foo)cal(bar)@(baz)iamcal.com(quux),(foo)cal(bar),(baz)iamcal.com(quux),
-cal(foo\)bar)@iamcal.com,cal(foo\)bar),iamcal.com,
-cal(woo(yay)hoopla)@iamcal.com,cal(woo(yay)hoopla),iamcal.com,
-first(Welcome to&#13;&#10; the ("wonderful" (!)) world&#13;&#10; of email)@test.org,first(Welcome to&#13;&#10; the ("wonderful" (!)) world&#13;&#10; of email),test.org,
-pete(his account)@silly.test(his host),pete(his account),silly.test(his host),
-first(abc\(def)@test.org,first(abc\(def),test.org,
-a(a(b(c)d(e(f))g)h(i)j)@test.org,a(a(b(c)d(e(f))g)h(i)j),test.org,
-c@(Chris's host.)public.example,c,(Chris's host.)public.example,
+cal(foo\@bar)@iamcal.com,cal(foo\@bar),iamcal.com,A basic address with a valid comment and escaped at-sign
+(comment)test@test.org,(comment)test,test.org,A basic address with a valid comment
+(foo)cal(bar)@(baz)iamcal.com(quux),(foo)cal(bar),(baz)iamcal.com(quux),Comments in the domain are allowed
+cal(foo\)bar)@iamcal.com,cal(foo\)bar),iamcal.com,A comment with an escaped ) character is allowed
+cal(woo(yay)hoopla)@iamcal.com,cal(woo(yay)hoopla),iamcal.com,Nested comments are allowed
+first(Welcome to&#13;&#10; the ("wonderful" (!)) world&#13;&#10; of email)@test.org,first(Welcome to&#13;&#10; the ("wonderful" (!)) world&#13;&#10; of email),test.org,A very complicated address with comments that is valid
+pete(his account)@silly.test(his host),pete(his account),silly.test(his host),A comment with whitespace is allowed
+first(abc\(def)@test.org,first(abc\(def),test.org,A comment with an escaped ( character is allowed
+a(a(b(c)d(e(f))g)h(i)j)@test.org,a(a(b(c)d(e(f))g)h(i)j),test.org,Multiple levels of nested comments are allowed
+c@(Chris's host.)public.example,c,(Chris's host.)public.example,Characters ' and . are allowed within comments
 a@b.co-foo.uk,a,b.co-foo.uk,The - character is allowed within a domain part
 _Yosemite.Sam@test.org,_Yosemite.Sam,test.org,Underscore is allowed in the local-part
 ~@test.org,~,test.org,The ~ character is a valid local-part
-Iinsist@(that comments are allowed)this.is.ok,Iinsist,(that comments are allowed)this.is.ok,
-test@Bücher.ch,test,Bücher.ch,
-あいうえお@example.com,あいうえお,example.com,
-Pelé@example.com,Pelé,example.com,
-δοκιμή@παράδειγμα.δοκιμή,δοκιμή,παράδειγμα.δοκιμή,
-我買@屋企.香港,我買,屋企.香港,
-二ノ宮@黒川.日本,二ノ宮,黒川.日本,
-медведь@с-балалайкой.рф,медведь,с-балалайкой.рф,
-संपर्क@डाटामेल.भारत,संपर्क,डाटामेल.भारत,
-email@example.com (Joe Smith),email,example.com (Joe Smith),
-cal@iamcal(woo).(yay)com,cal,iamcal(woo).(yay)com,
-first(abc.def).last@test.org,first(abc.def).last,test.org,
-first(a"bc.def).last@test.org,first(a"bc.def).last,test.org,
-first.(")middle.last(")@test.org,first.(")middle.last("),test.org,
-first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com,first.last,x(1234567890123456789012345678901234567890123456789012345678901234567890).com,
+Iinsist@(that comments are allowed)this.is.ok,Iinsist,(that comments are allowed)this.is.ok,Comments in the domain are allowed
+test@Bücher.ch,test,Bücher.ch,Unicode domains are allowed
+あいうえお@example.com,あいうえお,example.com,Unicode local-parts are allowed
+Pelé@example.com,Pelé,example.com,Unicode local-parts are allowed
+δοκιμή@παράδειγμα.δοκιμή,δοκιμή,παράδειγμα.δοκιμή,A combination of unicode local-parts and domains are allowed
+我買@屋企.香港,我買,屋企.香港,A combination of unicode local-parts and domains are allowed
+二ノ宮@黒川.日本,二ノ宮,黒川.日本,A combination of unicode local-parts and domains are allowed
+медведь@с-балалайкой.рф,медведь,с-балалайкой.рф,A combination of unicode local-parts and domains are allowed
+संपर्क@डाटामेल.भारत,संपर्क,डाटामेल.भारत,A combination of unicode local-parts and domains are allowed
+email@example.com (Joe Smith),email,example.com (Joe Smith),Trailing domains comments are allowed
+cal@iamcal(woo).(yay)com,cal,iamcal(woo).(yay)com,Comments are allowed between dot-separated domain parts
+first(abc.def).last@test.org,first(abc.def).last,test.org,Comments are allowed inside the local-part if dot-separated
+first(a"bc.def).last@test.org,first(a"bc.def).last,test.org,The " character is allowed within comments
+first.(")middle.last(")@test.org,first.(")middle.last("),test.org,The " character is allowed within dot-separated comments
+first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com,first.last,x(1234567890123456789012345678901234567890123456789012345678901234567890).com,Comments do not count against the length of the domain
 user%uucp!path@berkeley.edu,user%uucp!path,berkeley.edu,The % and ! symbols are valid in the local-part
 first().last@test.org,first().last,test.org,Empty comments are valid
 mymail\@hello@hotmail.com,mymail\@hello,hotmail.com,Escaped @ symbols are allowed
 Abc\@def@test.org,Abc\@def,test.org,Escaped @ symbols are allowed
 Fred\ Bloggs@test.org,Fred\ Bloggs,test.org,Whitespace is allowed when quoted or between parts
-Joe.\\Blow@test.org,Joe.\\Blow,test.org,
+Joe.\\Blow@test.org,Joe.\\Blow,test.org,The backslash \ character is allowed when escaped
 test\<angled@mytest.edu,test\<angled,mytest.edu,Angled bracket is allowed when quoted
-{^c\@**Dog^}@cartoon.com,{^c\@**Dog^},cartoon.com,
+{^c\@**Dog^}@cartoon.com,{^c\@**Dog^},cartoon.com,A simple valid address with unusual characters
 phil.h\@\@ck@haacked.com,phil.h\@\@ck,haacked.com,Escaped @ symbols are allowed
 abc\\@test.org,abc\\,test.org,Escaped backslash is allowed
 Joe A Smith <email@example.com>,email,example.com,Quoted identifier address
