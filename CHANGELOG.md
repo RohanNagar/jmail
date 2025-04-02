@@ -132,18 +132,19 @@ the `Email` object (similar to the `normalize()` method).
   ```
 
 
-### Support for Leading and Trailing Dots in the Local-Part (GMail Allowed)
+### Support for Leading and Trailing Dots in the Local-Part
 
-While technically disallowed under published RFCs, GMail considers email addresses that have
-local-parts that start with or end with a dot `.` character as valid. For example, GMail
-considers `.my.email.@gmail.com` valid, even though it is not actually valid according to RFC.
+While technically disallowed under published RFCs, some email providers (ex: GMail)
+consider email addresses that have local-parts that start with or end with a dot `.` character
+as valid. For example, GMail considers `.my.email.@gmail.com` valid, even though it is not
+actually valid according to RFC.
 
 JMail now gives you the option to consider these addresses valid as well. You must use an
-`EmailValidator` with the `allowGmailDots` rule added to it to allow these addresses to pass validation.
+`EmailValidator` with the `allowNonstandardDots` rule added to it to allow these addresses to pass validation.
 
 ```java
 EmailValidator validator = JMail.strictValidator()
-        .allowGmailDots();
+        .allowNonstandardDots();
 
 validator.isValid(".my.email.@gmail.com"); // returns true
 ```

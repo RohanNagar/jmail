@@ -211,14 +211,14 @@ class JMailTest {
   }
 
   @Nested
-  class AllowGmailDots {
+  class AllowNonstandardDots {
     @ParameterizedTest(name = "{0}")
     @MethodSource({
         "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails",
         "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidWhitespaceEmails",
         "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidControlEmails"})
     @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;", numLinesToSkip = 1)
-    void ensureFailuresWhenAllowGmailDotsIsTrue(String email) {
+    void ensureFailures(String email) {
       // This test only works for addresses that will fail
       // even when we allow a starting or trailing dot in the local-part
       assumeTrue(email.charAt(0) != '.' && !email.contains(".@"));
@@ -228,7 +228,7 @@ class JMailTest {
     }
 
     @Test
-    void ensureOnlyDotFailsWhenAllowGmailDotsIsTrue() {
+    void ensureOnlyDotFails() {
       assertThat(JMail.validate(".@test.com", true))
           .returns(true, EmailValidationResult::isFailure)
           .returns(FailureReason.LOCAL_PART_MISSING, EmailValidationResult::getFailureReason);;

@@ -48,12 +48,12 @@ public final class EmailValidator {
       = ValidationRules::requireAscii;
 
   private final Map<Predicate<Email>, FailureReason> validationPredicates;
-  private final boolean allowGmailDots;
+  private final boolean allowNonstandardDots;
 
   EmailValidator(Map<Predicate<Email>, FailureReason> validationPredicates,
-                 boolean allowGmailDots) {
+                 boolean allowNonstandardDots) {
     this.validationPredicates = Collections.unmodifiableMap(validationPredicates);
-    this.allowGmailDots = allowGmailDots;
+    this.allowNonstandardDots = allowNonstandardDots;
   }
 
   EmailValidator() {
@@ -80,7 +80,7 @@ public final class EmailValidator {
     Map<Predicate<Email>, FailureReason> ruleMap = new HashMap<>(validationPredicates);
     ruleMap.putAll(rules);
 
-    return new EmailValidator(ruleMap, allowGmailDots);
+    return new EmailValidator(ruleMap, allowNonstandardDots);
   }
 
   /**
@@ -170,14 +170,14 @@ public final class EmailValidator {
    * {@code .} character.</p>
    *
    * <p>While not allowed according to RFC, a leading or trailing dot character in the local-part
-   * <strong>is allowed</strong> by GMail, hence the naming of this method.</p>
+   * <strong>is allowed</strong> by some mail providers (such as GMail).</p>
    *
    * <p>For example, {@code ".test@gmail.com"} would be considered valid if you use the
    * {@code EmailValidator} returned by this method.</p>
    *
    * @return the new {@code EmailValidator} instance
    */
-  public EmailValidator allowGmailDots() {
+  public EmailValidator allowNonstandardDots() {
     return new EmailValidator(this.validationPredicates, true);
   }
 
@@ -361,7 +361,7 @@ public final class EmailValidator {
    * @return the result of the validation
    */
   public boolean isValid(String email) {
-    return JMail.validate(email, allowGmailDots)
+    return JMail.validate(email, allowNonstandardDots)
         .getEmail()
         .filter(e -> !testPredicates(e).isPresent())
         .isPresent();
@@ -404,7 +404,7 @@ public final class EmailValidator {
    *         {@link Email} object if successful, or the {@link FailureReason} if not
    */
   public EmailValidationResult validate(String email) {
-    EmailValidationResult result = JMail.validate(email, allowGmailDots);
+    EmailValidationResult result = JMail.validate(email, allowNonstandardDots);
 
     // If failed basic validation, just return it
     if (!result.getEmail().isPresent()) return result;
@@ -425,7 +425,7 @@ public final class EmailValidator {
    *         is invalid according to all registered validation rules
    */
   public Optional<Email> tryParse(String email) {
-    return JMail.validate(email, allowGmailDots).getEmail()
+    return JMail.validate(email, allowNonstandardDots).getEmail()
         .filter(e -> !testPredicates(e).isPresent());
   }
 

@@ -129,24 +129,28 @@ public final class JMail {
   }
 
   /**
-   * Package-private validate method that exposes an additional option {@code allowGmailDots}.
+   * Package-private validate method that exposes an additional option {@code allowNonstandardDots}.
    *
    * @param email the email address to parse and validate
-   * @param allowGmailDots true if a leading or trailing dot in the local-part should be allowed
+   * @param allowNonstandardDots true if a leading or trailing dot in the local-part should be
+   *                             allowed
    * @return a {@link EmailValidationResult} containing success or failure, along with the parsed
    *         {@link Email} object if successful, or the {@link FailureReason} if not
    */
-  static EmailValidationResult validate(String email, boolean allowGmailDots) {
-    return validateInternal(email, allowGmailDots);
+  static EmailValidationResult validate(String email, boolean allowNonstandardDots) {
+    return validateInternal(email, allowNonstandardDots);
   }
 
   /**
    * Internal parsing method.
    *
    * @param email the email address to parse
+   * @param allowNonstandardDots true if a leading or trailing dot in the local-part should be
+   *                             allowed
    * @return a new {@link Email} instance if valid, empty if invalid
    */
-  private static EmailValidationResult validateInternal(String email, boolean allowGmailDots) {
+  private static EmailValidationResult validateInternal(String email,
+                                                        boolean allowNonstandardDots) {
     // email cannot be null
     if (email == null) return EmailValidationResult.failure(FailureReason.NULL_ADDRESS);
 
@@ -180,9 +184,8 @@ public final class JMail {
     if (size > 320) return EmailValidationResult.failure(FailureReason.ADDRESS_TOO_LONG);
 
     // email cannot start with '.'
-    // email cannot start with '.'
     // unless we are configured to allow it (GMail doesn't care about a starting dot)
-    if (email.charAt(0) == '.' && !allowGmailDots) {
+    if (email.charAt(0) == '.' && !allowNonstandardDots) {
       return EmailValidationResult.failure(FailureReason.STARTS_WITH_DOT);
     }
 
@@ -240,7 +243,7 @@ public final class JMail {
         }
 
         EmailValidationResult innerResult
-            = validateInternal(email.substring(i + 1, size - 1), allowGmailDots);
+            = validateInternal(email.substring(i + 1, size - 1), allowNonstandardDots);
 
         // If the address passed validation, return success with the identifier included.
         // Otherwise, just return the failed internal result
@@ -530,7 +533,7 @@ public final class JMail {
     // Check that local-part does not end with '.'
     if (localPart.charAt(localPart.length() - 1) == '.') {
       // unless we are configured to allow it (GMail doesn't care about a trailing dot)
-      if (!allowGmailDots) {
+      if (!allowNonstandardDots) {
         return EmailValidationResult.failure(FailureReason.LOCAL_PART_ENDS_WITH_DOT);
       }
 
