@@ -36,10 +36,10 @@ following reasons:
    email address! It clearly is not, as it has two `@` characters. JMail correctly
    considers this address invalid. You can
    [see a full comparison of correctness and try it out for yourself online](https://www.rohannagar.com/jmail/).
-   
+
 2. JMail is **_faster_** than other libraries by, on average, at least
    2x, thanks in part to lack of regex.
-   
+
 3. JMail has **_zero dependencies_** and is very lightweight.
 
 4. JMail is **_modern_**. It is built for Java 8+, and provides many
@@ -65,21 +65,21 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>1.6.2</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 Or in your `build.gradle`:
 
 ```groovy
-implementation 'com.sanctionco.jmail:jmail:1.6.2'
+implementation 'com.sanctionco.jmail:jmail:2.0.0'
 ```
 
 ## Usage
 
 ### Standard Email Validation
 
-To perform standard email validation, use the static methods
+To perform standard, RFC-compliant email validation, you can use the static methods
 available in `JMail`. For example, to test validation:
 
 ```java
@@ -133,7 +133,8 @@ EmailValidator validator = JMail.strictValidator()
     // Require that the top-level-domain is ".com"
     .requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM)
     // Require that the local-part starts with "allowed"
-    .withRule(email -> email.localPart().startsWith("allowed"));
+    .withRule(email -> email.localPart().startsWith("allowed"),
+            new FailureReason("DOES_NOT_START_WITH_ALLOWED"));
 
 boolean valid = validator.isValid("allowed-email@test.com");
 boolean invalidWithoutTld = validator.isValid("allowed@test");
@@ -193,10 +194,10 @@ JMail.tryParse("test@example.com")
         () -> log.error("Could not send email to invalid email"));
 ```
 
-#### Get a normalized version of the email address
+#### Get different versions of the email address
 
 ```java
-// Get a normalized email address without any comments
+// Get a normalized email address
 Optional<String> normalized = JMail.tryParse("admin(comment)@mysite.org")
     .map(Email::normalized);
 
@@ -204,16 +205,39 @@ Optional<String> normalized = JMail.tryParse("admin(comment)@mysite.org")
 ```
 
 ```java
-// Get a normalized email address and strip quotes if the address would
-// still be valid
-Optional<String> normalized = JMail.tryParse("\"test.1\"@mysite.org")
-        .map(e -> e.normalized(true));
+// Get a normalized email address and remove any sub-addressing when normalizing
+Optional<String> normalized = JMail.tryParse("test.1+mytag@mysite.org")
+        .map(e -> e.normalized(
+            NormalizationOptions.builder()
+                    .removeSubAddress()
+                    .build()));
 
 // normalized == Optional.of("test.1@mysite.org")
 ```
 
-> **Note:** You can also set the `-Djmail.normalize.strip.quotes=true` JVM property to
-strip quotes when calling `normalized()` without parameters.
+```java
+// Get a reference (MD5 hash) of the email address
+Optional<String> reference = JMail.tryParse("test@gmail.com")
+        .map(Email::reference);
+
+// redacted == Optional.of("1aedb8d9dc4751e229a335e371db8058");
+```
+
+```java
+// Get a redacted version of the email address
+Optional<String> redacted = JMail.tryParse("test@gmail.com")
+        .map(Email::redacted);
+
+// redacted == Optional.of("{a94a8fe5ccb19ba61c4c0873d391e987982fbbd3}@gmail.com");
+```
+
+```java
+// Get a munged version of the email address
+Optional<String> redacted = JMail.tryParse("test@gmail.com")
+        .map(Email::munged);
+
+// redacted == Optional.of("te*****@gm*****");
+```
 
 ### Additional Validation Rules
 
@@ -325,6 +349,17 @@ other than ASCII characters.
 JMail.validator().requireAscii();
 ```
 
+#### Allow Nonstandard Dots in the Local-Part
+
+While technically disallowed under published RFCs, some email providers (ex: GMail)
+consider email addresses that have local-parts that start with or end with a dot `.` character
+as valid. For example, GMail considers `.my.email.@gmail.com` valid, even though it is not
+actually valid according to RFC.
+
+```java
+JMail.validator().allowNonstandardDots();
+```
+
 ### Bonus: IP Address Validation
 
 Since validating email addresses requires validation of IP addresses,
@@ -379,8 +414,8 @@ Optional<String> validated = InternetProtocolAddress.validate(ipv4);
 
 // The validate() method allows for convenience such as:
 String ip = InternetProtocolAddress
-    .validate("notvalid")
-    .orElse("0.0.0.0");
+        .validate("notvalid")
+        .orElse("0.0.0.0");
 ```
 
 ```java
@@ -390,8 +425,8 @@ Optional<String> validated = InternetProtocolAddress.validate(ipv6);
 
 // The validate() method allows for convenience such as:
 String ip = InternetProtocolAddress
-    .validate("notvalid")
-    .orElse("2001:db8::1234:5678");
+        .validate("notvalid")
+        .orElse("2001:db8::1234:5678");
 ```
 
 ### Contributing

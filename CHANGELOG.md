@@ -1,11 +1,11 @@
 # JMail Changelog
 
-## 2.0.0 (Upcoming)
+## 2.0.0
 
 ### Breaking Changes
 
-- By default, `Email#normalized` now lowercases the email address **and** removes any extraneous quotes in the local-part of the address.
-  To revert this behavior so that it behaves the same as v1, use the following:
+- By default, `Email#normalized` now lowercases the email address **and** removes any extraneous quotes in
+  the local-part of the address. To revert this behavior so that it behaves the same as v1, use the following:
   
   ```
   myEmailObject.normalized(
@@ -24,8 +24,13 @@
   Quotes are stripped by default now. If you need to disable quote stripping, use `NormalizationOptionsBuilder#keepQuotes()`.
 
 
-- `FailureReason` was switched from an enum to a class in order to support custom failure reasons, so you cannot
-  use it in a `switch` statement.
+- `FailureReason` was switched from an enum to a class in order to support custom failure reasons, so it is no longer
+  possible to use it in a `switch` statement.
+
+
+- Email addresses that fail validation due to additional rules added to the `EmailValidator` (such as
+  `disallowIpDomain()` or `requireValidMXRecord()`) no longer return a generic `FailureReason.FAILED_CUSTOM_VALIDATION`
+  in the `EmailValidationResult`. Instead, it returns a more specific `FailureReason` depending on the rule.
 
 
 - `FailureReason.MISSING_TOP_LEVEL_DOMAIN` was changed to `FailureReason.MISSING_FINAL_DOMAIN_PART`.
@@ -35,10 +40,6 @@
   is now used properly: if you use the rule `requireTopLevelDomain()`, any address that is missing the TLD will give
   that failure reason.
 
-
-- Email addresses that fail validation due to additional rules added to the `EmailValidator` (such as
-  `disallowIpDomain()` or `requireValidMXRecord()`) no longer return a generic `FailureReason.FAILED_CUSTOM_VALIDATION`
-  in the `EmailValidationResult`. Instead, it returns a more specific `FailureReason` depending on the rule. 
 
 ### FailureReason Improvements
 
@@ -83,10 +84,10 @@ assertEquals(nonGmailFailure, result.getFailureReason());
 #### New Normalization Methods
 
 This version introduces a new `NormalizationOptions` class that is used to provide
-configuration of the behavior of the `Email#normalize()` method. See the table below to see
+configuration of the behavior of the `Email#normalized()` method. See the table below to see
 all the new and existing options.
 
-In v2.0.0, you can use either `Email#normalize()` (with no parameters) or `Email#normalize(NormalizationOptions options)`.
+In v2.0.0, you can use either `Email#normalized()` (with no parameters) or `Email#normalized(NormalizationOptions options)`.
 
 The first method without parameters will return a normalized email address based on the default
 normalization options. The second method allows you to provide your own `NormalizationOptions` at runtime
@@ -109,7 +110,7 @@ Thanks, @Sprokof, for contributing (introducing `removeDots` and `adjustCase` op
 ### Additional Address Formats
 
 Version 2.0.0 introduces new additional email address formats that can be obtained from
-the `Email` object (similar to the `normalize()` method).
+the `Email` object (similar to the `normalized()` method).
 
 - `Email#reference()` returns an MD5 hash of the normalized email address.
 
