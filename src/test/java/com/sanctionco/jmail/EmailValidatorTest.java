@@ -93,7 +93,12 @@ class EmailValidatorTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"test@123.123.123.com", "first.last@example.com"})
+    @ValueSource(strings = {
+        "test@123.123.123.com",
+        "first.last@example.com",
+        "user@[123.123.123.123]",
+        "first.last@[IPv6:::12.34.56.78]"
+    })
     void allowsOtherAddresses(String email) {
       runValidTest(JMail.validator().requireTopLevelDomain(), email);
     }

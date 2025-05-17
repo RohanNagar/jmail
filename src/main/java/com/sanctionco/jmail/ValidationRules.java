@@ -48,7 +48,8 @@ public final class ValidationRules {
    * @return true if this email address has a top-level domain, or false if it does not
    */
   public static boolean requireTopLevelDomain(Email email) {
-    return !email.topLevelDomain().equals(TopLevelDomain.NONE);
+    // IP address domains have an inherent top level domain
+    return email.isIpAddress() || !email.topLevelDomain().equals(TopLevelDomain.NONE);
   }
 
   /**
