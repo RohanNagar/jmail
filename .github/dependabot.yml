@@ -9,6 +9,9 @@ updates:
       test-dependencies:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "nl.jqno.equalsverifier:equalsverifier"
+        update-types: [ "version-update:semver-major" ]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
