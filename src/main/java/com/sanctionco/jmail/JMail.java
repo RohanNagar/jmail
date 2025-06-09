@@ -176,6 +176,12 @@ public final class JMail {
       fullSourceRoute = detail.fullRoute.toString();
 
       email = email.substring(fullSourceRoute.length());
+
+      // If the actual email is empty then the source route was valid but
+      // the entire address just ended with a : character
+      if (email.isEmpty()) {
+        return EmailValidationResult.failure(FailureReason.BEGINS_WITH_AT_SYMBOL);
+      }
     }
 
     int size = email.length();
@@ -682,6 +688,9 @@ public final class JMail {
 
     // If we haven't seen the end of the current part, its invalid
     if (currentDomainPart.length() > 0) return Optional.empty();
+
+    // If we haven't seen the end of the current source route, its invalid
+    if (sourceRoute.length() > 0) return Optional.empty();
 
     // If we needed a new domain (last saw a comma), fail
     if (requireNewDomain) return Optional.empty();

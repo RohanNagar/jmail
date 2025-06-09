@@ -141,3 +141,5 @@ Joe A Smith <email@-example.com-> ;                                             
 Joe A Smith <email> ;                                                                  The address part must be valid (missing @ character and domain)
 ABC.DEF@GHI. (MNO) ;                                                                   The domain cannot end with the . character even with an ending comment
 test@test.com(comment ;                                                                A comment at the end of the domain must have closing parenthesis
+@wp.pl.dwa. ;                                                                          Cannot start with an @ character or end with a .
+@wp.pl.dwa: ;                                                                          An address with source routing cannot have a missing final email address
