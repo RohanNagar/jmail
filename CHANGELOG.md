@@ -1,5 +1,12 @@
 # JMail Changelog
 
+## 2.0.1
+
+- Fix bug where using the rule `requireTopLevelDomain()` would incorrectly invalidate addresses that use IP domains (since those inherently have a TLD). (Thanks @ahegyes for reporting!)
+- Fix bug where addresses starting with an at (`@`) character and ending with either a dot `.` or a colon `:` character threw a `StringIndexOutOfBoundsException` instead of correctly invalidating the address. (Thanks @alexc-scopely for reporting!)
+- Add new `ValidationRule` `disallowSingleCharacterTopLevelDomains()` to consider email addresses with TLDs that are only a single character (such as `test.c`) as invalid. (Thanks @alexc-scopely for suggesting!)
+
+---
 ## 2.0.0
 
 ### Breaking Changes

@@ -278,6 +278,18 @@ JMail.validator().disallowExplicitSourceRouting();
 
 > Note: `JMail.strictValidator()` includes this rule automatically.
 
+#### Disallow Single Character Top Level Domains
+
+A common user error is single-character top level domains (such as accidentally typing
+`test@test.c` instead of `test@test.com`). These single character TLDs don't actually exist
+and are not resolvable.
+
+You can require that addresses do not have these single-character TLDs:
+
+```java
+JMail.validator().disallowSingleCharacterTopLevelDomains();
+```
+
 #### Disallow Reserved Domains
 
 As specified in [RFC 2606](https://datatracker.ietf.org/doc/html/rfc2606),
