@@ -176,6 +176,24 @@ class EmailValidatorTest {
   }
 
   @Nested
+  class DisallowSingleCharacterTopLevelDomains {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"test@123.123.123.o", "first.last@example.n", "test@test.c"})
+    void rejects(String email) {
+      runInvalidTest(
+          JMail.validator().disallowSingleCharacterTopLevelDomains(),
+          email,
+          FailureReason.SINGLE_CHARACTER_TOP_LEVEL_DOMAIN);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"test@123.123.123.co", "first.last@example.com", "x@test"})
+    void allows(String email) {
+      runValidTest(JMail.validator().disallowSingleCharacterTopLevelDomains(), email);
+    }
+  }
+
+  @Nested
   class DisallowObsoleteWhitespace {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {

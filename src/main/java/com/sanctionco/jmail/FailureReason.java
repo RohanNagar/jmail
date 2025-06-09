@@ -296,6 +296,14 @@ public final class FailureReason {
       = new FailureReason("MISSING_TOP_LEVEL_DOMAIN");
 
   /**
+   * If the rule {@link EmailValidator#disallowSingleCharacterTopLevelDomains()} is added to
+   * your {@code EmailValidator}, then this failure indicates the email address contained
+   * a top level domain that was only a single character.
+   */
+  public static final FailureReason SINGLE_CHARACTER_TOP_LEVEL_DOMAIN
+      = new FailureReason("SINGLE_CHARACTER_TOP_LEVEL_DOMAIN");
+
+  /**
    * If the rule {@link EmailValidator#requireAscii()} is added to your
    * {@code EmailValidator}, then this failure indicates the email address contains non-ACII
    * characters.

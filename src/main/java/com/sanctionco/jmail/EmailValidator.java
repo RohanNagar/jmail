@@ -34,6 +34,8 @@ public final class EmailValidator {
       = ValidationRules::disallowIpDomain;
   private static final Predicate<Email> REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE
       = ValidationRules::requireTopLevelDomain;
+  private static final Predicate<Email> DISALLOW_SINGLE_CHAR_TOP_LEVEL_DOMAINS_PREDICATE
+      = ValidationRules::disallowSingleCharacterTopLevelDomains;
   private static final Predicate<Email> DISALLOW_EXPLICIT_SOURCE_ROUTING_PREDICATE
       = ValidationRules::disallowExplicitSourceRouting;
   private static final Predicate<Email> DISALLOW_QUOTED_IDENTIFIERS_PREDICATE
@@ -211,6 +213,22 @@ public final class EmailValidator {
     return withRule(
         REQUIRE_TOP_LEVEL_DOMAIN_PREDICATE,
         FailureReason.MISSING_TOP_LEVEL_DOMAIN);
+  }
+
+  /**
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#disallowSingleCharacterTopLevelDomains(Email)} rule.
+   * Email addresses that have top level domains that are just a single character
+   * fail validation with {@link FailureReason#SINGLE_CHARACTER_TOP_LEVEL_DOMAIN}.
+   *
+   * <p>For example, the email address {@code "name@host.c"} would be invalid.
+   *
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator disallowSingleCharacterTopLevelDomains() {
+    return withRule(
+        DISALLOW_SINGLE_CHAR_TOP_LEVEL_DOMAINS_PREDICATE,
+        FailureReason.SINGLE_CHARACTER_TOP_LEVEL_DOMAIN);
   }
 
   /**

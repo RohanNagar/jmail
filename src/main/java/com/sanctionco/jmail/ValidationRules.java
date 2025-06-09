@@ -53,6 +53,18 @@ public final class ValidationRules {
   }
 
   /**
+   * Rejects an email address that has a TLD with only one (or zero) character(s). For example,
+   * the address {@code "test@server.c"} would be rejected.
+   *
+   * @param email the email address to validate
+   * @return true if the email address has a TLD with more than one character, or false if not
+   */
+  public static boolean disallowSingleCharacterTopLevelDomains(Email email) {
+    return email.topLevelDomain().equals(TopLevelDomain.NONE)
+        || email.topLevelDomain().stringValue().length() > 1;
+  }
+
+  /**
    * Rejects an email address that uses explicit source routing. Explicit source routing has been
    * <a href="https://datatracker.ietf.org/doc/html/rfc5321#section-3.6.1">deprecated</a>
    * as of RFC 5321 and you SHOULD NOT use explicit source routing except under unusual
