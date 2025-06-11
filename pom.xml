@@ -42,13 +42,13 @@
     <java.minimum.version>1.9</java.minimum.version>
 
     <!-- Plugin versions -->
+    <central-publishing-plugin.version>0.7.0</central-publishing-plugin.version>
     <checkstyle.version>10.25.0</checkstyle.version>
     <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.7</gpg-plugin.version>
     <jacoco.version>0.8.13</jacoco.version>
     <javadoc-plugin.version>3.11.2</javadoc-plugin.version>
-    <nexus-plugin.version>1.7.0</nexus-plugin.version>
     <release-plugin.version>3.1.1</release-plugin.version>
     <source-plugin.version>3.3.1</source-plugin.version>
     <surefire.version>3.5.3</surefire.version>
@@ -62,15 +62,10 @@
 
   <!-- Specify releases to Maven Central -->
   <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
     <repository>
-      <id>ossrh</id>
-      <name>Nexus Release Repository</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <id>central</id>
+      <name>Maven Central</name>
+      <url>https://central.sonatype.com</url>
     </repository>
   </distributionManagement>
 
@@ -146,14 +141,14 @@
 
           <!-- Deploy to Maven Central -->
           <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>${nexus-plugin.version}</version>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>${central-publishing-plugin.version}</version>
             <extensions>true</extensions>
             <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+              <publishingServerId>central</publishingServerId>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
             </configuration>
           </plugin>
         </plugins>
