@@ -42,7 +42,7 @@
     <java.minimum.version>1.9</java.minimum.version>
 
     <!-- Plugin versions -->
-    <central-publishing-plugin.version>0.7.0</central-publishing-plugin.version>
+    <central-publishing-plugin.version>0.8.0</central-publishing-plugin.version>
     <checkstyle.version>10.25.0</checkstyle.version>
     <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
