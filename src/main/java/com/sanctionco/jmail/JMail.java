@@ -565,11 +565,13 @@ public final class JMail {
     }
 
     // Ensure the last domain part (TLD) is not all numeric
-    if (currentDomainPart.toString().chars().allMatch(Character::isDigit)) {
+    String tld = currentDomainPart.toString();
+
+    if (tld.chars().allMatch(Character::isDigit)) {
       return EmailValidationResult.failure(FailureReason.NUMERIC_TLD);
     }
 
-    domainParts.add(currentDomainPart.toString());
+    domainParts.add(tld);
 
     // Validate the characters in the domain if it is not an IP address
     if (!isIpAddress && !isValidIdn(domainWithoutComments.toString())) {
