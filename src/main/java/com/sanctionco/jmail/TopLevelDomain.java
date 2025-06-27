@@ -69,7 +69,7 @@ public final class TopLevelDomain {
   }
 
   private static boolean isValidTopLevelDomain(String domain) {
-    if (domain == null || domain.isEmpty()) return false;
+    if (domain.isEmpty()) return false;
 
     int size = domain.length();
 
