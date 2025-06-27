@@ -163,10 +163,13 @@ class JMailTest {
       "@.relay,2nd.relay:user@final.domain",
       "@1st.1111,2nd.relay:user@final.domain",
       "@hello.world,user@final.domain",
+      "@hello.world,",
       "@1st.relay,@2nd.relay:user@-final.domain",
       "@1st.relay,@2nd.relay:invalid",
       "@@1st.relay,@2nd.relay:user@final.domain",
       "@1st.r_elay,@2nd.relay:user@final.domain",
+      "@abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkl.relay,"
+          + "@2nd.relay:user@final.domain"
   })
   void ensureInvalidSourceRoutingAddressesFail(String email) {
     assertThat(JMail.tryParse(email)).isNotPresent();

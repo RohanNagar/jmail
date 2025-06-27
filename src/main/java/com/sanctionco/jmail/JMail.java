@@ -437,7 +437,8 @@ public final class JMail {
           // validate IP address and be done
           String ipDomain = email.substring(i);
 
-          if (!ipDomain.startsWith("[") || !ipDomain.endsWith("]") || ipDomain.length() < 3) {
+          // We already know it starts with a '[', so make sure it ends with a ']'
+          if (!ipDomain.endsWith("]") || ipDomain.length() < 3) {
             return EmailValidationResult.failure(FailureReason.INVALID_IP_DOMAIN);
           }
 

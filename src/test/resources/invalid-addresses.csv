@@ -128,6 +128,7 @@ first(middle)last@test.org ;                                                    
 Unicode NULL \␀@char.com ;                                                             The escaped unicode null character is only allowed within quotes
 "test"test@test.com ;                                                                  Quotes must be dot separated
 ()@test.com ;                                                                          Empty comment is not allowed
+() ;                                                                                   An email address cannot just be a comment
 test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames ; The top level domain can only be 63 characters long
 test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com ;     Each domain part can only be 63 characters long
 invalid@[1] ;                                                                          The domain literal is not a valid IPv4 or IPv6 address
