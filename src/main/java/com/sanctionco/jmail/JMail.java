@@ -189,12 +189,6 @@ public final class JMail {
     // email cannot be more than 320 chars
     if (size > 320) return EmailValidationResult.failure(FailureReason.ADDRESS_TOO_LONG);
 
-    // email cannot start with '.'
-    // unless we are configured to allow it (GMail doesn't care about a starting dot)
-    if (email.charAt(0) == '.' && !allowNonstandardDots) {
-      return EmailValidationResult.failure(FailureReason.STARTS_WITH_DOT);
-    }
-
     // email cannot end with '.'
     if (email.charAt(size - 1) == '.') {
       return EmailValidationResult.failure(FailureReason.ENDS_WITH_DOT);
@@ -205,6 +199,7 @@ public final class JMail {
       return EmailValidationResult.failure(FailureReason.DOMAIN_PART_ENDS_WITH_DASH);
     }
 
+    boolean startsWithDot = false;         // set to true if we start with a dot
     boolean atFound = false;               // set to true when the '@' character is found
     boolean inQuotes = false;              // set to true if we are currently within quotes
     boolean previousDot = false;           // set to true if the previous character is '.'
@@ -241,6 +236,14 @@ public final class JMail {
       char c = email.charAt(i);
 
       if (c >= 128) isAscii = false;
+
+      if (i == 0 && c == '.' && !allowNonstandardDots) {
+        // email cannot start with '.'
+        // unless we are configured to allow it (GMail doesn't care about a starting dot)
+        // we set a flag instead of immediately invalidating the address since it could
+        // start with a dot as part of the identifier
+        startsWithDot = true;
+      }
 
       if (c == '<' && !inQuotes && !previousBackslash) {
         // could be "phrase <address>" format. If not, it's not allowed
@@ -422,6 +425,14 @@ public final class JMail {
         }
       } else {
         // We're in the domain
+
+        // Once we make it to the domain, there is no longer a chance of the address being in
+        // display-name <addr> format anymore. So, if we saw that we started with a '.' character,
+        // it's time to invalidate the address
+        if (startsWithDot) {
+          return EmailValidationResult.failure(FailureReason.STARTS_WITH_DOT);
+        }
+
         if (firstDomainChar && c == '[') {
           // validate IP address and be done
           String ipDomain = email.substring(i);
