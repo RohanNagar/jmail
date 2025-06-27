@@ -1,5 +1,10 @@
 # JMail Changelog
 
+## 2.0.2
+
+- Fix bug where address containing a display name that starts with a dot `.` character would be incorrectly invalidated. (Thanks @utalmighty for reporting!)
+
+---
 ## 2.0.1
 
 - Fix bug where using the rule `requireTopLevelDomain()` would incorrectly invalidate addresses that use IP domains (since those inherently have a TLD). (Thanks @ahegyes for reporting!)

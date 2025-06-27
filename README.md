@@ -65,14 +65,14 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
 </dependency>
 ```
 
 Or in your `build.gradle`:
 
 ```groovy
-implementation 'com.sanctionco.jmail:jmail:2.0.1'
+implementation 'com.sanctionco.jmail:jmail:2.0.2'
 ```
 
 ## Usage
