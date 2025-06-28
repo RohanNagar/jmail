@@ -34,7 +34,7 @@ public final class Email {
 
   Email(String localPart, String localPartWithoutComments, String localPartWithoutQuotes,
         String domain, String domainWithoutComments,
-        String fullSourceRoute, String identifier,
+        String fullSourceRoute,
         List<String> domainParts, List<String> comments, List<String> sourceRoutes,
         boolean isIpAddress, boolean containsWhitespace, boolean isAscii) {
     this.localPart = localPart;
@@ -43,14 +43,14 @@ public final class Email {
     this.domain = domain;
     this.domainWithoutComments = domainWithoutComments;
     this.fullSourceRoute = fullSourceRoute;
-    this.identifier = identifier;
     this.domainParts = Collections.unmodifiableList(domainParts);
     this.comments = Collections.unmodifiableList(comments);
     this.sourceRoutes = Collections.unmodifiableList(sourceRoutes);
     this.isIpAddress = isIpAddress;
     this.containsWhitespace = containsWhitespace;
     this.isAscii = isAscii;
-    this.hasIdentifier = identifier != null && identifier.length() > 0;
+    this.identifier = null;
+    this.hasIdentifier = false;
 
     this.tld = domainParts.size() > 1
         ? TopLevelDomain.fromString(domainParts.get(domainParts.size() - 1))

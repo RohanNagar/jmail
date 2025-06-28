@@ -5,6 +5,8 @@ import com.sanctionco.jmail.normalization.NormalizationOptions;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -29,6 +31,20 @@ class EmailTest {
   @Test
   void ensureEqualsContract() {
     EqualsVerifier.forClass(Email.class).verify();
+  }
+
+  @Test
+  void ensureEmptyIdentifierStringReportsCorrectly() {
+    Optional<Email> email = Email.of("test@test.com");
+
+    assertThat(email)
+        .isPresent().get()
+        .returns(false, Email::hasIdentifier);
+
+    assertThat(new Email(email.get(), null))
+        .returns(false, Email::hasIdentifier);
+    assertThat(new Email(email.get(), ""))
+        .returns(false, Email::hasIdentifier);
   }
 
   @Test

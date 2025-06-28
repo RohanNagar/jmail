@@ -216,7 +216,7 @@ public final class JMail {
 
     boolean removableQuotePair = true;     // set to false if the current quote could not be removed
     boolean previousQuotedDot = false;     // set to true if the previous character is '.' in quotes
-    boolean requireQuotedAtOrDot = false;  // set to true if we need an @ or . for a removable quote
+    boolean requireQuotedDot = false;      // set to true if we need a . for a removable quote
 
     StringBuilder localPart = new StringBuilder(size);
     StringBuilder localPartWithoutComments = new StringBuilder(size);
@@ -307,7 +307,7 @@ public final class JMail {
       if (whitespace) {
         // Whitespace is allowed if it is between parts
         if (!previousDot && !previousComment) {
-          if (c != '.' && c != '@' && c != '(' && !isWhitespace(c)) {
+          if (c != '.' && c != '(' && !isWhitespace(c)) {
             if (!atFound) requireAngledBracket = true; // or in phrase <addr> format
             else return EmailValidationResult.failure(FailureReason.INVALID_WHITESPACE);
           }
@@ -315,11 +315,11 @@ public final class JMail {
       }
 
       // Additional logic to check if the current quote could be removable
-      if (requireQuotedAtOrDot && inQuotes) {
-        if (c != '.' && c != '@' && !isWhitespace(c) && c != '"') {
+      if (requireQuotedDot && inQuotes) {
+        if (c != '.' && !isWhitespace(c) && c != '"') {
           removableQuotePair = false;
         } else if (!isWhitespace(c) && c != '"') {
-          requireQuotedAtOrDot = false;
+          requireQuotedDot = false;
         }
       }
 
@@ -529,7 +529,7 @@ public final class JMail {
       // if this quote would be removable
       if (quotedWhitespace) {
         if (!previousQuotedDot && !previousBackslash) {
-          requireQuotedAtOrDot = true;
+          requireQuotedDot = true;
         }
       }
 
@@ -593,7 +593,7 @@ public final class JMail {
     Email parsed = new Email(
         localPart.toString(), localPartWithoutComments.toString(),
         localPartWithoutQuotes.toString(), domain.toString(), domainWithoutComments.toString(),
-        fullSourceRoute, null, domainParts, comments, sourceRoutes, isIpAddress,
+        fullSourceRoute, domainParts, comments, sourceRoutes, isIpAddress,
         containsWhiteSpace, isAscii);
 
     return EmailValidationResult.success(parsed);

@@ -22,6 +22,7 @@ this\ is"really"not\allowed@example.com ;                                       
 first.last@sub.do,com ;                                                                The , character is not allowed in the domain
 email@[12.34.44.56 ;                                                                   The domain literal must have the closing bracket
 email@14.44.56.34] ;                                                                   The domain literal must have the opening bracket
+email@[] ;                                                                             The domain literal cannot be missing the IP address
 email@[1.1.23.5f] ;                                                                    The IPv4 format must be valid (disallowed character)
 email@[3.256.255.23] ;                                                                 The IPv4 format must be valid (256 is above the IP range)
 "first"last"@test.org ;                                                                The final quote is invalid (missing pair and not dot-separated)
@@ -128,7 +129,7 @@ first(middle)last@test.org ;                                                    
 Unicode NULL \␀@char.com ;                                                             The escaped unicode null character is only allowed within quotes
 "test"test@test.com ;                                                                  Quotes must be dot separated
 ()@test.com ;                                                                          Empty comment is not allowed
-() ;                                                                                   An email address cannot just be a comment
+test@test.com( ;                                                                       An email address cannot end with an opening (
 test@really.long.topleveldomainisnotallowedunfortunatelyforpeoplewholikereallylongtopleveldomainnames ; The top level domain can only be 63 characters long
 test@really.long.domainpartisnotallowedunfortunatelyforpeoplewholikereallylongdomainnameparts.com ;     Each domain part can only be 63 characters long
 invalid@[1] ;                                                                          The domain literal is not a valid IPv4 or IPv6 address
