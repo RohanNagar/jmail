@@ -30,7 +30,6 @@ package com.sanctionco.jmail.disposable;
  *     this.cache = new ConcurrentHashMap<>();
  *   }
  *
- *   @Override
  *   public boolean isDisposableDomain(String domain) {
  *     return cache.computeIfAbsent(domain, wrappedSource::isDisposableDomain);
  *   }
