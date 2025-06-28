@@ -1,5 +1,8 @@
 package com.sanctionco.jmail;
 
+import com.sanctionco.jmail.disposable.DisposableDomainSource;
+
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Map;
@@ -231,7 +234,7 @@ class EmailValidatorTest {
         "test@gmail.com", "test@hotmail.com", "test@yahoo.com", "test@utexas.edu",
         "test@gmail.(comment)com"})
     void allowsDomainsWithMXRecord(String email) {
-      runValidTest(JMail.validator().requireValidMXRecord(100, 3), email);
+      runValidTest(JMail.validator().requireValidMXRecord(100, 5), email);
     }
 
     @Test
@@ -242,6 +245,32 @@ class EmailValidatorTest {
       long endTime = System.currentTimeMillis();
 
       assertThat(endTime - startTime).isLessThan(500);
+    }
+  }
+
+  @Nested
+  class DisallowDisposableDomains {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "mailbox@10-minute-mail.com", "john@emailnow.net", "test@disposableinbox.com",
+        "john@emailnow.(comment)net"})
+    void rejectsWithDisposableDomains(String email) throws IOException {
+      DisposableDomainSource source
+          = DisposableDomainSource.file("src/test/resources/disposable_email_blocklist.conf");
+
+      runInvalidTest(JMail.validator()
+          .disallowDisposableDomains(source), email, FailureReason.CONTAINS_DISPOSABLE_DOMAIN);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {
+        "test@gmail.com", "test@hotmail.com", "test@yahoo.com", "test@utexas.edu",
+        "test@gmail.(comment)com", "test@[1.2.3.4]"})
+    void allowsWithoutDisposableDomain(String email) throws IOException {
+      DisposableDomainSource source
+          = DisposableDomainSource.file("src/test/resources/disposable_email_blocklist.conf");
+
+      runValidTest(JMail.validator().disallowDisposableDomains(source), email);
     }
   }
 

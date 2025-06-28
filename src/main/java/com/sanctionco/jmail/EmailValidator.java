@@ -1,5 +1,7 @@
 package com.sanctionco.jmail;
 
+import com.sanctionco.jmail.disposable.DisposableDomainSource;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -218,7 +220,7 @@ public final class EmailValidator {
   /**
    * Create a new {@code EmailValidator} with all rules from the current instance and the
    * {@link ValidationRules#disallowSingleCharacterTopLevelDomains(Email)} rule.
-   * Email addresses that have top level domains that are just a single character
+   * Email addresses that have top level domains that are just a single character will
    * fail validation with {@link FailureReason#SINGLE_CHARACTER_TOP_LEVEL_DOMAIN}.
    *
    * <p>For example, the email address {@code "name@host.c"} would be invalid.
@@ -352,6 +354,25 @@ public final class EmailValidator {
     return withRule(
         email -> ValidationRules.requireValidMXRecord(email, initialTimeout, numRetries),
         FailureReason.INVALID_MX_RECORD);
+  }
+
+  /**
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#disallowDisposableDomains(Email, DisposableDomainSource)}  rule.
+   * Email addresses that have a disposable domain according to the provided
+   * {@link DisposableDomainSource} will fail validation with
+   * {@link FailureReason#CONTAINS_DISPOSABLE_DOMAIN}.
+   *
+   * <p>For example, if the domain {@code disposableinbox.com} is a disposable domain, then the
+   * email address {@code "myemail@disposableinbox.com"} would be invalid.
+   *
+   * @param disposableDomainSource the source of disposable domains
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator disallowDisposableDomains(DisposableDomainSource disposableDomainSource) {
+    return withRule(
+        email -> ValidationRules.disallowDisposableDomains(email, disposableDomainSource),
+        FailureReason.CONTAINS_DISPOSABLE_DOMAIN);
   }
 
   /**

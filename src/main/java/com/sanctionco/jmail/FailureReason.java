@@ -1,5 +1,7 @@
 package com.sanctionco.jmail;
 
+import com.sanctionco.jmail.disposable.DisposableDomainSource;
+
 import java.util.Objects;
 
 /**
@@ -230,6 +232,14 @@ public final class FailureReason {
       = new FailureReason("UNUSED_BACKSLASH_ESCAPE");
 
   /* Additional FailureReasons for ValidationRules */
+
+  /**
+   * If the rule {@link EmailValidator#disallowDisposableDomains(DisposableDomainSource)} is
+   * added to your {@code EmailValidator}, then this failure indicates the email address contained
+   * a disposable domain.
+   */
+  public static final FailureReason CONTAINS_DISPOSABLE_DOMAIN
+      = new FailureReason("CONTAINS_DISPOSABLE_DOMAIN");
 
   /**
    * If the rule {@link EmailValidator#disallowExplicitSourceRouting()} is added to your

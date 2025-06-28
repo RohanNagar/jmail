@@ -1,5 +1,6 @@
 package com.sanctionco.jmail;
 
+import com.sanctionco.jmail.disposable.DisposableDomainSource;
 import com.sanctionco.jmail.dns.DNSLookupUtil;
 
 import java.util.Arrays;
@@ -172,6 +173,20 @@ public final class ValidationRules {
    */
   public static boolean requireValidMXRecord(Email email, int initialTimeout, int numRetries) {
     return DNSLookupUtil.hasMXRecord(email.domainWithoutComments(), initialTimeout, numRetries);
+  }
+
+  /**
+   * Rejects an email address that has a disposable domain. The set of disposable domains
+   * is determined by the provided {@link DisposableDomainSource}.
+   *
+   * @param email the email address to validate
+   * @param disposableDomainSource the source of disposable domains
+   * @return true if this email address does not have a disposable domain, or false if it does
+   */
+  public static boolean disallowDisposableDomains(Email email,
+                                                  DisposableDomainSource disposableDomainSource) {
+    return email.isIpAddress()
+        || !disposableDomainSource.isDisposableDomain(email.domainWithoutComments());
   }
 
   /**

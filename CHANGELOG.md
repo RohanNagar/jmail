@@ -1,5 +1,12 @@
 # JMail Changelog
 
+## 2.1.0
+
+- Add new `ValidationRule` `disallowDisposableDomains(DisposableDomainSource)` to consider email addresses that have a disposable domain (such as `username@10-minute-mail.com`) as invalid.
+  - The `FileSource` implementation of `DisposableDomainSource` uses a given file as the source of truth for disposable domains.
+  - The `IsTempMailAPISource` uses the [IsTempMail API](https://www.istempmail.com) as the source of truth for disposable domains. Usage of this source requires an API Key provided by IsTempMail.
+
+---
 ## 2.0.2
 
 - Fix bug where address containing a display name that starts with a dot `.` character would be incorrectly invalidated. (Thanks @utalmighty for reporting!)
