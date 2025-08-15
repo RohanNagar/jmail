@@ -43,7 +43,7 @@
 
     <!-- Plugin versions -->
     <central-publishing-plugin.version>0.8.0</central-publishing-plugin.version>
-    <checkstyle.version>10.26.1</checkstyle.version>
+    <checkstyle.version>11.0.0</checkstyle.version>
     <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.8</gpg-plugin.version>
@@ -57,7 +57,7 @@
     <equalsverifier.version>3.19.4</equalsverifier.version>
     <junit.version>5.13.4</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
-    <mockito.version>5.18.0</mockito.version>
+    <mockito.version>5.19.0</mockito.version>
     <mockneat.version>0.4.8</mockneat.version>
   </properties>
 
@@ -314,7 +314,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.27.3</version>
+      <version>3.27.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
