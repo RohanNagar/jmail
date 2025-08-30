@@ -48,7 +48,7 @@
     <compiler-plugin.version>3.14.0</compiler-plugin.version>
     <gpg-plugin.version>3.2.8</gpg-plugin.version>
     <jacoco.version>0.8.13</jacoco.version>
-    <javadoc-plugin.version>3.11.2</javadoc-plugin.version>
+    <javadoc-plugin.version>3.11.3</javadoc-plugin.version>
     <release-plugin.version>3.1.1</release-plugin.version>
     <source-plugin.version>3.3.1</source-plugin.version>
     <surefire.version>3.5.3</surefire.version>
@@ -57,7 +57,7 @@
     <equalsverifier.version>3.19.4</equalsverifier.version>
     <junit.version>5.13.4</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
-    <mockito.version>5.18.0</mockito.version>
+    <mockito.version>5.19.0</mockito.version>
     <mockneat.version>0.4.8</mockneat.version>
   </properties>
 
@@ -314,7 +314,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.27.3</version>
+      <version>3.27.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
