@@ -13,6 +13,9 @@ updates:
       # equalsverifier 4.0+ requires Java 17. Remove when upgrading this library to Java 17.
       - dependency-name: "nl.jqno.equalsverifier:equalsverifier"
         update-types: [ "version-update:semver-major" ]
+      # checkstyle 11.0.0+ requires Java 17. Remove when upgrading this library to Java 17.
+      - dependency-name: "com.puppycrawl.tools:checkstyle"
+        update-types: [ "version-update:semver-major" ]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
