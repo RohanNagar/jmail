@@ -145,3 +145,4 @@ ABC.DEF@GHI. (MNO) ;                                                            
 test@test.com(comment ;                                                                A comment at the end of the domain must have closing parenthesis
 @wp.pl.dwa. ;                                                                          Cannot start with an @ character or end with a .
 @wp.pl.dwa: ;                                                                          An address with source routing cannot have a missing final email address
+•email@domain.com                                                                      Unicode punctuation symbols like • are not allowed in the local-part
