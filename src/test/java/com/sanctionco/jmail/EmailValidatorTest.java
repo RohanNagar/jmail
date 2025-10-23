@@ -144,7 +144,9 @@ class EmailValidatorTest {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {
         "test@domain.test", "test@domain.example", "test@domain.invalid", "test@domain.localhost",
-        "test@example.com", "test@example.org", "test@example.net", "test@sub.example.com"})
+        "test@example.com", "test@example.org", "test@example.net", "test@sub.example.com",
+        "TEST@DOMAIN.TEST", "TEST@DOMAIN.EXAMPLE", "TEST@DOMAIN.INVALID", "TEST@DOMAIN.LOCALHOST",
+        "TEST@EXAMPLE.COM", "TEST@EXAMPLE.ORG", "TEST@EXAMPLE.NET", "TEST@SUB.EXAMPLE.COM"})
     void rejectsReservedDomains(String email) {
       runInvalidTest(JMail.validator()
           .disallowReservedDomains(), email, FailureReason.CONTAINS_RESERVED_DOMAIN);
@@ -171,7 +173,9 @@ class EmailValidatorTest {
     }
 
     @ParameterizedTest(name = "{0}")
-    @ValueSource(strings = {"test@123.123.123.com", "first.last@example.com", "x@test.edu"})
+    @ValueSource(strings = {
+        "test@123.123.123.com", "first.last@example.com", "x@test.edu",
+        "TEST@123.123.123.COM", "FIRST.LAST@EXAMPLE.COM", "X@TEST.EDU"})
     void allows(String email) {
       runValidTest(JMail.validator()
           .requireOnlyTopLevelDomains(TopLevelDomain.DOT_COM, TopLevelDomain.DOT_EDU), email);
@@ -253,6 +257,7 @@ class EmailValidatorTest {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {
         "mailbox@10-minute-mail.com", "john@emailnow.net", "test@disposableinbox.com",
+        "MAILBOX@10-MINUTE-MAIL.COM", "JOHN@EMAILNOW.NET", "TEST@DISPOSABLEINBOX.COM",
         "john@emailnow.(comment)net"})
     void rejectsWithDisposableDomains(String email) throws IOException {
       DisposableDomainSource source

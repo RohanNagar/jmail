@@ -35,7 +35,9 @@ class FileSourceTest {
     assertAll(
         () -> assertTrue(source.isDisposableDomain("disposableinbox.com")),
         () -> assertTrue(source.isDisposableDomain("10-minute-mail.com")),
-        () -> assertTrue(source.isDisposableDomain("emailnow.net"))
+        () -> assertTrue(source.isDisposableDomain("emailnow.net")),
+        () -> assertTrue(source.isDisposableDomain("10-MINUTE-MAIL.com")),
+        () -> assertTrue(source.isDisposableDomain("emailnow.NET"))
     );
   }
 

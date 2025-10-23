@@ -33,6 +33,6 @@ public class FileSource implements DisposableDomainSource {
 
   @Override
   public boolean isDisposableDomain(String domain) {
-    return this.disposableDomains.contains(domain);
+    return this.disposableDomains.contains(domain.toLowerCase());
   }
 }

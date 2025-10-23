@@ -102,7 +102,7 @@ public final class ValidationRules {
    * @return true if this email address has an allowed top-level domain, or false if it does not
    */
   public static boolean requireOnlyTopLevelDomains(Email email, Set<TopLevelDomain> allowed) {
-    return allowed.contains(email.topLevelDomain());
+    return allowed.contains(email.topLevelDomain().toLowerCase());
   }
 
   /**
@@ -138,15 +138,15 @@ public final class ValidationRules {
     List<String> domainParts = email.domainParts();
 
     // Check the top level domain to see if it is reserved, if so return false
-    if (reservedTopLevelDomains.contains(domainParts.get(domainParts.size() - 1))) {
+    if (reservedTopLevelDomains.contains(domainParts.get(domainParts.size() - 1).toLowerCase())) {
       return false;
     }
 
     // Check the second level domain to see if it is example.*, where * is contained in
     // the reservedExampleTlds set
     if (domainParts.size() > 1
-        && "example".equals(domainParts.get(domainParts.size() - 2))
-        && reservedExampleTlds.contains(email.topLevelDomain())) {
+        && "example".equals(domainParts.get(domainParts.size() - 2).toLowerCase())
+        && reservedExampleTlds.contains(email.topLevelDomain().toLowerCase())) {
       return false;
     }
 

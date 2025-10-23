@@ -68,6 +68,10 @@ public final class TopLevelDomain {
     return "TopLevelDomain[tld='" + tld + "']";
   }
 
+  public TopLevelDomain toLowerCase() {
+    return fromString(stringValue().toLowerCase());
+  }
+
   private static boolean isValidTopLevelDomain(String domain) {
     if (domain.isEmpty()) return false;
 
