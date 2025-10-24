@@ -1,6 +1,7 @@
 package com.sanctionco.jmail.disposable;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * <p>A {@code DisposableDomainSource} is used as a source of truth for which domains are considered
@@ -40,6 +41,20 @@ public interface DisposableDomainSource {
    */
   static DisposableDomainSource file(String path) throws IOException {
     return new FileSource(path);
+  }
+
+  /**
+   * <p>Create and return a new {@link InputStreamSource}, which can be used as a
+   * {@code DisposableDomainSource} that uses an input stream as the source of disposable domains.
+   *
+   * <p>The input stream should have each disposable domain on its own line.
+   *
+   * @param inputStream the input stream containing disposable domains. Will be closed by this method
+   * @return a new instance of {@link InputStreamSource}
+   * @throws IOException if the input stream was closed or any other issue occurred reading the input stream
+   */
+  static DisposableDomainSource inputStream(InputStream inputStream) throws IOException {
+    return new InputStreamSource(inputStream);
   }
 
   /**
