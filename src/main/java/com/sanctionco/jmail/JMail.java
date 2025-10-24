@@ -396,6 +396,43 @@ public final class JMail {
           removableQuotePair = false;
         }
 
+        // RFC 6531 Section 3.3 and RFC 5321 Section 4.1.2 specify that internationalized
+        // email addresses (EAI) can contain UTF-8 characters in the local-part, but only
+        // certain character classes are valid. According to RFC 6531, the local-part should
+        // consist of "atext" (RFC 5322 Section 3.2.3) or UTF-8 characters that are letters,
+        // marks, or numbers.
+        //
+        // While RFC 6531 allows UTF-8, it doesn't permit arbitrary Unicode symbols and
+        // punctuation marks in unquoted local-parts. Characters like • (BULLET U+2022),
+        // ★ (BLACK STAR U+2605), © (COPYRIGHT U+00A9), etc. are categorized as punctuation
+        // or symbols in Unicode, not letters/marks, and should not be allowed in unquoted
+        // local-parts as they can cause interoperability issues with SMTP servers.
+        //
+        // This validation applies ONLY to the local-part (before @), not the domain.
+        // The domain has separate validation via IDN (Internationalized Domain Names).
+        if (c >= 128 && !inQuotes && !previousBackslash) {
+          int type = Character.getType(c);
+          // Reject Unicode character categories that represent symbols and punctuation.
+          // Allow: Letters (Lu, Ll, Lt, Lm, Lo), Marks (Mn, Mc, Me), Numbers (Nd, Nl, No)
+          // Reject: Punctuation (Pc, Pd, Ps, Pe, Pi, Pf, Po) and Symbols (Sm, Sc, Sk, So)
+          //
+          // This ensures compatibility with SMTP servers while supporting genuine
+          // internationalized names (e.g., Pelé, 山田, Владимир).
+          if (type == Character.CONNECTOR_PUNCTUATION       // Pc: _ (underscore is ASCII)
+                  || type == Character.DASH_PUNCTUATION         // Pd: - (dash) and variants
+                  || type == Character.START_PUNCTUATION        // Ps: ( [ { etc.
+                  || type == Character.END_PUNCTUATION          // Pe: ) ] } etc.
+                  || type == Character.INITIAL_QUOTE_PUNCTUATION // Pi: « ' etc.
+                  || type == Character.FINAL_QUOTE_PUNCTUATION   // Pf: » ' etc.
+                  || type == Character.OTHER_PUNCTUATION         // Po: ! • ★ etc.
+                  || type == Character.MATH_SYMBOL               // Sm: + = × etc.
+                  || type == Character.CURRENCY_SYMBOL           // Sc: $ € £ etc.
+                  || type == Character.MODIFIER_SYMBOL           // Sk: ^ ` etc.
+                  || type == Character.OTHER_SYMBOL) {           // So: © ® ™ etc.
+            return EmailValidationResult.failure(FailureReason.DISALLOWED_UNQUOTED_CHARACTER);
+          }
+        }
+
         // If we previously saw a backslash, we must make sure it is being used to quote something
         if (!inQuotes && previousBackslash && !mustBeQuoted && c != ' ' && c != '\\') {
           return EmailValidationResult.failure(FailureReason.UNUSED_BACKSLASH_ESCAPE);
