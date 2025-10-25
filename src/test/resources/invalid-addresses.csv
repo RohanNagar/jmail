@@ -145,4 +145,14 @@ ABC.DEF@GHI. (MNO) ;                                                            
 test@test.com(comment ;                                                                A comment at the end of the domain must have closing parenthesis
 @wp.pl.dwa. ;                                                                          Cannot start with an @ character or end with a .
 @wp.pl.dwa: ;                                                                          An address with source routing cannot have a missing final email address
-•email@domain.com                                                                      Unicode punctuation symbols like • are not allowed in the local-part
+e＿mail@hello.net ;                                                                    Unicode connecting symbols are not allowed in the local-part
+e—mail@mytest.eu ;                                                                     Unicode dash symbols like em-dash are not allowed in the local-part
+e⌉mail@testing.txt ;                                                                   Unicode ending punctuation symbols are not allowed in the local-part
+e⁽mail@testing.txt ;                                                                   Unicode starting punctuation symbols are not allowed in the local-part
+“email@mydomain.txt ;                                                                  Unicode opening quote punctuation symbols are not allowed in the local-part
+email”@mydomain.txt ;                                                                  Unicode closing quote punctuation symbols are not allowed in the local-part
+•email@domain.com ;                                                                    Unicode punctuation symbols like • are not allowed in the local-part
+emailwithmath×symbol@test.com ;                                                        Unicode math symbols are not allowed in the local-part
+euro€@eu.com ;                                                                         Unicode currency symbols are not allowed in the local-part
+mod¨@modifier.edu ;                                                                    Unicode modifier symbols are not allowed in the local-part
+other©copyright@copy.org ;                                                             Other Unicode symbols like the copyright symbol are not allowed in the local-part
