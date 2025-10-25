@@ -35,9 +35,7 @@ class FileSourceTest {
     assertAll(
         () -> assertTrue(source.isDisposableDomain("disposableinbox.com")),
         () -> assertTrue(source.isDisposableDomain("10-minute-mail.com")),
-        () -> assertTrue(source.isDisposableDomain("emailnow.net")),
-        () -> assertTrue(source.isDisposableDomain("10-MINUTE-MAIL.com")),
-        () -> assertTrue(source.isDisposableDomain("emailnow.NET"))
+        () -> assertTrue(source.isDisposableDomain("emailnow.net"))
     );
   }
 
@@ -48,7 +46,10 @@ class FileSourceTest {
     assertAll(
         () -> assertFalse(source.isDisposableDomain("gmail.com")),
         () -> assertFalse(source.isDisposableDomain("yahoo.com")),
-        () -> assertFalse(source.isDisposableDomain("utexas.edu"))
+        () -> assertFalse(source.isDisposableDomain("utexas.edu")),
+        // Disposable domains with capital letters will not match
+        () -> assertFalse(source.isDisposableDomain("10-MINUTE-MAIL.com")),
+        () -> assertFalse(source.isDisposableDomain("emailnow.NET"))
     );
   }
 }

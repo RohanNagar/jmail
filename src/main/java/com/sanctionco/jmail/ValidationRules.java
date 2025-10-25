@@ -186,7 +186,7 @@ public final class ValidationRules {
   public static boolean disallowDisposableDomains(Email email,
                                                   DisposableDomainSource disposableDomainSource) {
     return email.isIpAddress()
-        || !disposableDomainSource.isDisposableDomain(email.domainWithoutComments());
+        || !disposableDomainSource.isDisposableDomain(email.domainWithoutComments().toLowerCase());
   }
 
   /**
