@@ -102,7 +102,7 @@ public final class ValidationRules {
    * @return true if this email address has an allowed top-level domain, or false if it does not
    */
   public static boolean requireOnlyTopLevelDomains(Email email, Set<TopLevelDomain> allowed) {
-    return allowed.contains(email.topLevelDomain().toLowerCase());
+    return allowed.contains(email.topLevelDomain());
   }
 
   /**
@@ -146,7 +146,7 @@ public final class ValidationRules {
     // the reservedExampleTlds set
     if (domainParts.size() > 1
         && "example".equals(domainParts.get(domainParts.size() - 2).toLowerCase())
-        && reservedExampleTlds.contains(email.topLevelDomain().toLowerCase())) {
+        && reservedExampleTlds.contains(email.topLevelDomain())) {
       return false;
     }
 
