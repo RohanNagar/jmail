@@ -2,8 +2,6 @@ name: code quality
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   snyk:
