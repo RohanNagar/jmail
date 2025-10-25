@@ -2,6 +2,11 @@
 
 ## 2.1.0
 
+- Fix bug where addresses containing unquoted Unicode punctuation or symbol characters in the local-part would be incorrectly considered valid.
+  - While RFC 6531 allows for UTF-8 characters for the purposes of internationalized domain names, not all Unicode symbols are permitted.
+    Specifically, this excludes Punctuation (Pc, Pd, Ps, Pe, Pi, Pf, Po) and Symbols (Sm, Sc, Sk, So).
+  - Thanks @acmcmurray for reporting and @houssam966 for contributing! 🎉
+
 - Add new `ValidationRule` `disallowDisposableDomains(DisposableDomainSource)` to consider email addresses that have a disposable domain (such as `username@10-minute-mail.com`) as invalid.
   - The `FileSource` implementation of `DisposableDomainSource` uses a given file as the source of truth for disposable domains.
   - The `IsTempMailAPISource` uses the [IsTempMail API](https://www.istempmail.com) as the source of truth for disposable domains. Usage of this source requires an API Key provided by IsTempMail.
@@ -9,7 +14,7 @@
 ---
 ## 2.0.2
 
-- Fix bug where address containing a display name that starts with a dot `.` character would be incorrectly invalidated. (Thanks @utalmighty for reporting!)
+- Fix bug where addresses containing a display name that starts with a dot `.` character would be incorrectly invalidated. (Thanks @utalmighty for reporting!)
 
 ---
 ## 2.0.1
