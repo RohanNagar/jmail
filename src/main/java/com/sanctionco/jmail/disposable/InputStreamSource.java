@@ -1,6 +1,11 @@
 package com.sanctionco.jmail.disposable;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashSet;
@@ -8,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collector;
 
 /**
- * An implementation of {@link DisposableDomainSource} that loads disposable domains from an input stream.
+ * An implementation of {@link DisposableDomainSource} that loads domains from an input stream.
  * <p>
  * The input stream must contain lowercase domains, one per line.
  * All domains are read into memory and stored in an unmodifiable set for fast lookup.
@@ -21,7 +26,8 @@ public class InputStreamSource implements DisposableDomainSource {
   /**
    * Reads all domains (one per line) from the given input stream into memory.
    * <p>
-   * The input stream is not closed by this constructor, so the caller is responsible for closing it.
+   * The input stream is not closed by this constructor,
+   * so the caller is responsible for closing it.
    * Once the instance is created, the input stream is no longer used.
    *
    * @param inputStream the input stream containing disposable domains
