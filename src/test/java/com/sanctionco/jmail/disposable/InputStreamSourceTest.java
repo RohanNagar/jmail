@@ -23,6 +23,16 @@ public class InputStreamSourceTest {
   }
 
   @Test
+  void shouldNotCloseInputStream() throws IOException {
+    try (TrackCloseInputStream inputStream = new TrackCloseInputStream(inputStreamFromFile(PATH))) {
+      DisposableDomainSource.inputStream(inputStream);
+
+      // The stream should still be readable
+      assertFalse(inputStream.closed);
+    }
+  }
+
+  @Test
   void shouldThrowWhenStreamIsClosedOnMissingFile() throws IOException {
     InputStream inputStream = inputStreamFromFile(PATH);
     inputStream.close();
@@ -57,11 +67,33 @@ public class InputStreamSourceTest {
     );
   }
 
+  @SuppressWarnings("SameParameterValue")
   private InputStream inputStreamFromFile(String path) {
     try {
       return Files.newInputStream(Paths.get(path));
     } catch (IOException e) {
       throw new UncheckedIOException(e);
+    }
+  }
+
+  // Custom InputStream that tracks whether close() was called
+  private static class TrackCloseInputStream extends InputStream {
+    private final InputStream delegate;
+    boolean closed = false;
+
+    TrackCloseInputStream(InputStream delegate) {
+      this.delegate = delegate;
+    }
+
+    @Override
+    public int read() throws IOException {
+      return delegate.read();
+    }
+
+    @Override
+    public void close() throws IOException {
+      closed = true;
+      delegate.close();
     }
   }
 }

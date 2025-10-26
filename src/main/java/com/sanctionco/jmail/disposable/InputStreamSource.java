@@ -4,16 +4,14 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Collector;
 
 /**
- * <p>An implementation of {@link DisposableDomainSource} that uses an input stream as the source
- * for disposable domains.
- *
- * <p>The input stream should contain a list of disposable lowercase domains where each domain is on its own
- * line.
+ * An implementation of {@link DisposableDomainSource} that loads disposable domains from an input stream.
+ * <p>
+ * The input stream must contain lowercase domains, one per line.
+ * All domains are read into memory and stored in an unmodifiable set for fast lookup.
  *
  * @see DisposableDomainSource
  */
@@ -21,16 +19,16 @@ public class InputStreamSource implements DisposableDomainSource {
   private final Set<String> disposableDomains;
 
   /**
-   * Create a new instance of {@code InputStreamSource} from input stream.
+   * Reads all domains (one per line) from the given input stream into memory.
    * <p>
-   * Closes the input stream.
+   * The input stream is not closed by this constructor, so the caller is responsible for closing it.
+   * Once the instance is created, the input stream is no longer used.
    *
-   * @param inputStream the input stream that contains disposable domains. Will be closed by this method
-   * @throws IOException if the input stream was closed or any other issue occurred reading the input stream
+   * @param inputStream the input stream containing disposable domains
+   * @throws IOException if the input stream is closed or cannot be read
    */
   InputStreamSource(InputStream inputStream) throws IOException {
-    this.disposableDomains = Collections.unmodifiableSet(
-        new HashSet<>(readAllLines(inputStream)));
+    this.disposableDomains = readAllLines(inputStream);
   }
 
   @Override
@@ -38,17 +36,33 @@ public class InputStreamSource implements DisposableDomainSource {
     return this.disposableDomains.contains(domain);
   }
 
-  private static List<String> readAllLines(InputStream inputStream) throws IOException {
-    try (Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-         BufferedReader bufferedReader = new BufferedReader(reader)
-    ) {
+  private static Set<String> readAllLines(InputStream inputStream) throws IOException {
+    // not closing the InputStreamReader nor BufferedReader - they will be garbage collected later
+    Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+    BufferedReader bufferedReader = new BufferedReader(reader);
+
+    try {
       return bufferedReader.lines()
           .map(String::trim)
           .filter(s -> !s.isEmpty())
-          .collect(Collectors.toList());
+          .collect(toUnmodifiableSet());
     } catch (UncheckedIOException e) {
-      // operating on bufferedReader.lines() wraps underlying IOException in UncheckedIOException
+      // Exceptions thrown while processing the Stream returned by bufferedReader.lines()
+      // are wrapped in UncheckedIOException. Rethrow the original IOException.
       throw e.getCause();
     }
+  }
+
+  // As JMail supports java 8, then having this copy of Collectors.toUnmodifiableSet() from java 10+
+  private static <T> Collector<T, HashSet<T>, Set<T>> toUnmodifiableSet() {
+    return Collector.of(
+        HashSet::new,
+        Set::add,
+        (left, right) -> {
+          left.addAll(right);
+          return left;
+        },
+        Collections::unmodifiableSet
+    );
   }
 }
