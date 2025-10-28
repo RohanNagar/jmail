@@ -29,8 +29,6 @@ class InputStreamSourceTest {
   void shouldNotCloseInputStream() throws IOException {
     try (TrackCloseInputStream inputStream = new TrackCloseInputStream(getResourceAsStream(PATH))) {
       DisposableDomainSource.inputStream(inputStream);
-
-      // The stream should still be readable
       assertFalse(inputStream.closed);
     }
   }
