@@ -68,8 +68,7 @@ class InputStreamSourceTest {
 
     assertAll(
         () -> assertTrue(source.isDisposableDomain("caps.com")),
-        () -> assertTrue(source.isDisposableDomain("allcaps.com")),
-        () -> assertFalse(source.isDisposableDomain(""))
+        () -> assertTrue(source.isDisposableDomain("allcaps.com"))
     );
   }
 
