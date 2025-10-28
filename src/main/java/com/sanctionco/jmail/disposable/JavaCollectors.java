@@ -9,7 +9,9 @@ import java.util.stream.Collector;
  * Contains convenient Stream collectors.
  * Internal usage only.
  */
-class JavaCollectors {
+final class JavaCollectors {
+  private JavaCollectors() {
+  }
 
   // As JMail supports java 8, then having this copy of Collectors.toUnmodifiableSet() from java 10+
   static <T> Collector<T, HashSet<T>, Set<T>> toUnmodifiableSet() {
