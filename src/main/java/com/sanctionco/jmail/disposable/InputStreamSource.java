@@ -1,11 +1,6 @@
 package com.sanctionco.jmail.disposable;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashSet;
@@ -53,8 +48,8 @@ public class InputStreamSource implements DisposableDomainSource {
           .filter(s -> !s.isEmpty())
           .collect(toUnmodifiableSet());
     } catch (UncheckedIOException e) {
-      // Exceptions thrown while processing the Stream returned by bufferedReader.lines()
-      // are wrapped in UncheckedIOException. Rethrow the original IOException.
+      // As documented by BufferedReader.lines(), IOException is wrapped in UncheckedIOException.
+      // Rethrow the original IOException.
       throw e.getCause();
     }
   }
