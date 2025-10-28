@@ -1,18 +1,14 @@
 package com.sanctionco.jmail.disposable;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InputStreamSourceTest {
   private static final String PATH = "src/test/resources/disposable_email_blocklist.conf";
@@ -56,6 +52,18 @@ public class InputStreamSourceTest {
         () -> assertTrue(source.isDisposableDomain("disposableinbox.com")),
         () -> assertTrue(source.isDisposableDomain("10-minute-mail.com")),
         () -> assertTrue(source.isDisposableDomain("emailnow.net"))
+    );
+  }
+
+  @Test
+  void shouldMatchDomainsCaseInsensitively() throws IOException {
+    InputStream inputStream = inputStreamFromFile(PATH);
+    DisposableDomainSource source = DisposableDomainSource.inputStream(inputStream);
+
+    assertAll(
+        () -> assertTrue(source.isDisposableDomain("disposableinbox.com")),
+        () -> assertTrue(source.isDisposableDomain("DiSpoSaBlEiNbOX.com")),
+        () -> assertTrue(source.isDisposableDomain("disposableinbox.COM"))
     );
   }
 

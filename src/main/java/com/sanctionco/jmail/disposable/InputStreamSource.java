@@ -34,7 +34,7 @@ public class InputStreamSource implements DisposableDomainSource {
 
   @Override
   public boolean isDisposableDomain(String domain) {
-    return this.disposableDomains.contains(domain);
+    return this.disposableDomains.contains(domain.toLowerCase());
   }
 
   private static Set<String> readAllLines(InputStream inputStream) throws IOException {
@@ -46,6 +46,7 @@ public class InputStreamSource implements DisposableDomainSource {
       return bufferedReader.lines()
           .map(String::trim)
           .filter(s -> !s.isEmpty())
+          .map(String::toLowerCase)
           .collect(toUnmodifiableSet());
     } catch (UncheckedIOException e) {
       // As documented by BufferedReader.lines(), IOException is wrapped in UncheckedIOException.
