@@ -2,20 +2,19 @@ package com.sanctionco.jmail.disposable;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InputStreamSourceTest {
-  private static final String PATH = "src/test/resources/disposable_email_blocklist.conf";
+  private static final String PATH = "disposable_email_blocklist.conf";
 
   @Test
   void shouldReadFromInputStream() throws IOException {
-    try (InputStream inputStream = inputStreamFromFile(PATH)) {
+    try (InputStream inputStream = getResourceAsStream(PATH)) {
       assertDoesNotThrow(
           () -> DisposableDomainSource.inputStream(inputStream),
           "InputStreamSource should not throw on open input stream");
@@ -24,7 +23,7 @@ public class InputStreamSourceTest {
 
   @Test
   void shouldNotCloseInputStream() throws IOException {
-    try (TrackCloseInputStream inputStream = new TrackCloseInputStream(inputStreamFromFile(PATH))) {
+    try (TrackCloseInputStream inputStream = new TrackCloseInputStream(getResourceAsStream(PATH))) {
       DisposableDomainSource.inputStream(inputStream);
 
       // The stream should still be readable
@@ -33,8 +32,46 @@ public class InputStreamSourceTest {
   }
 
   @Test
-  void shouldThrowWhenStreamIsClosedOnMissingFile() throws IOException {
-    InputStream inputStream = inputStreamFromFile(PATH);
+  void shouldAllowWhiteSpaceInInputStream() throws IOException {
+    List<String> domains = List.of(
+        "first.com",
+        "second.com",
+        " untrimmed.com ",
+        " CAPS.com ",
+        " ALLCAPS.COM ",
+        "",
+        "   "
+    );
+
+    DisposableDomainSource source = DisposableDomainSource.inputStream(getListAsStream(domains));
+
+    assertAll(
+        () -> assertTrue(source.isDisposableDomain("first.com")),
+        () -> assertTrue(source.isDisposableDomain("second.com")),
+        () -> assertTrue(source.isDisposableDomain("untrimmed.com")),
+        () -> assertFalse(source.isDisposableDomain(""))
+    );
+  }
+
+  @Test
+  void shouldAllowMixedCaseInInputStream() throws IOException {
+    List<String> domains = List.of(
+        "CAPS.com",
+        "ALLCAPS.COM"
+    );
+
+    DisposableDomainSource source = DisposableDomainSource.inputStream(getListAsStream(domains));
+
+    assertAll(
+        () -> assertTrue(source.isDisposableDomain("caps.com")),
+        () -> assertTrue(source.isDisposableDomain("allcaps.com")),
+        () -> assertFalse(source.isDisposableDomain(""))
+    );
+  }
+
+  @Test
+  void shouldThrowWhenStreamIsClosed() throws IOException {
+    InputStream inputStream = getResourceAsStream(PATH);
     inputStream.close();
 
     assertThrows(
@@ -45,7 +82,7 @@ public class InputStreamSourceTest {
 
   @Test
   void shouldIdentifyDisposableDomains() throws IOException {
-    InputStream inputStream = inputStreamFromFile(PATH);
+    InputStream inputStream = getResourceAsStream(PATH);
     DisposableDomainSource source = DisposableDomainSource.inputStream(inputStream);
 
     assertAll(
@@ -57,7 +94,7 @@ public class InputStreamSourceTest {
 
   @Test
   void shouldMatchDomainsCaseInsensitively() throws IOException {
-    InputStream inputStream = inputStreamFromFile(PATH);
+    InputStream inputStream = getResourceAsStream(PATH);
     DisposableDomainSource source = DisposableDomainSource.inputStream(inputStream);
 
     assertAll(
@@ -69,7 +106,7 @@ public class InputStreamSourceTest {
 
   @Test
   void shouldNotBlockMissingDomains() throws IOException {
-    InputStream inputStream = inputStreamFromFile(PATH);
+    InputStream inputStream = getResourceAsStream(PATH);
     DisposableDomainSource source = DisposableDomainSource.inputStream(inputStream);
 
     assertAll(
@@ -80,12 +117,16 @@ public class InputStreamSourceTest {
   }
 
   @SuppressWarnings("SameParameterValue")
-  private InputStream inputStreamFromFile(String path) {
-    try {
-      return Files.newInputStream(Paths.get(path));
-    } catch (IOException e) {
-      throw new UncheckedIOException(e);
+  private InputStream getResourceAsStream(String path) {
+    InputStream inputStream = getClass().getClassLoader().getResourceAsStream(path);
+    if (inputStream == null) {
+      throw new IllegalArgumentException("classpath resource not found: " + path);
     }
+    return inputStream;
+  }
+
+  private InputStream getListAsStream(List<String> domains) {
+    return new ByteArrayInputStream(String.join("\n", domains).getBytes());
   }
 
   // Custom InputStream that tracks whether close() was called
