@@ -22,7 +22,7 @@ public interface DisposableDomainSource {
   /**
    * Determine if the given domain is a disposable domain.
    *
-   * @param domain the domain to check, must be in lowercase
+   * @param domain the domain to check
    * @return {@code true} if the domain is a disposable domain, or {@code false} if not
    */
   boolean isDisposableDomain(String domain);

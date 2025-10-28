@@ -22,7 +22,7 @@ public class FileSource implements DisposableDomainSource {
   /**
    * Create a new instance of {@code FileSource}.
    *
-   * @param path the path to the file that contains disposable lowercase domains
+   * @param path the path to the file that contains disposable domains
    * @throws IOException if the file at the given path does not exist or there is an issue reading
    *                     the file
    */
@@ -33,6 +33,6 @@ public class FileSource implements DisposableDomainSource {
 
   @Override
   public boolean isDisposableDomain(String domain) {
-    return this.disposableDomains.contains(domain);
+    return this.disposableDomains.contains(domain.toLowerCase());
   }
 }
