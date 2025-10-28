@@ -1,11 +1,11 @@
 package com.sanctionco.jmail.disposable;
 
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collector;
+
+import static com.sanctionco.jmail.disposable.JavaCollectors.toUnmodifiableSet;
 
 /**
  * An implementation of {@link DisposableDomainSource} that loads domains from an input stream.
@@ -53,18 +53,5 @@ public class InputStreamSource implements DisposableDomainSource {
       // Rethrow the original IOException.
       throw e.getCause();
     }
-  }
-
-  // As JMail supports java 8, then having this copy of Collectors.toUnmodifiableSet() from java 10+
-  private static <T> Collector<T, HashSet<T>, Set<T>> toUnmodifiableSet() {
-    return Collector.of(
-        HashSet::new,
-        Set::add,
-        (left, right) -> {
-          left.addAll(right);
-          return left;
-        },
-        Collections::unmodifiableSet
-    );
   }
 }
