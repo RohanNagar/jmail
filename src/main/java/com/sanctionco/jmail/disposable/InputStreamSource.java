@@ -15,7 +15,7 @@ import static com.sanctionco.jmail.disposable.JavaCollectors.toUnmodifiableSet;
 /**
  * An implementation of {@link DisposableDomainSource} that loads domains from an input stream.
  * <p>
- * The input stream must contain lowercase domains, one per line.
+ * The input stream must contain one domain per line.
  * All domains are read into memory and stored in an unmodifiable set for fast lookup.
  *
  * @see DisposableDomainSource
