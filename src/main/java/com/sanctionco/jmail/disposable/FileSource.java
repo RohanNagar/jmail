@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>An implementation of {@link DisposableDomainSource} that uses a file as the source
@@ -28,11 +29,12 @@ public class FileSource implements DisposableDomainSource {
    */
   FileSource(String path) throws IOException {
     this.disposableDomains = Collections.unmodifiableSet(
-        new HashSet<>(Files.readAllLines(Paths.get(path))));
+        new HashSet<>(Files.readAllLines(Paths.get(path)).stream()
+            .map(String::toLowerCase).collect(Collectors.toSet())));
   }
 
   @Override
   public boolean isDisposableDomain(String domain) {
-    return this.disposableDomains.contains(domain);
+    return this.disposableDomains.contains(domain.toLowerCase());
   }
 }

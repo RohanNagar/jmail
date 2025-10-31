@@ -138,14 +138,14 @@ public final class ValidationRules {
     List<String> domainParts = email.domainParts();
 
     // Check the top level domain to see if it is reserved, if so return false
-    if (reservedTopLevelDomains.contains(domainParts.get(domainParts.size() - 1))) {
+    if (reservedTopLevelDomains.contains(domainParts.get(domainParts.size() - 1).toLowerCase())) {
       return false;
     }
 
     // Check the second level domain to see if it is example.*, where * is contained in
     // the reservedExampleTlds set
     if (domainParts.size() > 1
-        && "example".equals(domainParts.get(domainParts.size() - 2))
+        && "example".equals(domainParts.get(domainParts.size() - 2).toLowerCase())
         && reservedExampleTlds.contains(email.topLevelDomain())) {
       return false;
     }

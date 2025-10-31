@@ -55,12 +55,14 @@ public final class TopLevelDomain {
     if (this == o) return true;
     if (!(o instanceof TopLevelDomain)) return false;
     TopLevelDomain that = (TopLevelDomain) o;
-    return Objects.equals(tld, that.tld);
+    if (tld == null) return that.tld == null;
+    if (that.tld == null) return false;
+    return tld.compareToIgnoreCase(that.tld) == 0;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tld);
+    return tld != null ? Objects.hash(tld.toLowerCase()) : 0;
   }
 
   @Override

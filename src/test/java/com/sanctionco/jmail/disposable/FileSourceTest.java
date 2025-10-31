@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FileSourceTest {
   private static final String PATH = "src/test/resources/disposable_email_blocklist.conf";
+  // Uppercase domain listing
+  private static final String UC_PATH = "src/test/resources/uppercase_email_blocklist.conf";
 
   @Test
   void shouldReadFromFile() {
@@ -35,7 +37,9 @@ class FileSourceTest {
     assertAll(
         () -> assertTrue(source.isDisposableDomain("disposableinbox.com")),
         () -> assertTrue(source.isDisposableDomain("10-minute-mail.com")),
-        () -> assertTrue(source.isDisposableDomain("emailnow.net"))
+        () -> assertTrue(source.isDisposableDomain("emailnow.net")),
+        () -> assertTrue(source.isDisposableDomain("10-MINUTE-MAIL.com")),
+        () -> assertTrue(source.isDisposableDomain("emailnow.NET"))
     );
   }
 
@@ -47,6 +51,17 @@ class FileSourceTest {
         () -> assertFalse(source.isDisposableDomain("gmail.com")),
         () -> assertFalse(source.isDisposableDomain("yahoo.com")),
         () -> assertFalse(source.isDisposableDomain("utexas.edu"))
+    );
+  }
+
+  @Test
+  void shouldIdentifyDisposableDomainsCaseInsensitive() throws IOException {
+    DisposableDomainSource source = DisposableDomainSource.file(UC_PATH);
+
+    assertAll(
+        () -> assertTrue(source.isDisposableDomain("10-minute-mail.com")),
+        () -> assertTrue(source.isDisposableDomain("10-MINUTE-MAIL.COM")),
+        () -> assertTrue(source.isDisposableDomain("10-MINUTE-MAIL.com"))
     );
   }
 }
