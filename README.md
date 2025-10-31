@@ -65,14 +65,14 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>2.0.2</version>
+  <version>2.1.0</version>
 </dependency>
 ```
 
 Or in your `build.gradle`:
 
 ```groovy
-implementation 'com.sanctionco.jmail:jmail:2.0.2'
+implementation 'com.sanctionco.jmail:jmail:2.1.0'
 ```
 
 ## Usage
@@ -482,4 +482,5 @@ Relevant RFCs:
 [822](https://datatracker.ietf.org/doc/html/rfc822),
 [2822](https://datatracker.ietf.org/doc/html/rfc2822),
 [5321](https://datatracker.ietf.org/doc/html/rfc5321),
-[5322](https://datatracker.ietf.org/doc/html/rfc5322)
+[5322](https://datatracker.ietf.org/doc/html/rfc5322),
+[6531](https://datatracker.ietf.org/doc/html/rfc6531)
