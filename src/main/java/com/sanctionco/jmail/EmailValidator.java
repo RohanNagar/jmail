@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -81,7 +82,7 @@ public final class EmailValidator {
    * @return the new {@code EmailValidator} instance
    */
   public EmailValidator withRules(Map<Predicate<Email>, FailureReason> rules) {
-    Map<Predicate<Email>, FailureReason> ruleMap = new HashMap<>(validationPredicates);
+    Map<Predicate<Email>, FailureReason> ruleMap = new LinkedHashMap<>(validationPredicates);
     ruleMap.putAll(rules);
 
     return new EmailValidator(ruleMap, allowNonstandardDots);

@@ -70,6 +70,22 @@ class EmailValidatorTest {
     assertThat(validator.isInvalid(address)).isFalse();
   }
 
+  @Test
+  void respectsOrderOfRules() {
+    EmailValidator validator = JMail.validator()
+        .disallowSingleCharacterTopLevelDomains()
+        .disallowReservedDomains()
+        .requireValidMXRecord();
+
+    EmailValidationResult singleCharResult = validator.validate("john@doe.c");
+    assertThat(singleCharResult.getFailureReason())
+        .isEqualTo(FailureReason.SINGLE_CHARACTER_TOP_LEVEL_DOMAIN);
+
+    EmailValidationResult reservedResult = validator.validate("john@example.com");
+    assertThat(reservedResult.getFailureReason())
+        .isEqualTo(FailureReason.CONTAINS_RESERVED_DOMAIN);
+  }
+
   @Nested
   class DisallowIpAddress {
     @ParameterizedTest(name = "{0}")
