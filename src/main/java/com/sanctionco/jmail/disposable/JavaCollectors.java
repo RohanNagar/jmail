@@ -13,7 +13,7 @@ final class JavaCollectors {
   private JavaCollectors() {
   }
 
-  // As JMail supports java 8, then having this copy of Collectors.toUnmodifiableSet() from java 10+
+  // Since JMail supports Java 8, copy Collectors.toUnmodifiableSet() from Java 10+
   static <T> Collector<T, HashSet<T>, Set<T>> toUnmodifiableSet() {
     return Collector.of(
         HashSet::new,

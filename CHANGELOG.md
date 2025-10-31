@@ -2,13 +2,15 @@
 
 ## 2.1.0
 
-- Fix bug where addresses containing unquoted Unicode punctuation or symbol characters in the local-part would be incorrectly considered valid.
+- Fix bug where addresses containing unquoted Unicode punctuation or symbol characters in the local-part would be incorrectly considered valid (Thanks @acmcmurray for reporting and @houssam966 for contributing! 🎉).
   - While RFC 6531 allows for UTF-8 characters for the purposes of internationalized domain names, not all Unicode symbols are permitted.
     Specifically, this excludes Punctuation (Pc, Pd, Ps, Pe, Pi, Pf, Po) and Symbols (Sm, Sc, Sk, So).
-  - Thanks @acmcmurray for reporting and @houssam966 for contributing! 🎉
+
+- Fix bug where the validation rules `requireOnlyTopLevelDomains()` and `disallowReservedDomains()` did not correctly ignore case in the domains (Thanks @mtillberg for contributing! 🎉). 
 
 - Add new `ValidationRule` `disallowDisposableDomains(DisposableDomainSource)` to consider email addresses that have a disposable domain (such as `username@10-minute-mail.com`) as invalid.
-  - The `FileSource` implementation of `DisposableDomainSource` uses a given file as the source of truth for disposable domains.
+  - The `DisposableDomainSource.file(String)` implementation of `DisposableDomainSource` uses a given file as the source of truth for disposable domains (Thanks @mtillberg for contributing! 🎉).
+  - The `DisposableDomainSource.inputStream(InputStream)` implementation of `DisposableDomainSource` uses a given `InputStream` as the source of truth for disposable domains (Thanks @liias for contributing! 🎉)
   - The `IsTempMailAPISource` uses the [IsTempMail API](https://www.istempmail.com) as the source of truth for disposable domains. Usage of this source requires an API Key provided by IsTempMail.
 
 ---

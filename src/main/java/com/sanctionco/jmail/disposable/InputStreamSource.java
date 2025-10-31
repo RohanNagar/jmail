@@ -1,6 +1,5 @@
 package com.sanctionco.jmail.disposable;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,11 +23,11 @@ public class InputStreamSource implements DisposableDomainSource {
   private final Set<String> disposableDomains;
 
   /**
-   * Reads all domains (one per line) from the given input stream into memory.
+   * Reads all domains (one per line) from the given input stream into memory and constructs
+   * the new {@code InputStreamSource}.
    * <p>
-   * The input stream is not closed by this constructor,
-   * so the caller is responsible for closing it.
-   * Once the instance is created, the input stream is no longer used.
+   * The input stream is not closed by this constructor, so the caller is responsible
+   * for closing it. Once the instance is created, the input stream is no longer used.
    *
    * @param inputStream the input stream containing disposable domains
    * @throws IOException if the input stream is closed or cannot be read
