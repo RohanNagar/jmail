@@ -55,7 +55,7 @@
 
     <!-- Test dependency versions -->
     <equalsverifier.version>3.19.4</equalsverifier.version>
-    <junit.version>5.14.0</junit.version>
+    <junit.version>5.14.1</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
     <mockito.version>5.20.0</mockito.version>
     <mockneat.version>0.4.8</mockneat.version>
