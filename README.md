@@ -361,12 +361,13 @@ You can require that your `EmailValidator` reject all email addresses that have 
 
 You must provide a `DisposableDomainSource` that is able to determine what domains are considered disposable.
 
-Currently, there are two provided `DisposableDomainSource` implementations:
+Currently, there are three provided `DisposableDomainSource` implementations:
 
-1. `DisposableDomainSource.file(String path)` uses a provided file containing disposable domains as the source. The file could
-   be taken from [disposable-email-domains(https://github.com/disposable-email-domains/disposable-email-domains) for example, and
+1. `DisposableDomainSource.inputStream(InputStream stream)` uses a given `InputStream` as the source of truth for disposable domains.
+2. `DisposableDomainSource.file(String path)` uses a provided file containing disposable domains as the source. The file could
+   be taken from [disposable-email-domains](https://github.com/disposable-email-domains/disposable-email-domains) for example, and
    included in your application.
-2. `DisposableDomainSource.isTempMailAPI(String apiKey)` uses the [IsTempMail API](https://www.istempmail.com) to determine which
+3. `DisposableDomainSource.isTempMailAPI(String apiKey)` uses the [IsTempMail API](https://www.istempmail.com) to determine which
    domains are disposable. To use this source, you must sign up with IsTempMail and get an API key for usage.
 
 > **Please note that using the IsTempMailAPI source for this rule on your email validator can increase the
