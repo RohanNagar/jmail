@@ -59,7 +59,7 @@ public final class EmailValidationResult {
    * Get the reason for failure. If the validation was successful, this method will return
    * {@code FailureReason.NONE}.
    *
-   * @return the {@link FailureReason} that describes why the email address failed valiation
+   * @return the {@link FailureReason} that describes why the email address failed validation
    */
   public FailureReason getFailureReason() {
     return failureReason;

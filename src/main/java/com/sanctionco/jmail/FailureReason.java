@@ -315,7 +315,7 @@ public final class FailureReason {
 
   /**
    * If the rule {@link EmailValidator#requireAscii()} is added to your
-   * {@code EmailValidator}, then this failure indicates the email address contains non-ACII
+   * {@code EmailValidator}, then this failure indicates the email address contains non-ASCII
    * characters.
    */
   public static final FailureReason NON_ASCII_ADDRESS

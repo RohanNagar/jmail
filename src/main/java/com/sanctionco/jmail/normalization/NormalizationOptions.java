@@ -6,7 +6,7 @@ import java.text.Normalizer;
  * <p>This class provides all configurable options to the email address normalization method
  * {@link com.sanctionco.jmail.Email#normalized(NormalizationOptions)} to adjust its behavior.</p>
  *
- * <p>Look at each method in this class to see all of the available options and their default
+ * <p>Look at each method in this class to see all the available options and their default
  * values.</p>
  *
  * <p>You can build a custom NormalizationOptions object to pass into the normalize method using
@@ -96,23 +96,23 @@ public class NormalizationOptions {
   }
 
   /**
-   * <p>Whether to perform unicode normalization on the local-part of the email address.</p>
+   * <p>Whether to perform Unicode normalization on the local-part of the email address.</p>
    *
    * <p>By default, this is {@code false}.</p>
    *
-   * @return true if unicode normalization should be performed, or false otherwise
+   * @return true if Unicode normalization should be performed, or false otherwise
    */
   public boolean shouldPerformUnicodeNormalization() {
     return performUnicodeNormalization;
   }
 
   /**
-   * <p>The {@link Normalizer.Form} to use if performing unicode normalization on the
+   * <p>The {@link Normalizer.Form} to use if performing Unicode normalization on the
    * local-part of the email address.</p>
    *
    * <p>By default, this is {@link Normalizer.Form#NFKC}.</p>
    *
-   * @return the unicode normalization form to use
+   * @return the Unicode normalization form to use
    */
   public Normalizer.Form getUnicodeNormalizationForm() {
     return unicodeNormalizationForm;

@@ -66,7 +66,7 @@ public class NormalizationOptionsBuilder {
    *
    * <p>Many mail servers support adding to the end of the local-part a {@code +} character
    * (or in rare cases a {@code -} character, or even more rare an arbitrary character),
-   * followed by addtional characters, and the mail will be sent to the same address
+   * followed by additional characters, and the mail will be sent to the same address
    * as if the sub-address was never added.</p>
    *
    * <p>For example, {@code test+subaddress@gmail.com} and {@code test+additional@gmail.com}
@@ -93,7 +93,7 @@ public class NormalizationOptionsBuilder {
    *
    * <p>Many mail servers support adding to the end of the local-part a {@code +} character
    * (or in rare cases a {@code -} character, or even more rare an arbitrary character),
-   * followed by addtional characters, and the mail will be sent to the same address
+   * followed by additional characters, and the mail will be sent to the same address
    * as if the sub-address was never added.</p>
    *
    * <p>For example, {@code test+subaddress@gmail.com} and {@code test+additional@gmail.com}
@@ -115,10 +115,10 @@ public class NormalizationOptionsBuilder {
   }
 
   /**
-   * <p>Perform unicode normalization on the local-part of the email address.</p>
+   * <p>Perform Unicode normalization on the local-part of the email address.</p>
    *
    * <p><a href="https://datatracker.ietf.org/doc/html/rfc6530#section-10.1">RFC 6530</a> Section 10.1
-   * describes unicode normalization on the local-part of email addresses in the context
+   * describes Unicode normalization on the local-part of email addresses in the context
    * of internationalized addresses. Of particular note is the following:</p>
    *
    * <pre>
@@ -129,8 +129,8 @@ public class NormalizationOptionsBuilder {
    * <p>With this in mind, it may be beneficial in some situations to be able to normalize
    * the local-part of the email address in an application.</p>
    *
-   * <p>The default normalization behavior does <strong>not</strong> perform unicode normalization.
-   * If unicode normalization is enabled via this method, then the default normalization form used
+   * <p>The default normalization behavior does <strong>not</strong> perform Unicode normalization.
+   * If Unicode normalization is enabled via this method, then the default normalization form used
    * is {@link Normalizer.Form#NFKC}, as recommended in RFC 6530. To use a different form, use the
    * method {@link #performUnicodeNormalization(Normalizer.Form)}.</p>
    *
@@ -142,11 +142,11 @@ public class NormalizationOptionsBuilder {
   }
 
   /**
-   * <p>Perform unicode normalization on the local-part of the email address, and supply a
+   * <p>Perform Unicode normalization on the local-part of the email address, and supply a
    * custom {@link Normalizer.Form}.</p>
    *
    * <p><a href="https://datatracker.ietf.org/doc/html/rfc6530#section-10.1">RFC 6530</a> Section 10.1
-   * describes unicode normalization on the local-part of email addresses in the context
+   * describes Unicode normalization on the local-part of email addresses in the context
    * of internationalized addresses. Of particular note is the following:</p>
    *
    * <pre>
@@ -160,7 +160,7 @@ public class NormalizationOptionsBuilder {
    * <p>The default normalization behavior does <strong>not</strong> perform unicode
    * normalization.</p>
    *
-   * @param form the {@link Normalizer.Form} to use when performing unicode normalization
+   * @param form the {@link Normalizer.Form} to use when performing Unicode normalization
    * @return this
    */
   public NormalizationOptionsBuilder performUnicodeNormalization(Normalizer.Form form) {

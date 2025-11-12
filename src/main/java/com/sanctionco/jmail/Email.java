@@ -71,7 +71,7 @@ public final class Email {
     this.isIpAddress = other.isIpAddress;
     this.containsWhitespace = other.containsWhitespace;
     this.isAscii = other.isAscii;
-    this.hasIdentifier = identifier != null && identifier.length() > 0;
+    this.hasIdentifier = identifier != null && !identifier.isEmpty();
     this.tld = other.tld;
   }
 
@@ -173,7 +173,7 @@ public final class Email {
    * as of RFC 5321 and you <em>SHOULD NOT</em> allow addresses with explicit source routing
    * except under unusual circumstances.
    *
-   * @return the list of explict source routes
+   * @return the list of explicit source routes
    */
   public List<String> explicitSourceRoutes() {
     return sourceRoutes;
@@ -275,7 +275,7 @@ public final class Email {
    * <p>For example, the address {@code "tEST@(comment)example.com"} will return
    * {@code "test@example.com"}.</p>
    *
-   * <p>See {@link NormalizationOptions} for more details on all of the configurable options.</p>
+   * <p>See {@link NormalizationOptions} for more details on all the configurable options.</p>
    *
    * @param options the {@link NormalizationOptions} to use when normalizing
    * @return the normalized version of this email address
@@ -468,11 +468,11 @@ public final class Email {
     String fixedDomain = isIpAddress ? "[" + domain + "]" : domain;
     String fixedLocalPart = fullSourceRoute + localPart;
 
-    String addr = fixedLocalPart + "@" + fixedDomain;
+    String address = fixedLocalPart + "@" + fixedDomain;
 
     return hasIdentifier
-        ? identifier + "<" + addr + ">"
-        : addr;
+        ? identifier + "<" + address + ">"
+        : address;
   }
 
   @Override

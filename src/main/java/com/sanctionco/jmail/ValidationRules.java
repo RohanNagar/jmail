@@ -27,7 +27,7 @@ public final class ValidationRules {
 
   // Set of reserved second level domains according to RFC 2606, section 3
   // Reserved second level domains are all "example.*" The values for * are defined here.
-  private static final Set<TopLevelDomain> reservedExampleTlds = new HashSet<>(
+  private static final Set<TopLevelDomain> reservedExampleTLDs = new HashSet<>(
       Arrays.asList(TopLevelDomain.DOT_COM, TopLevelDomain.DOT_NET, TopLevelDomain.DOT_ORG));
 
   /**
@@ -78,7 +78,7 @@ public final class ValidationRules {
    * @return true if the email address does not contain explicit source routing, or false if it does
    */
   public static boolean disallowExplicitSourceRouting(Email email) {
-    return email.explicitSourceRoutes().size() <= 0;
+    return email.explicitSourceRoutes().isEmpty();
   }
 
   /**
@@ -143,14 +143,10 @@ public final class ValidationRules {
     }
 
     // Check the second level domain to see if it is example.*, where * is contained in
-    // the reservedExampleTlds set
-    if (domainParts.size() > 1
-        && "example".equals(domainParts.get(domainParts.size() - 2).toLowerCase())
-        && reservedExampleTlds.contains(email.topLevelDomain())) {
-      return false;
-    }
-
-    return true;
+    // the reservedExampleTLDs set
+    return domainParts.size() == 1
+        || !"example".equalsIgnoreCase(domainParts.get(domainParts.size() - 2))
+        || !reservedExampleTLDs.contains(email.topLevelDomain());
   }
 
   /**

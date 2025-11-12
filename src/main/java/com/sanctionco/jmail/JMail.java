@@ -99,7 +99,7 @@ public final class JMail {
    * accurate in determining if an email address is valid or invalid due to the
    * complexity of the email RFC standards. That being said, if you come across
    * an email address that you expect to be valid that fails validation, or
-   * vice-versa, please open an issue at the
+   * vice versa, please open an issue at the
    * <a href="https://github.com/RohanNagar/jmail">GitHub repo</a> so it can be fixed.
    *
    * <p>In general, this method should be more or less compliant with the latest RFCs.
@@ -682,7 +682,7 @@ public final class JMail {
       // We can't see the @ character unless we need it
       if (c == '@' && !requireNewDomain) return Optional.empty();
 
-      // A . , : means we should validate the current domain part
+      // One of [. or , or :] means we should validate the current domain part
       if (c == '.' || c == ',' || c == ':') {
         // Cannot be empty or more than 63 chars
         if (currentDomainPart.length() == 0 || currentDomainPart.length() > 63) {
@@ -786,7 +786,7 @@ public final class JMail {
   private static final Set<Byte> DISALLOWED_UNQUOTED_CHARACTER_TYPES = new HashSet<>(
       Arrays.asList(
           Character.CONNECTOR_PUNCTUATION,     // Pc: _ (underscore is ASCII)
-          Character.DASH_PUNCTUATION,          // Pd: - (dash) and variants
+          Character.DASH_PUNCTUATION,          // Pd: - dash and variants
           Character.START_PUNCTUATION,         // Ps: ( [ { etc.
           Character.END_PUNCTUATION,           // Pe: ) ] } etc.
           Character.INITIAL_QUOTE_PUNCTUATION, // Pi: « ' etc.

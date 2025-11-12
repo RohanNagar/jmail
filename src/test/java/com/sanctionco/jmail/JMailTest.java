@@ -35,7 +35,7 @@ class JMailTest {
         ? Collections.singletonList(domain.substring(1, domain.length() - 1))
         : Arrays.stream(
             domain
-                .replaceAll("\\s*\\([^\\)]*\\)\\s*", "") // no comments in parts
+                .replaceAll("\\s*\\([^)]*\\)\\s*", "") // no comments in parts
                 .split("\\.")).map(String::trim).collect(Collectors.toList());
 
     final String expectedDomain = domain.startsWith("[")
@@ -234,7 +234,7 @@ class JMailTest {
     void ensureOnlyDotFails() {
       assertThat(JMail.validate(".@test.com", true))
           .returns(true, EmailValidationResult::isFailure)
-          .returns(FailureReason.LOCAL_PART_MISSING, EmailValidationResult::getFailureReason);;
+          .returns(FailureReason.LOCAL_PART_MISSING, EmailValidationResult::getFailureReason);
     }
 
     @ParameterizedTest(name = "{0}")

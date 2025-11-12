@@ -5,7 +5,6 @@ import com.sanctionco.jmail.normalization.NormalizationOptions;
 
 import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
