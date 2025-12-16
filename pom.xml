@@ -49,7 +49,7 @@
     <gpg-plugin.version>3.2.8</gpg-plugin.version>
     <jacoco.version>0.8.14</jacoco.version>
     <javadoc-plugin.version>3.12.0</javadoc-plugin.version>
-    <release-plugin.version>3.3.0</release-plugin.version>
+    <release-plugin.version>3.3.1</release-plugin.version>
     <source-plugin.version>3.4.0</source-plugin.version>
     <surefire.version>3.5.4</surefire.version>
 
