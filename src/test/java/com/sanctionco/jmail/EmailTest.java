@@ -190,6 +190,20 @@ class EmailTest {
   }
 
   @Test
+  void ensureNormalizedSkipsDomainAsciiConversion() {
+    String address = "you@test.com";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(
+            "you@test.com",
+            email -> email.normalized(NormalizationOptions
+                .builder()
+                .convertDomainToAscii()
+                .build()));
+  }
+
+  @Test
   void ensureNormalizedConvertsLocalPartAndDomain() {
     String address = "Äffintest½@déjà.VU.straße.example.com";
 

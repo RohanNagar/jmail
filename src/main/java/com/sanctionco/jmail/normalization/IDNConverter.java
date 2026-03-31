@@ -18,6 +18,9 @@ public class IDNConverter {
   private static final int INITIAL_BIAS = 72;
   private static final int INITIAL_N = 0x80;
 
+  private IDNConverter() {
+  }
+
   /**
    * Convert a list of labels to ASCII-compatible format, and join them into a domain name.
    * Handles internationalized domain labels.
@@ -57,12 +60,7 @@ public class IDNConverter {
     }
 
     // Encode to Punycode
-    try {
-      return ACE_PREFIX + punycodeEncode(label);
-    } catch (Exception e) {
-      // If encoding fails, return original lowercase
-      return label;
-    }
+    return ACE_PREFIX + punycodeEncode(label);
   }
 
   /**
