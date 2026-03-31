@@ -15,7 +15,7 @@ class DNSLookupUtilTest {
   void failsToFindInvalidMXRecord() {
     assertThat(DNSLookupUtil.hasMXRecord("a.com")).isFalse();
     assertThat(DNSLookupUtil.hasMXRecord("whatis.hello")).isFalse();
-    assertThat(DNSLookupUtil.hasMXRecord("sanctions.com")).isFalse();
+    assertThat(DNSLookupUtil.hasMXRecord("this-does-not-exist.com")).isFalse();
   }
 
   @Test
