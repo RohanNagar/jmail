@@ -15,6 +15,7 @@ public class NormalizationOptionsBuilder {
   String subAddressSeparator = "+";
   boolean performUnicodeNormalization = false;
   Normalizer.Form unicodeNormalizationForm = Normalizer.Form.NFKC;
+  boolean convertDomainToAscii = false;
 
   NormalizationOptionsBuilder() {
   }
@@ -166,6 +167,28 @@ public class NormalizationOptionsBuilder {
   public NormalizationOptionsBuilder performUnicodeNormalization(Normalizer.Form form) {
     this.performUnicodeNormalization = true;
     this.unicodeNormalizationForm = form;
+    return this;
+  }
+
+  /**
+   * <p>Convert the domain of the email address to ASCII.</p>
+   *
+   * <p>Although most modern mail servers support IDNs (internationalized domain names), there
+   * may be some legacy servers that do not. Therefore, it may be beneficial in some situations
+   * to be able to normalize the domain of the email address to its ASCII form. Enabling
+   * this conversion will ensure that any non-ASCII domain parts are turned into ASCII
+   * via Punycode encoding, as specified in
+   * <a href="https://datatracker.ietf.org/doc/html/rfc3492">RFC 3492</a>.</p>
+   *
+   * <p><strong>Note:</strong> enabling this option also results in the domain being lowercased,
+   * as that is required as part of the encoding algorithm.</p>
+   *
+   * <p>The default normalization behavior does <strong>not</strong> convert domains to ASCII.</p>
+   *
+   * @return this
+   */
+  public NormalizationOptionsBuilder convertDomainToAscii() {
+    this.convertDomainToAscii = true;
     return this;
   }
 

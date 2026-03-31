@@ -1,6 +1,7 @@
 package com.sanctionco.jmail;
 
 import com.sanctionco.jmail.normalization.CaseOption;
+import com.sanctionco.jmail.normalization.IDNConverter;
 import com.sanctionco.jmail.normalization.NormalizationOptions;
 
 import java.nio.charset.StandardCharsets;
@@ -435,11 +436,16 @@ public final class Email {
   }
 
   private String normalizedDomain(NormalizationOptions options) {
-    CaseOption caseOption = options.getCaseOption();
+    if (isIpAddress) {
+      return "[" + this.domainWithoutComments + "]";
+    }
 
-    return isIpAddress
-        ? "[" + this.domainWithoutComments + "]"
-        : caseOption.adjustDomain(this.domainWithoutComments);
+    String domain = options.shouldConvertDomainToAscii() && !isAscii
+        ? IDNConverter.labelsToAsciiDomain(this.domainParts)
+        : this.domainWithoutComments;
+
+    CaseOption caseOption = options.getCaseOption();
+    return caseOption.adjustDomain(domain);
   }
 
   private String toHexString(byte[] bytes) {

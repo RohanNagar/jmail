@@ -1,5 +1,10 @@
 # JMail Changelog
 
+## 2.2.0
+
+- Add new normalization option `convertDomainToAscii()`, to have internationalized domain names (IDNs) be converted to ASCII during normalization (Thanks @JamesBoon for suggesting!).
+
+---
 ## 2.1.0
 
 - Fix bug where addresses containing unquoted Unicode punctuation or symbol characters in the local-part would be incorrectly considered valid (Thanks @acmcmurray for reporting and @houssam966 for contributing! 🎉).

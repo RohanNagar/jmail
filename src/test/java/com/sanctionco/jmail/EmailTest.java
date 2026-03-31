@@ -175,6 +175,50 @@ class EmailTest {
             .build()));
   }
 
+  @Test
+  void ensureNormalizedConvertsDomainToAscii() {
+    String address = "you@déjà.VU.straße.example.com";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(
+            "you@xn--dj-kia8a.vu.xn--strae-oqa.example.com",
+            email -> email.normalized(NormalizationOptions
+                .builder()
+                .convertDomainToAscii()
+                .build()));
+  }
+
+  @Test
+  void ensureNormalizedSkipsDomainAsciiConversion() {
+    String address = "you@test.com";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(
+            "you@test.com",
+            email -> email.normalized(NormalizationOptions
+                .builder()
+                .convertDomainToAscii()
+                .build()));
+  }
+
+  @Test
+  void ensureNormalizedConvertsLocalPartAndDomain() {
+    String address = "Äffintest½@déjà.VU.straße.example.com";
+
+    assertThat(Email.of(address))
+        .isPresent().get()
+        .returns(
+            "Äffintest1⁄2@xn--dj-kia8a.vu.xn--strae-oqa.example.com",
+            email -> email.normalized(NormalizationOptions
+                .builder()
+                .adjustCase(CaseOption.NO_CHANGE)
+                .performUnicodeNormalization()
+                .convertDomainToAscii()
+                .build()));
+  }
+
   @ParameterizedTest(name = "{0}")
   @CsvFileSource(resources = "/valid-addresses.csv", numLinesToSkip = 1)
   void ensureNormalizedStripsQuotesForAllValidAddresses(String address) {
