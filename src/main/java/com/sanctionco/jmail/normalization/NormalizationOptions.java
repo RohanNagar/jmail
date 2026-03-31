@@ -25,6 +25,7 @@ public class NormalizationOptions {
   private final String subAddressSeparator;
   private final boolean performUnicodeNormalization;
   private final Normalizer.Form unicodeNormalizationForm;
+  private final boolean convertDomainToAscii;
 
   NormalizationOptions(NormalizationOptionsBuilder builder) {
     this.caseOption = builder.caseOption;
@@ -34,6 +35,7 @@ public class NormalizationOptions {
     this.subAddressSeparator = builder.subAddressSeparator;
     this.performUnicodeNormalization = builder.performUnicodeNormalization;
     this.unicodeNormalizationForm = builder.unicodeNormalizationForm;
+    this.convertDomainToAscii = builder.convertDomainToAscii;
   }
 
   /**
@@ -116,6 +118,17 @@ public class NormalizationOptions {
    */
   public Normalizer.Form getUnicodeNormalizationForm() {
     return unicodeNormalizationForm;
+  }
+
+  /**
+   * <p>Whether to convert the domain of the email address to ASCII using Punycode encoding.</p>
+   *
+   * <p>By default, this is {@code false}.</p>
+   *
+   * @return true if the domain should be converted to ASCII, or false otherwise
+   */
+  public boolean shouldConvertDomainToAscii() {
+    return convertDomainToAscii;
   }
 
   /**
