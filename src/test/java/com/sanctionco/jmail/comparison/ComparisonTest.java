@@ -1,5 +1,7 @@
 package com.sanctionco.jmail.comparison;
 
+import com.google.common.labs.email.EmailAddress;
+import com.google.common.labs.parse.Parser;
 import com.sanctionco.jmail.JMail;
 
 import jakarta.mail.internet.InternetAddress;
@@ -61,8 +63,20 @@ class ComparisonTest {
       "https://github.com/bbottema/email-rfc2822-validator",
       s -> EmailAddressValidator.isValid(s, EmailAddressCriteria.RFC_COMPLIANT));
 
+  private final Implementation googleDotParseImpl = new Implementation("Google dot-parse",
+      "https://github.com/google/mug",
+      s -> {
+        try {
+          EmailAddress.of(s);
+        } catch (Parser.ParseException e) {
+          return false;
+        }
+
+        return true;
+      });
+
   private final List<Implementation> implementations = Arrays
-      .asList(jmailImpl, apacheImpl, javaMailImpl, rfc2822Impl);
+      .asList(jmailImpl, apacheImpl, javaMailImpl, rfc2822Impl, googleDotParseImpl);
 
   @BeforeAll
   @SuppressWarnings({"unused"})
