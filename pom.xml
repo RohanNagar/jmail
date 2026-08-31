@@ -55,6 +55,7 @@
 
     <!-- Test dependency versions -->
     <equalsverifier.version>3.19.4</equalsverifier.version>
+    <jmh.version>1.37</jmh.version>
     <junit.version>5.14.4</junit.version>
     <junit.platform.version>1.9.2</junit.platform.version>
     <mockito.version>5.23.0</mockito.version>
@@ -187,6 +188,21 @@
                 <exclude>module-info.java</exclude>
               </excludes>
               <release>8</release>
+            </configuration>
+          </execution>
+          <execution>
+            <id>default-testCompile</id>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+            <configuration>
+              <annotationProcessorPaths>
+                <path>
+                  <groupId>org.openjdk.jmh</groupId>
+                  <artifactId>jmh-generator-annprocess</artifactId>
+                  <version>${jmh.version}</version>
+                </path>
+              </annotationProcessorPaths>
             </configuration>
           </execution>
         </executions>
@@ -341,5 +357,18 @@
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-generator-annprocess</artifactId>
+      <version>${jmh.version}</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>
