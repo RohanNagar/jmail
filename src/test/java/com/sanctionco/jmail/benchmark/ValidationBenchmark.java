@@ -52,31 +52,16 @@ public class ValidationBenchmark {
   })
   public String email;
 
-  /**
-   * Benchmark JMail validation. This is the implementation under test for the consolidation work.
-   *
-   * @return the validation result, returned so JMH does not eliminate the call
-   */
   @Benchmark
   public boolean jmail() {
     return JMail.isValid(email);
   }
 
-  /**
-   * Benchmark Apache Commons Validator.
-   *
-   * @return the validation result, returned so JMH does not eliminate the call
-   */
   @Benchmark
   public boolean apacheCommons() {
     return EmailValidator.getInstance(true, true).isValid(email);
   }
 
-  /**
-   * Benchmark Jakarta (Javax) Mail address validation.
-   *
-   * @return the validation result, returned so JMH does not eliminate the call
-   */
   @Benchmark
   public boolean jakartaMail() {
     try {
@@ -88,21 +73,11 @@ public class ValidationBenchmark {
     return true;
   }
 
-  /**
-   * Benchmark the email-rfc2822 validator in RFC-compliant mode.
-   *
-   * @return the validation result, returned so JMH does not eliminate the call
-   */
   @Benchmark
   public boolean emailRfc2822() {
     return EmailAddressValidator.isValid(email, EmailAddressCriteria.RFC_COMPLIANT);
   }
 
-  /**
-   * Benchmark the Google dot-parse (mug) email parser.
-   *
-   * @return the validation result, returned so JMH does not eliminate the call
-   */
   @Benchmark
   public boolean googleDotParse() {
     try {

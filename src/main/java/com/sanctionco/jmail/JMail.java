@@ -818,7 +818,7 @@ public final class JMail {
     for (int i = 0, size = domain.length(); i < size; i++) {
       char c = domain.charAt(i);
 
-      if (!JMail.ALLOWED_DOMAIN_CHARACTERS.contains(c)) return false;
+      if (!isAllowedDomainChar(c)) return false;
     }
 
     return true;
@@ -832,6 +832,20 @@ public final class JMail {
    */
   private static boolean isWhitespace(char c) {
     return (c == ' ' || c == '\n' || c == '\r');
+  }
+
+  /**
+   * Returns true if the given character is allowed in a domain.
+   *
+   * @param c the character to check
+   * @return true if allowed in a domain, false otherwise
+   */
+  private static boolean isAllowedDomainChar(char c) {
+    return (c >= 'a' && c <= 'z') // a - z
+        || (c >= 'A' && c <= 'Z') // A - Z
+        || (c >= '0' && c <= '9') // 0 - 9
+        // Hyphen and dot (also allow whitespace between parts)
+        || c == '-' || c == '.' || c == ' ' || c == '\n' || c == '\r';
   }
 
   private static final class SourceRouteDetail {
@@ -864,20 +878,6 @@ public final class JMail {
           Character.MODIFIER_SYMBOL,           // Sk: ^ ` etc.
           Character.OTHER_SYMBOL               // So: © ® ™ etc.
       ));
-
-  // Set of characters that are allowed in the domain
-  private static final Set<Character> ALLOWED_DOMAIN_CHARACTERS = new HashSet<>(
-      Arrays.asList(
-          // A - Z
-          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-          'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-          // a - z
-          'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-          's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-          // 0 - 9
-          '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-          // Hyphen and dot (also allow whitespace between parts)
-          '-', '.', ' ', '\n', '\r'));
 
   // Set of characters within local-part quotes that require an escape
   private static final Set<Character> ALLOWED_QUOTED_WITH_ESCAPE = new HashSet<>(
