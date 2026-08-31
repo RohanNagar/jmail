@@ -157,6 +157,8 @@ public class AdditionalEmailProvider {
             "Whitespace is allowed when dot-separated (or @-separated)"),
         Arguments.of("first .last  @test .org", "first .last  ", "test .org",
             "Whitespace is allowed when dot-separated (or @-separated)"),
+        Arguments.of("Name < first.last@test.org >", " first.last", "test.org ",
+            "Whitespace is allowed in angle brackets"),
         Arguments.of("jdoe@machine(comment).  example", "jdoe", "machine(comment).  example",
             "Whitespace is allowed when dot-separated (or @-separated)"),
         Arguments.of("very.\"(),:;<>[]\".VERY.\"very@\\\\ ”very\".unusual@strange.example.com",
@@ -184,7 +186,14 @@ public class AdditionalEmailProvider {
                 + "last \r\n (  x \r\n ) \r\n @test.org",
             "\r\n (\r\n x \r\n ) \r\n first\r\n ( \r\n x\r\n ) \r\n .\r\n ( \r\n x) \r\n "
                 + "last \r\n (  x \r\n ) \r\n ",
-            "test.org")
+            "test.org"),
+        Arguments.of("John Doe <\r\n test@example.com>", "\r\n test", "example.com",
+            "FWS is allowed after the opening angle bracket"),
+        Arguments.of("Admin <admin@example.com\r\n>", "admin", "example.com\r\n",
+            "FWS is allowed before the closing angle bracket"),
+        Arguments.of("Test User <first.last@example.com >",
+            "first.last", "example.com ",
+            "FWS is allowed before the closing angle bracket")
     );
   }
 }

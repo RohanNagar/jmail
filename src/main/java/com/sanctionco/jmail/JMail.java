@@ -125,7 +125,7 @@ public final class JMail {
    *         {@link Email} object if successful, or the {@link FailureReason} if not
    */
   public static EmailValidationResult validate(String email) {
-    return validateInternal(email, false);
+    return validateInternal(email, false, false);
   }
 
   /**
@@ -138,7 +138,7 @@ public final class JMail {
    *         {@link Email} object if successful, or the {@link FailureReason} if not
    */
   static EmailValidationResult validate(String email, boolean allowNonstandardDots) {
-    return validateInternal(email, allowNonstandardDots);
+    return validateInternal(email, allowNonstandardDots, false);
   }
 
   /**
@@ -150,7 +150,8 @@ public final class JMail {
    * @return a new {@link Email} instance if valid, empty if invalid
    */
   private static EmailValidationResult validateInternal(String email,
-                                                        boolean allowNonstandardDots) {
+                                                        boolean allowNonstandardDots,
+                                                        boolean allowStartingWhitespace) {
     // email cannot be null
     if (email == null) return EmailValidationResult.failure(FailureReason.NULL_ADDRESS);
 
@@ -209,10 +210,14 @@ public final class JMail {
     boolean requireAtOrDot = false;        // set to true if the next character should be @ or .
     boolean requireAtDotOrComment = false; // set to true if the next character should be @ . or (
     boolean whitespace = false;            // set to true if we are currently within whitespace
-    boolean previousComment = false;       // set to true if the last character was the end comment
     boolean requireAngledBracket = false;  // set to true if we need an angled bracket before the @
     boolean containsWhiteSpace = false;    // set to true if the email contains whitespace anywhere
     boolean isAscii = true;                // set to false if the email contains non-ascii chars
+
+    // set to true if the last character was the end comment
+    // initialize to value of allowStartingWhitespace to make it act like we had a prev comment
+    // in the case of "Identifier < test@t.com >" to allow for the whitespace after the '<'
+    boolean previousComment = allowStartingWhitespace;
 
     boolean removableQuotePair = true;     // set to false if the current quote could not be removed
     boolean previousQuotedDot = false;     // set to true if the previous character is '.' in quotes
@@ -252,7 +257,7 @@ public final class JMail {
         }
 
         EmailValidationResult innerResult
-            = validateInternal(email.substring(i + 1, size - 1), allowNonstandardDots);
+            = validateInternal(email.substring(i + 1, size - 1), allowNonstandardDots, true);
 
         // If the address passed validation, return success with the identifier included.
         // Otherwise, just return the failed internal result
@@ -810,7 +815,7 @@ public final class JMail {
           // 0 - 9
           '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
           // Hyphen and dot (also allow whitespace between parts)
-          '-', '.', ' '));
+          '-', '.', ' ', '\n', '\r'));
 
   // Set of characters within local-part quotes that require an escape
   private static final Set<Character> ALLOWED_QUOTED_WITH_ESCAPE = new HashSet<>(

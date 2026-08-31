@@ -90,6 +90,7 @@ two..dot@test.org ;                                                             
 "Doug "Ace" L."@test.org ;                                                             Quotes must be separated by . characters
 Doug\ \"Ace\"\ L\.@test.org ;                                                          Whitespace must be separated by . characters
 hello world@test.org ;                                                                 Whitespace must be separated by . characters
+hello.world@tes t.org ;                                                                Whitespace must be separated by . characters
 gatsby@f.sc.ot.t.f.i.tzg.era.l.d. ;                                                    The domain cannot end with a . character
 .@ ;                                                                                   The local-part cannot be a single . character
 @bar.com ;                                                                             The local-part cannot be empty
