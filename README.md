@@ -40,10 +40,15 @@ following reasons:
 2. JMail is **_faster_** than other libraries by, on average, at least
    2x, thanks in part to lack of regex.
 
+    > The dot-parse library claims to be almost twice as fast as JMail, but they only ran
+    > comparisons with the happy path simple addresses. In reality, many addresses may be
+    > invalid, and dot-parse is very slow to handle invalid addresses as you can see on the
+    > [comparison site](https://www.rohannagar.com/jmail/).
+
 3. JMail has **_zero dependencies_** and is very lightweight.
 
 4. JMail is **_modern_**. It is built for Java 8+, and provides many
-   [useful methods and data accessors](#usage).
+   [useful methods, data accessors, and canonical address formats](#usage).
 
 [Click here for a full report](https://www.rohannagar.com/jmail/)
 of the differences in correctness and speed between JMail and other libraries.
