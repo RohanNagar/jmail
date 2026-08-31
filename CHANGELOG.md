@@ -1,5 +1,11 @@
 # JMail Changelog
 
+## 2.2.1
+
+- Fix bug where addresses with whitespace at the beginning or end of the address within angle brackets of quoted identifiers
+  (ex. `John Smith < John@smith.com >`) were incorrectly considered invalid. These now validate properly as expected.
+
+---
 ## 2.2.0
 
 - Add new normalization option `convertDomainToAscii()`, to have internationalized domain names (IDNs) be converted to ASCII during normalization (Thanks @JamesBoon for suggesting!).
