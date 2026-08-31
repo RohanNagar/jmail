@@ -238,6 +238,7 @@ public final class JMail {
     int charactersOnLine = 1; // since we can have 0 chars on the first line, start at 1
 
     int encodedWordState = 0; // tracks the state of a possible encoded word
+    boolean hasEncodedWord = false;
 
     for (int i = 0; i < size; i++) {
       char c = email.charAt(i);
@@ -246,7 +247,7 @@ public final class JMail {
         encodedWordState = updateEncodedWordState(encodedWordState, c);
 
         if (encodedWordState == 6) {
-          return EmailValidationResult.failure(FailureReason.ENCODED_WORD_IN_LOCAL_PART);
+          hasEncodedWord = true;
         }
       }
 
@@ -472,6 +473,12 @@ public final class JMail {
         // it's time to invalidate the address
         if (startsWithDot) {
           return EmailValidationResult.failure(FailureReason.STARTS_WITH_DOT);
+        }
+
+        // Also invalidate if we saw an encoded-word in the local-part since there is no longer
+        // a chance of the encoded word being in the display-name
+        if (hasEncodedWord) {
+          return EmailValidationResult.failure(FailureReason.ENCODED_WORD_IN_LOCAL_PART);
         }
 
         if (firstDomainChar && c == '[') {

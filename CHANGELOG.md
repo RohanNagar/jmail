@@ -4,8 +4,9 @@
 
 - Fix bug where addresses with whitespace at the beginning or end of the address within angle brackets of quoted identifiers
   (ex. `John Smith < John@smith.com >`) were incorrectly considered invalid. These now validate properly as expected.
-- Fix bug where addresses containing an encoded-word in the local-part were incorrectly considered valid.
-  These addresses (ex. `=?utf-8?q?=40evil.com=00?=@microsoft.com`) are invalid according to RFC 2047.
+- Fix bug where addresses containing an encoded word in the local-part were incorrectly considered valid.
+  These addresses (ex. `=?utf-8?q?=40evil.com=00?=@microsoft.com`) are invalid according to RFC 2047. Encoded words are
+  still allowed in identifiers (ex. `=?utf-8?q?=40evil.com=00?= <test@microsoft.com>`).
 
 ---
 ## 2.2.0

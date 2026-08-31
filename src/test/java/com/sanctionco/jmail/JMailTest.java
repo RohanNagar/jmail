@@ -280,6 +280,15 @@ class JMailTest {
     assertThat(email).is(valid);
   }
 
+  @ParameterizedTest(name = "{0}")
+  @ValueSource(strings = {
+      "=?utf-8?q?=40evil.com=00?= <test@example.com>"
+  })
+  void ensureEncodedWordsInIdentiferPass(String email) {
+    assertThat(JMail.tryParse(email)).isPresent();
+    assertThat(email).is(valid);
+  }
+
   @Test
   void ensureEncodedWordDetectionRespectQuotes() {
     // Encoded-word pattern inside quotes should be allowed
