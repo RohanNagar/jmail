@@ -157,3 +157,4 @@ emailwithmath×symbol@test.com ;                                                
 euro€@eu.com ;                                                                         Unicode currency symbols are not allowed in the local-part
 mod¨@modifier.edu ;                                                                    Unicode modifier symbols are not allowed in the local-part
 other©copyright@copy.org ;                                                             Other Unicode symbols like the copyright symbol are not allowed in the local-part
+=?utf-8?q?=40evil.com=00?=@microsoft.com ;                                             Encoded words are not allowed in the local-part

@@ -80,6 +80,12 @@ public final class FailureReason {
       = new FailureReason("DOMAIN_TOO_LONG");
 
   /**
+   * An email address cannot have encoded-words according to RFC 2047.
+   */
+  public static final FailureReason ENCODED_WORD_IN_LOCAL_PART
+      = new FailureReason("ENCODED_WORD_IN_LOCAL_PART");
+
+  /**
    * An email address cannot end with the {@code '.'} character.
    */
   public static final FailureReason ENDS_WITH_DOT

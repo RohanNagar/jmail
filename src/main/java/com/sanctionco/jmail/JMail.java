@@ -235,10 +235,20 @@ public final class JMail {
 
     int localPartCommentLength = 0;
     int domainCommentLength = 0;
-    int charactersOnLine = 1; // sine we can have 0 chars on the first line, start at 1
+    int charactersOnLine = 1; // since we can have 0 chars on the first line, start at 1
+
+    int encodedWordState = 0; // tracks the state of a possible encoded word
 
     for (int i = 0; i < size; i++) {
       char c = email.charAt(i);
+
+      if (!atFound && !inQuotes) {
+        encodedWordState = updateEncodedWordState(encodedWordState, c);
+
+        if (encodedWordState == 6) {
+          return EmailValidationResult.failure(FailureReason.ENCODED_WORD_IN_LOCAL_PART);
+        }
+      }
 
       if (c >= 128) isAscii = false;
 
@@ -741,6 +751,51 @@ public final class JMail {
     if (requireNewDomain) return Optional.empty();
 
     return Optional.of(detail);
+  }
+
+  private static int updateEncodedWordState(int currentState, char c) {
+    switch (currentState) {
+      case 0: // Initial state, looking for '='
+        if (c == '=') {
+          return 1;
+        }
+        break;
+
+      case 1: // Saw '=', expecting '?'
+        return c == '?' ? 2 : 0;
+
+      case 2: // Saw '=?', accumulating charset (looking for separator '?')
+        if (c == '?') {
+          return 3; // Move to encoding separator
+        }
+        break;
+
+      case 3: // Saw '=?charset?', accumulating encoding (looking for separator '?')
+        if (c == '?') {
+          return 4; // Move to encoded-text
+        }
+        break;
+
+      case 4: // Saw '=?charset?encoding?', accumulating encoded-text (looking for '?=')
+        if (c == '?') {
+          return 5; // Potential end of pattern
+        }
+        break;
+
+      case 5: // Saw potential '?=', check if this is the closing sequence
+        if (c == '=') {
+          // Found complete encoded-word pattern =?charset?encoding?text?=
+          return 6;
+        }
+
+        // Not a closing '=', but we're still in encoded-text, reset to state 4
+        return 4;
+
+      default:
+        return currentState;
+    }
+
+    return currentState;
   }
 
   private static boolean isValidIdn(String test) {
