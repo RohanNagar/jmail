@@ -13,8 +13,8 @@
   <img src="https://img.shields.io/badge/monthly_downloads-110%2C503-green" alt="Monthly Downloads">
 </a>
 
-A modern, fast, zero-dependency library for working with email addresses
-and performing email address validation in Java.
+A modern, fast, zero-dependency library for parsing, validating,
+and working with email addresses in Java.
 
 Built for Java 8 and up.
 
@@ -28,7 +28,7 @@ Built for Java 8 and up.
 JMail was built mainly because I wanted to tackle the complex problem
 of email address validation without using Regex. Along the way, JMail became a
 much better choice than other Java email validation libraries
-(such as Apache Commons Validator or Jakarta (Javax) Mail Validation) for the
+(such as Apache Commons Validator, Jakarta Mail Validation, or Google dot-parse) for the
 following reasons:
 
 1. JMail is **_more correct_** than other libraries. For example, both
@@ -38,16 +38,16 @@ following reasons:
    [see a full comparison of correctness and try it out for yourself online](https://www.rohannagar.com/jmail/).
 
 2. JMail is **_faster_** than other libraries by, on average, at least
-   2x, thanks in part to lack of regex.
-
-    > The dot-parse library claims to be almost twice as fast as JMail, but they only ran
-    > comparisons with the happy path simple addresses. In reality, many addresses may be
-    > invalid, and dot-parse is very slow to handle invalid addresses as you can see on the
-    > [comparison site](https://www.rohannagar.com/jmail/).
+   2x, thanks in part to lack of regex. See the [performance](#performance) section
+   for more details.
 
 3. JMail has **_zero dependencies_** and is very lightweight.
 
-4. JMail is **_modern_**. It is built for Java 8+, and provides many
+4. JMail is **_customizable and feature-rich_**. You can provide custom validation rules,
+   directly access different parts of the email addresses, and transform addresses into
+   a wide variety of canonical formats.
+
+5. JMail is **_modern_**. It is built for Java 8+, and provides many
    [useful methods, data accessors, and canonical address formats](#usage).
 
 [Click here for a full report](https://www.rohannagar.com/jmail/)
@@ -79,6 +79,29 @@ Or in your `build.gradle`:
 ```groovy
 implementation 'com.sanctionco.jmail:jmail:2.2.0'
 ```
+
+## Performance
+
+Average validation time in nanoseconds per operation (ns/op), measured with JMH.
+
+You can see that while Google's dot-parse and Jakarta Mail are quick for simple
+valid addresses, they struggle a lot with invalid addresses, while JMail stays consistently
+sub-microsecond no matter what address you give it, and time only increases based on the length of
+the address, making it truly an `O(n)` solution.
+
+This consistent performance, combined with much better [correctness](https://www.rohannagar.com/jmail/),
+a richer API set, and more out-of-the-box customization and canonicalization options, makes JMail the best
+choice for email address parsing and validation.
+
+| Email address                                  | JMail | Google dot-parse | Jakarta Mail | Apache Commons | email-rfc2822 |
+|:-----------------------------------------------| ---: | ---: | ---: | ---: | ---: |
+| `email@example.com`                            | 446 | 167 | 71 | 678 | 2034 |
+| `first.middle.last@sub.division.example.co.uk` | 947 | 297 | 175 | 1573 | 5129 |
+| `user@münchen.de`                              | 733 | 663 | 63 | 1331 | 2229 |
+| `user@12345.example.com`                       | 564 | 215 | 86 | 776 | 1821 |
+| `first@last@example.org` (Invalid)             | 100 | 1393 | 815 | 411 | 2867 |
+| `valid.local@exam_ple.com` (Invalid)           | 432 | 1421 | 835 | 881 | 3384 |
+| `"john doe"(a comment)@example.com` (Invalid)  | 648 | 1508 | 501 | 719 | 8433 |
 
 ## Usage
 
