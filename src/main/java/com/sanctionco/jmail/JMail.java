@@ -207,6 +207,8 @@ public final class JMail {
     boolean previousBackslash = false;     // set to true if the previous character is '\'
     boolean firstDomainChar = true;        // set to false after beginning parsing the domain
     boolean domainPartNumeric = true;      // set to false once the domain label has a non-digit
+    boolean domainIsAscii = true;          // set to false once the domain has a non-ascii char
+    boolean domainHasAceLabel = false;     // set to true if the domain contains an ACE label xn--
     boolean isIpAddress = false;           // set to true if encountered an IP address domain
     boolean requireAtOrDot = false;        // set to true if the next character should be @ or .
     boolean requireAtDotOrComment = false; // set to true if the next character should be @ . or (
@@ -249,7 +251,9 @@ public final class JMail {
     for (int i = 0; i < size; i++) {
       char c = email.charAt(i);
 
-      if (!atFound && !inQuotes) {
+      // Update the current encoded-word state if we're in a non-zero state, or we
+      // see a = character which could be the start of one
+      if (!atFound && !inQuotes && (encodedWordState != 0 || c == '=')) {
         encodedWordState = updateEncodedWordState(encodedWordState, c);
 
         if (encodedWordState == 6) {
@@ -547,11 +551,19 @@ public final class JMail {
             return EmailValidationResult.failure(FailureReason.DOMAIN_PART_ENDS_WITH_DASH);
           }
 
+          if (domainIsAscii && !domainHasAceLabel && startsWithAcePrefix(currentDomainPart)) {
+            domainHasAceLabel = true;
+          }
+
           domainParts.add(currentDomainPart.toString());
           currentDomainPart.setLength(0);
           domainPartNumeric = true;
         } else {
           if (!isWhitespace(c)) {
+            // non-ascii chars must be deferred to the end when we call isValidIdn
+            if (c < 128 && !isAllowedDomainChar(c)) {
+              return EmailValidationResult.failure(FailureReason.INVALID_DOMAIN_CHARACTER);
+            }
             currentDomainPart.append(c);
             domainPartNumeric = domainPartNumeric && Character.isDigit(c);
           }
@@ -561,6 +573,7 @@ public final class JMail {
         if (domainWithoutComments != null) {
           domainWithoutComments.append(c);
         }
+        if (c >= 128) domainIsAscii = false;
         firstDomainChar = false;
       }
 
@@ -671,6 +684,10 @@ public final class JMail {
       return EmailValidationResult.failure(FailureReason.NUMERIC_TLD);
     }
 
+    if (domainIsAscii && !domainHasAceLabel && startsWithAcePrefix(currentDomainPart)) {
+      domainHasAceLabel = true;
+    }
+
     domainParts.add(currentDomainPart.toString());
 
     String domainStr = domain.toString();
@@ -678,8 +695,11 @@ public final class JMail {
         ? domainWithoutComments.toString()
         : domainStr;
 
-    // Validate the characters in the domain if it is not an IP address
-    if (!isIpAddress && !isValidIdn(domainWithoutCommentsStr)) {
+    // Validate the characters in the domain if it is not an IP address.
+    // We already validated characters in the main loop for fully ASCII domains,
+    // this check exists for non-ASCII domains which require us to convert to ASCII via IDN.
+    if (!isIpAddress && (!domainIsAscii || domainHasAceLabel)
+        && !isValidIdn(domainWithoutCommentsStr)) {
       return EmailValidationResult.failure(FailureReason.INVALID_DOMAIN_CHARACTER);
     }
 
@@ -888,6 +908,22 @@ public final class JMail {
   }
 
   /**
+   * Returns true if the given sequence starts with the ACE prefix {@code xn--}.
+   *
+   * @param label the label to check
+   * @return true if it starts with the ACE prefix, false otherwise
+   */
+  private static boolean startsWithAcePrefix(CharSequence label) {
+    if (label.length() < ACE_PREFIX.length()) return false;
+
+    for (int i = 0; i < ACE_PREFIX.length(); i++) {
+      if (Character.toLowerCase(label.charAt(i)) != ACE_PREFIX.charAt(i)) return false;
+    }
+
+    return true;
+  }
+
+  /**
    * Returns true if the given character is allowed in a domain.
    *
    * @param c the character to check
@@ -917,6 +953,7 @@ public final class JMail {
   }
 
   private static final String IPV6_PREFIX = "IPv6:";
+  private static final String ACE_PREFIX = "xn--";
 
   // Set of characters that are not allowed in the local-part outside of quotes
   private static final Set<Character> DISALLOWED_UNQUOTED_CHARACTERS = new HashSet<>(

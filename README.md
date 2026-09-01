@@ -34,7 +34,7 @@ following reasons:
 1. JMail is **_more correct_** than other libraries. For example, both
    Apache Commons and Jakarta Mail consider `first@last@test.org` as a valid
    email address! It clearly is not, as it has two `@` characters. JMail correctly
-   considers this address invalid. You can
+   considers this address invalid. No other library does better than _78% correct_ (JMail is 100%)! You can
    [see a full comparison of correctness and try it out for yourself online](https://www.rohannagar.com/jmail/).
 
 2. JMail is **_faster_** than other libraries by, on average, at least
@@ -84,24 +84,30 @@ implementation 'com.sanctionco.jmail:jmail:2.2.0'
 
 Average validation time in nanoseconds per operation (ns/op), measured with JMH.
 
-You can see that while Google's dot-parse and Jakarta Mail are quick for simple
-valid addresses, they struggle a lot with invalid addresses, while JMail stays consistently
-sub-microsecond no matter what address you give it, and time only increases based on the length of
-the address, making it truly an `O(n)` solution.
+JMail can take slightly longer (tens of nanoseconds) than others for some valid address because of how
+feature-rich the library is. The main loop ensures full RFC correctness and so requires considerably more allocations
+and branches in the logic than all other implementations that reduce the RFC set they validate against.
+Despite all the extra logic, JMail has fantastic performance numbers across the board, and doesn't give up
+anything in correctness.
+
+Additionally, other quick implementations like Google's dot-parse and Jakarta Mail
+struggle a lot with invalid addresses, while JMail's performance stays consistent with that
+of valid addresses. No matter what address you give it, time only increases based on the length
+or complexity of the address, making it truly an `O(n)` solution.
 
 This consistent performance, combined with **much** better [correctness](https://www.rohannagar.com/jmail/),
 a richer API set, and more out-of-the-box customization and canonicalization options, makes JMail the best
 choice for email address parsing and validation.
 
 | Email address                                  | JMail | Google dot-parse | Jakarta Mail | Apache Commons | email-rfc2822 |
-|:-----------------------------------------------|------:| ---: | ---: | ---: | ---: |
-| `email@example.com`                            |   319 | 167 | 71 | 678 | 2034 |
-| `first.middle.last@sub.division.example.co.uk` |   626 | 297 | 175 | 1573 | 5129 |
-| `user@münchen.de`                              |   751 | 663 | 63 | 1331 | 2229 |
-| `user@12345.example.com`                       |   446 | 215 | 86 | 776 | 1821 |
-| `first@last@example.org` (Invalid)             |    57 | 1393 | 815 | 411 | 2867 |
-| `valid.local@exam_ple.com` (Invalid)           |   339 | 1421 | 835 | 881 | 3384 |
-| `"john doe"(a comment)@example.com` (Invalid)  |   584 | 1508 | 501 | 719 | 8433 |
+|:-----------------------------------------------|------:|-----------------:|-------------:|---------------:|--------------:|
+| `email@example.com`                            |   188 |              167 |           71 |            678 |          2034 |
+| `first.middle.last@sub.division.example.co.uk` |   364 |              297 |          175 |           1573 |          5129 |
+| `user@münchen.de`                              |   751 |              663 |           63 |           1331 |          2229 |
+| `user@12345.example.com`                       |   263 |              215 |           86 |            776 |          1821 |
+| `first@last@example.org` (Invalid)             |    61 |             1393 |          815 |            411 |          2867 |
+| `valid.local@exam_ple.com` (Invalid)           |    80 |             1421 |          835 |            881 |          3384 |
+| `"john doe"(a comment)@example.com` (Invalid)  |   459 |             1508 |          501 |            719 |          8433 |
 
 ## Usage
 
