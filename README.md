@@ -89,19 +89,19 @@ valid addresses, they struggle a lot with invalid addresses, while JMail stays c
 sub-microsecond no matter what address you give it, and time only increases based on the length of
 the address, making it truly an `O(n)` solution.
 
-This consistent performance, combined with much better [correctness](https://www.rohannagar.com/jmail/),
+This consistent performance, combined with **much** better [correctness](https://www.rohannagar.com/jmail/),
 a richer API set, and more out-of-the-box customization and canonicalization options, makes JMail the best
 choice for email address parsing and validation.
 
 | Email address                                  | JMail | Google dot-parse | Jakarta Mail | Apache Commons | email-rfc2822 |
-|:-----------------------------------------------| ---: | ---: | ---: | ---: | ---: |
-| `email@example.com`                            | 446 | 167 | 71 | 678 | 2034 |
-| `first.middle.last@sub.division.example.co.uk` | 947 | 297 | 175 | 1573 | 5129 |
-| `user@münchen.de`                              | 733 | 663 | 63 | 1331 | 2229 |
-| `user@12345.example.com`                       | 564 | 215 | 86 | 776 | 1821 |
-| `first@last@example.org` (Invalid)             | 100 | 1393 | 815 | 411 | 2867 |
-| `valid.local@exam_ple.com` (Invalid)           | 432 | 1421 | 835 | 881 | 3384 |
-| `"john doe"(a comment)@example.com` (Invalid)  | 648 | 1508 | 501 | 719 | 8433 |
+|:-----------------------------------------------|------:| ---: | ---: | ---: | ---: |
+| `email@example.com`                            |   319 | 167 | 71 | 678 | 2034 |
+| `first.middle.last@sub.division.example.co.uk` |   626 | 297 | 175 | 1573 | 5129 |
+| `user@münchen.de`                              |   751 | 663 | 63 | 1331 | 2229 |
+| `user@12345.example.com`                       |   446 | 215 | 86 | 776 | 1821 |
+| `first@last@example.org` (Invalid)             |    57 | 1393 | 815 | 411 | 2867 |
+| `valid.local@exam_ple.com` (Invalid)           |   339 | 1421 | 835 | 881 | 3384 |
+| `"john doe"(a comment)@example.com` (Invalid)  |   584 | 1508 | 501 | 719 | 8433 |
 
 ## Usage
 

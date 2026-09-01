@@ -206,6 +206,7 @@ public final class JMail {
     boolean previousDot = false;           // set to true if the previous character is '.'
     boolean previousBackslash = false;     // set to true if the previous character is '\'
     boolean firstDomainChar = true;        // set to false after beginning parsing the domain
+    boolean domainPartNumeric = true;      // set to false once the domain label has a non-digit
     boolean isIpAddress = false;           // set to true if encountered an IP address domain
     boolean requireAtOrDot = false;        // set to true if the next character should be @ or .
     boolean requireAtDotOrComment = false; // set to true if the next character should be @ . or (
@@ -223,21 +224,26 @@ public final class JMail {
     boolean previousQuotedDot = false;     // set to true if the previous character is '.' in quotes
     boolean requireQuotedDot = false;      // set to true if we need a . for a removable quote
 
+    // Keep as many of these lazy as possible - each allocation adds overall time to validation
     StringBuilder localPart = new StringBuilder(size);
-    StringBuilder localPartWithoutComments = new StringBuilder(size);
-    StringBuilder localPartWithoutQuotes = new StringBuilder(size);
-    StringBuilder currentQuote = new StringBuilder();
+    StringBuilder localPartWithoutComments = null;
+    StringBuilder localPartWithoutQuotes = null;
+
     StringBuilder domain = new StringBuilder(size);
-    StringBuilder domainWithoutComments = new StringBuilder(size);
+    StringBuilder domainWithoutComments = null;
+
     StringBuilder currentDomainPart = new StringBuilder();
     List<String> domainParts = new ArrayList<>();
-    List<String> comments = new ArrayList<>();
+
+    StringBuilder currentQuote = null;
+    List<String> comments = null;
 
     int localPartCommentLength = 0;
     int domainCommentLength = 0;
     int charactersOnLine = 1; // since we can have 0 chars on the first line, start at 1
 
-    int encodedWordState = 0; // tracks the state of a possible encoded word
+    // tracks the state of a possible encoded word
+    int encodedWordState = 0;
     boolean hasEncodedWord = false;
 
     for (int i = 0; i < size; i++) {
@@ -370,16 +376,28 @@ public final class JMail {
         i += (commentStrLen - 1);
 
         if (!atFound) {
+          if (localPartWithoutComments == null) {
+            localPartWithoutComments = new StringBuilder(localPart);
+          }
+
           localPart.append(commentStr);
           localPartCommentLength += commentStrLen;
         } else {
           // comment is part of domain string, but not a domain part
+          if (domainWithoutComments == null) {
+            domainWithoutComments = new StringBuilder(domain);
+          }
+
           domain.append(commentStr);
           domainCommentLength += commentStrLen;
         }
 
-        previousComment = true;
+        if (comments == null) {
+          comments = new ArrayList<>();
+        }
+
         comments.add(commentStr.substring(1, commentStrLen - 1)); // add the comment without ()
+        previousComment = true;
         continue;
       }
 
@@ -399,7 +417,9 @@ public final class JMail {
           return EmailValidationResult.failure(FailureReason.INVALID_QUOTE_LOCATION);
         }
 
-        boolean mustBeQuoted = JMail.DISALLOWED_UNQUOTED_CHARACTERS.contains(c);
+        boolean mustBeQuoted = c < 128
+            ? JMail.DISALLOWED_UNQUOTED_ASCII[c]
+            : JMail.DISALLOWED_UNQUOTED_CHARACTERS.contains(c);
 
         if (c != '"' && !inQuotes && !previousBackslash && mustBeQuoted) {
           return EmailValidationResult.failure(FailureReason.DISALLOWED_UNQUOTED_CHARACTER);
@@ -446,7 +466,7 @@ public final class JMail {
         if (inQuotes) {
           // if we are in quotes, we need to make sure that if the character requires
           // a backlash escape, that it is there
-          if (JMail.ALLOWED_QUOTED_WITH_ESCAPE.contains(c)) {
+          if (c == '\r' || c == '␀' || c == '\n') {
             if (!previousBackslash) {
               return EmailValidationResult.failure(FailureReason.MISSING_BACKSLASH_ESCAPE);
             }
@@ -456,9 +476,11 @@ public final class JMail {
         }
 
         localPart.append(c);
-        localPartWithoutComments.append(c);
+        if (localPartWithoutComments != null) {
+          localPartWithoutComments.append(c);
+        }
 
-        if (c != '"') {
+        if (localPartWithoutQuotes != null && c != '"') {
           if (inQuotes) {
             currentQuote.append(c);
           } else {
@@ -504,7 +526,9 @@ public final class JMail {
 
           currentDomainPart.append(validatedIp.get());
           domain.append(validatedIp.get());
-          domainWithoutComments.append(validatedIp.get());
+          if (domainWithoutComments != null) {
+            domainWithoutComments.append(validatedIp.get());
+          }
 
           isIpAddress = true;
           break;
@@ -524,13 +548,19 @@ public final class JMail {
           }
 
           domainParts.add(currentDomainPart.toString());
-          currentDomainPart = new StringBuilder();
+          currentDomainPart.setLength(0);
+          domainPartNumeric = true;
         } else {
-          if (!isWhitespace(c)) currentDomainPart.append(c);
+          if (!isWhitespace(c)) {
+            currentDomainPart.append(c);
+            domainPartNumeric = domainPartNumeric && Character.isDigit(c);
+          }
         }
 
         domain.append(c);
-        domainWithoutComments.append(c);
+        if (domainWithoutComments != null) {
+          domainWithoutComments.append(c);
+        }
         firstDomainChar = false;
       }
 
@@ -553,7 +583,19 @@ public final class JMail {
           }
         } else { // opening quote
           removableQuotePair = true;
-          currentQuote = new StringBuilder();
+          if (currentQuote == null) {
+            currentQuote = new StringBuilder();
+          } else {
+            currentQuote.setLength(0);
+          }
+
+          if (localPartWithoutQuotes == null) {
+            StringBuilder base = localPartWithoutComments != null
+                ? localPartWithoutComments
+                : localPart;
+            localPartWithoutQuotes = new StringBuilder(base.length());
+            localPartWithoutQuotes.append(base, 0, base.length() - 1);
+          }
         }
 
         inQuotes = !inQuotes;
@@ -625,24 +667,35 @@ public final class JMail {
     }
 
     // Ensure the last domain part (TLD) is not all numeric
-    String tld = currentDomainPart.toString();
-
-    if (tld.chars().allMatch(Character::isDigit)) {
+    if (!isIpAddress && domainPartNumeric) {
       return EmailValidationResult.failure(FailureReason.NUMERIC_TLD);
     }
 
-    domainParts.add(tld);
+    domainParts.add(currentDomainPart.toString());
+
+    String domainStr = domain.toString();
+    String domainWithoutCommentsStr = domainWithoutComments != null
+        ? domainWithoutComments.toString()
+        : domainStr;
 
     // Validate the characters in the domain if it is not an IP address
-    if (!isIpAddress && !isValidIdn(domainWithoutComments.toString())) {
+    if (!isIpAddress && !isValidIdn(domainWithoutCommentsStr)) {
       return EmailValidationResult.failure(FailureReason.INVALID_DOMAIN_CHARACTER);
     }
 
+    String localPartStr = localPart.toString();
+    String localPartWithoutCommentsStr = localPartWithoutComments != null
+        ? localPartWithoutComments.toString()
+        : localPartStr;
+    String localPartWithoutQuotesStr = localPartWithoutQuotes != null
+        ? localPartWithoutQuotes.toString()
+        : localPartWithoutCommentsStr;
+
     Email parsed = new Email(
-        localPart.toString(), localPartWithoutComments.toString(),
-        localPartWithoutQuotes.toString(), domain.toString(), domainWithoutComments.toString(),
-        fullSourceRoute, domainParts, comments, sourceRoutes, isIpAddress,
-        containsWhiteSpace, isAscii);
+        localPartStr, localPartWithoutCommentsStr,
+        localPartWithoutQuotesStr, domainStr, domainWithoutCommentsStr,
+        fullSourceRoute, domainParts, comments != null ? comments : Collections.emptyList(),
+        sourceRoutes, isIpAddress, containsWhiteSpace, isAscii);
 
     return EmailValidationResult.success(parsed);
   }
@@ -723,7 +776,7 @@ public final class JMail {
           return Optional.empty();
         }
 
-        currentDomainPart = new StringBuilder();
+        currentDomainPart.setLength(0);
       } else {
         if (c != '@') currentDomainPart.append(c);
       }
@@ -740,7 +793,7 @@ public final class JMail {
 
         detail.routes.add(route);
 
-        sourceRoute = new StringBuilder();
+        sourceRoute.setLength(0);
       } else if (c != '@') {
         sourceRoute.append(c);
       }
@@ -848,6 +901,16 @@ public final class JMail {
         || c == '-' || c == '.' || c == ' ' || c == '\n' || c == '\r';
   }
 
+  private static boolean[] buildAsciiLookup(Set<Character> chars) {
+    boolean[] table = new boolean[128];
+
+    for (char c : chars) {
+      if (c < 128) table[c] = true;
+    }
+
+    return table;
+  }
+
   private static final class SourceRouteDetail {
     private final StringBuilder fullRoute = new StringBuilder();
     private final List<String> routes = new ArrayList<>();
@@ -879,7 +942,6 @@ public final class JMail {
           Character.OTHER_SYMBOL               // So: © ® ™ etc.
       ));
 
-  // Set of characters within local-part quotes that require an escape
-  private static final Set<Character> ALLOWED_QUOTED_WITH_ESCAPE = new HashSet<>(
-      Arrays.asList('\r', '␀', '\n'));
+  private static final boolean[] DISALLOWED_UNQUOTED_ASCII
+      = buildAsciiLookup(DISALLOWED_UNQUOTED_CHARACTERS);
 }
