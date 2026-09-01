@@ -509,6 +509,7 @@ encouraged.
 
 Relevant RFCs:
 [822](https://datatracker.ietf.org/doc/html/rfc822),
+[2047](https://datatracker.ietf.org/doc/html/rfc2047),
 [2822](https://datatracker.ietf.org/doc/html/rfc2822),
 [5321](https://datatracker.ietf.org/doc/html/rfc5321),
 [5322](https://datatracker.ietf.org/doc/html/rfc5322),
