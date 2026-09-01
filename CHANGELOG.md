@@ -7,7 +7,7 @@
 - Fix bug where addresses containing an encoded word in the local-part were incorrectly considered valid.
   These addresses (ex. `=?utf-8?q?=40evil.com=00?=@microsoft.com`) are invalid according to RFC 2047. Encoded words are
   still allowed in identifiers (ex. `=?utf-8?q?=40evil.com=00?= <test@microsoft.com>`).
-- Up to 58% performance improvement in simple address validation, plus published performance benchmarking numbers.
+- Performance improvements up to 77% 🔥 in simple address validation, plus published performance benchmarking numbers.
 
 ---
 ## 2.2.0

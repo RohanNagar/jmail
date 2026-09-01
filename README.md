@@ -84,30 +84,27 @@ implementation 'com.sanctionco.jmail:jmail:2.2.0'
 
 Average validation time in nanoseconds per operation (ns/op), measured with JMH.
 
-JMail can take slightly longer (tens of nanoseconds) than others for some valid address because of how
-feature-rich the library is. The main loop ensures full RFC correctness and so requires considerably more allocations
-and branches in the logic than all other implementations that reduce the RFC set they validate against.
-Despite all the extra logic, JMail has fantastic performance numbers across the board, and doesn't give up
-anything in correctness.
-
-Additionally, other quick implementations like Google's dot-parse and Jakarta Mail
-struggle a lot with invalid addresses, while JMail's performance stays consistent with that
-of valid addresses. No matter what address you give it, time only increases based on the length
-or complexity of the address, making it truly an `O(n)` solution.
+JMail can take slightly longer (tens of nanoseconds) than Jakarta for some valid address because of the
+comprehensivity of its checks. Note that Jakarta Mail has the worst correctness result of all
+competing libraries (61.5% correct). The main loop in JMail ensures full RFC correctness and so requires more
+and branches in the logic than any implementation that reduces the RFC set they validate against. Even so,
+invalid addresses complete much quicker than Jakarta Mail. Despite all the extra logic, JMail has fantastic performance
+numbers across the board, beating all other implementations, and doesn't give up anything in correctness. No matter what 
+address you give JMail, time only increases based on the length or complexity of the address, making it truly an `O(n)` solution.
 
 This consistent performance, combined with **much** better [correctness](https://www.rohannagar.com/jmail/),
 a richer API set, and more out-of-the-box customization and canonicalization options, makes JMail the best
 choice for email address parsing and validation.
 
-| Email address                                  | JMail | Google dot-parse | Jakarta Mail | Apache Commons | email-rfc2822 |
-|:-----------------------------------------------|------:|-----------------:|-------------:|---------------:|--------------:|
-| `email@example.com`                            |   188 |              167 |           71 |            678 |          2034 |
-| `first.middle.last@sub.division.example.co.uk` |   364 |              297 |          175 |           1573 |          5129 |
-| `user@münchen.de`                              |   751 |              663 |           63 |           1331 |          2229 |
-| `user@12345.example.com`                       |   263 |              215 |           86 |            776 |          1821 |
-| `first@last@example.org` (Invalid)             |    61 |             1393 |          815 |            411 |          2867 |
-| `valid.local@exam_ple.com` (Invalid)           |    80 |             1421 |          835 |            881 |          3384 |
-| `"john doe"(a comment)@example.com` (Invalid)  |   459 |             1508 |          501 |            719 |          8433 |
+| Email address                                  | JMail | Jakarta Mail | Google dot-parse | Apache Commons | email-rfc2822 |
+|:-----------------------------------------------|------:|-------------:|-----------------:|---------------:|--------------:|
+| `email@example.com`                            |    97 |           71 |              167 |            678 |          2034 |
+| `first.middle.last@sub.division.example.co.uk` |   239 |          175 |              297 |           1573 |          5129 |
+| `user@münchen.de`                              |   647 |           63 |              663 |           1331 |          2229 |
+| `user@12345.example.com`                       |   137 |           86 |              215 |            776 |          1821 |
+| `first@last@example.org` (Invalid)             |    35 |          815 |             1393 |            411 |          2867 |
+| `valid.local@exam_ple.com` (Invalid)           |    61 |          835 |             1421 |            881 |          3384 |
+| `"john doe"(a comment)@example.com` (Invalid)  |   387 |          501 |             1508 |            719 |          8433 |
 
 ## Usage
 

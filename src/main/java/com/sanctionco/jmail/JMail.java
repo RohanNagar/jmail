@@ -226,17 +226,15 @@ public final class JMail {
     boolean previousQuotedDot = false;     // set to true if the previous character is '.' in quotes
     boolean requireQuotedDot = false;      // set to true if we need a . for a removable quote
 
+    int atIndex = -1;       // track the index of the at symbol so we can split the address
+    String ipDomain = null; // separate string to hold a found ipDomain
+
     // Keep as many of these lazy as possible - each allocation adds overall time to validation
-    StringBuilder localPart = new StringBuilder(size);
     StringBuilder localPartWithoutComments = null;
     StringBuilder localPartWithoutQuotes = null;
-
-    StringBuilder domain = new StringBuilder(size);
     StringBuilder domainWithoutComments = null;
-
     StringBuilder currentDomainPart = new StringBuilder();
     List<String> domainParts = new ArrayList<>();
-
     StringBuilder currentQuote = null;
     List<String> comments = null;
 
@@ -280,10 +278,12 @@ public final class JMail {
         EmailValidationResult innerResult
             = validateInternal(email.substring(i + 1, size - 1), allowNonstandardDots, true);
 
+        String identifier = email.substring(0, i);
+
         // If the address passed validation, return success with the identifier included.
         // Otherwise, just return the failed internal result
         return innerResult.getEmail()
-            .map(e -> EmailValidationResult.success(new Email(e, localPart.toString())))
+            .map(e -> EmailValidationResult.success(new Email(e, identifier)))
             .orElse(innerResult);
       }
 
@@ -298,6 +298,7 @@ public final class JMail {
 
         // Otherwise
         atFound = true;
+        atIndex = i;
         requireAtOrDot = requireAtDotOrComment = false;
         whitespace = false;
         previousDot = true; // '@' acts like a '.' separator
@@ -365,6 +366,7 @@ public final class JMail {
 
         String commentStr = comment.get();
         int commentStrLen = commentStr.length();
+        int commentStart = i;
 
         // Now, what do we need surrounding the comment to make it valid?
         if (!atFound && (i != 0 && !previousDot)) {
@@ -381,18 +383,16 @@ public final class JMail {
 
         if (!atFound) {
           if (localPartWithoutComments == null) {
-            localPartWithoutComments = new StringBuilder(localPart);
+            localPartWithoutComments = new StringBuilder(email.substring(0, commentStart));
           }
 
-          localPart.append(commentStr);
           localPartCommentLength += commentStrLen;
         } else {
           // comment is part of domain string, but not a domain part
           if (domainWithoutComments == null) {
-            domainWithoutComments = new StringBuilder(domain);
+            domainWithoutComments = new StringBuilder(email.substring(atIndex + 1, commentStart));
           }
 
-          domain.append(commentStr);
           domainCommentLength += commentStrLen;
         }
 
@@ -479,7 +479,6 @@ public final class JMail {
           }
         }
 
-        localPart.append(c);
         if (localPartWithoutComments != null) {
           localPartWithoutComments.append(c);
         }
@@ -509,14 +508,14 @@ public final class JMail {
 
         if (firstDomainChar && c == '[') {
           // validate IP address and be done
-          String ipDomain = email.substring(i);
+          String ipLiteral = email.substring(i);
 
           // We already know it starts with a '[', so make sure it ends with a ']'
-          if (!ipDomain.endsWith("]") || ipDomain.length() < 3) {
+          if (!ipLiteral.endsWith("]") || ipLiteral.length() < 3) {
             return EmailValidationResult.failure(FailureReason.INVALID_IP_DOMAIN);
           }
 
-          String ip = ipDomain.substring(1, ipDomain.length() - 1);
+          String ip = ipLiteral.substring(1, ipLiteral.length() - 1);
           Optional<String> validatedIp = ip.startsWith(IPV6_PREFIX)
               // If it starts with the IPv6 prefix, validate with IPv6
               ? InternetProtocolAddress.validateIpv6(ip.substring(IPV6_PREFIX.length()))
@@ -529,7 +528,7 @@ public final class JMail {
           }
 
           currentDomainPart.append(validatedIp.get());
-          domain.append(validatedIp.get());
+          ipDomain = email.substring(atIndex + 1, i) + validatedIp.get();
           if (domainWithoutComments != null) {
             domainWithoutComments.append(validatedIp.get());
           }
@@ -569,7 +568,6 @@ public final class JMail {
           }
         }
 
-        domain.append(c);
         if (domainWithoutComments != null) {
           domainWithoutComments.append(c);
         }
@@ -603,11 +601,14 @@ public final class JMail {
           }
 
           if (localPartWithoutQuotes == null) {
-            StringBuilder base = localPartWithoutComments != null
-                ? localPartWithoutComments
-                : localPart;
-            localPartWithoutQuotes = new StringBuilder(base.length());
-            localPartWithoutQuotes.append(base, 0, base.length() - 1);
+            if (localPartWithoutComments != null) {
+              localPartWithoutQuotes = new StringBuilder(localPartWithoutComments.length());
+              localPartWithoutQuotes.append(
+                  localPartWithoutComments, 0, localPartWithoutComments.length() - 1);
+            } else {
+              localPartWithoutQuotes = new StringBuilder(i);
+              localPartWithoutQuotes.append(email, 0, i);
+            }
           }
         }
 
@@ -643,16 +644,16 @@ public final class JMail {
     if (!atFound) return EmailValidationResult.failure(FailureReason.MISSING_AT_SYMBOL);
 
     // Check length
-    int localPartLen = localPart.length() - localPartCommentLength;
+    int localPartLen = atIndex - localPartCommentLength;
     if (localPartLen == 0) return EmailValidationResult.failure(FailureReason.LOCAL_PART_MISSING);
     if (localPartLen > 64) return EmailValidationResult.failure(FailureReason.LOCAL_PART_TOO_LONG);
 
-    int domainLen = domain.length() - domainCommentLength;
+    int domainLen = (isIpAddress ? ipDomain.length() : size - atIndex - 1) - domainCommentLength;
     if (domainLen == 0) return EmailValidationResult.failure(FailureReason.DOMAIN_MISSING);
     if (domainLen > 255) return EmailValidationResult.failure(FailureReason.DOMAIN_TOO_LONG);
 
     // Check that local-part does not end with '.'
-    if (localPart.charAt(localPart.length() - 1) == '.') {
+    if (email.charAt(atIndex - 1) == '.') {
       // unless we are configured to allow it (GMail doesn't care about a trailing dot)
       if (!allowNonstandardDots) {
         return EmailValidationResult.failure(FailureReason.LOCAL_PART_ENDS_WITH_DOT);
@@ -690,7 +691,7 @@ public final class JMail {
 
     domainParts.add(currentDomainPart.toString());
 
-    String domainStr = domain.toString();
+    String domainStr = isIpAddress ? ipDomain : email.substring(atIndex + 1, size);
     String domainWithoutCommentsStr = domainWithoutComments != null
         ? domainWithoutComments.toString()
         : domainStr;
@@ -703,7 +704,7 @@ public final class JMail {
       return EmailValidationResult.failure(FailureReason.INVALID_DOMAIN_CHARACTER);
     }
 
-    String localPartStr = localPart.toString();
+    String localPartStr = email.substring(0, atIndex);
     String localPartWithoutCommentsStr = localPartWithoutComments != null
         ? localPartWithoutComments.toString()
         : localPartStr;
