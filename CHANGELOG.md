@@ -2,9 +2,12 @@
 
 ## 2.2.2
 
-- Fix bug where the Unicode control characters like `U+2400 SYMBOL FOR NULL` were incorrectly required to be backslash-escaped
-  within quotes. This was intended to check for the actual control characters like `U+0000 NUL`. This is now enforced
-  correctly for all control characters (0-8, 11, 12, 14-31, and 127).
+- Fix bug where the Unicode character `U+2400 SYMBOL FOR NULL` was incorrectly required to be backslash-escaped
+  within quotes. This was intended to check for the actual `NUL` control character `U+0000`. This is now enforced
+  correctly. (Thanks @fluentfuture for reporting!)
+- Fix bug where Unicode control characters (1-8, 11, 12, 14-31, and 127) were not properly required to be quoted.
+  The disallowed set was incorrectly populated with Unicode "control picture" glyphs instead of the actual control
+  characters.
 
 ---
 ## 2.2.1

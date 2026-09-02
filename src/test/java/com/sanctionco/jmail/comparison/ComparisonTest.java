@@ -135,17 +135,17 @@ class ComparisonTest {
   }
 
   @ParameterizedTest(name = "{0}")
-  @MethodSource("com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidEmails")
   @CsvFileSource(resources = "/valid-addresses.csv", numLinesToSkip = 1)
+  @MethodSource("com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideValidEmails")
   void compareValid(String email, String localPart, String domain, String desc) throws Exception {
     runTest(email, true, desc == null ? null : desc.trim());
   }
 
   @ParameterizedTest(name = "{0}")
+  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;", numLinesToSkip = 1)
   @MethodSource({
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidEmails",
       "com.sanctionco.jmail.helpers.AdditionalEmailProvider#provideInvalidControlEmails"})
-  @CsvFileSource(resources = "/invalid-addresses.csv", delimiterString = " ;", numLinesToSkip = 1)
   void compareInvalid(String email, String description) throws Exception {
     runTest(email, false, description == null ? null : description.trim());
   }
