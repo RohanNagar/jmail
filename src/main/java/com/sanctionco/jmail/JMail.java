@@ -470,11 +470,16 @@ public final class JMail {
         if (inQuotes) {
           // if we are in quotes, we need to make sure that if the character requires
           // a backlash escape, that it is there
-          if (c == '\r' || c == '␀' || c == '\n') {
+          if (c == '\r' || c == 0 || c == '\n') {
             if (!previousBackslash) {
               return EmailValidationResult.failure(FailureReason.MISSING_BACKSLASH_ESCAPE);
             }
 
+            removableQuotePair = false;
+          }
+
+          // If removing the quotes would leave an unused backslash escape then we can't remove it
+          if (previousBackslash && !mustBeQuoted && c != ' ' && c != '\\') {
             removableQuotePair = false;
           }
         }
@@ -949,6 +954,12 @@ public final class JMail {
       if (c < 128) table[c] = true;
     }
 
+    for (int c = 1; c < 32; c++) {
+      if (c != '\t' && c != '\n' && c != '\r') table[c] = true;
+    }
+
+    table[127] = true;
+
     return table;
   }
 
@@ -961,11 +972,9 @@ public final class JMail {
   private static final String ACE_PREFIX = "xn--";
 
   // Set of characters that are not allowed in the local-part outside of quotes
+  // Note control characters are also disallowed, but those are added directly in buildAsciiLookup
   private static final Set<Character> DISALLOWED_UNQUOTED_CHARACTERS = new HashSet<>(
-      Arrays.asList('\t', '(', ')', ',', ':', ';', '<', '>', '@', '[', ']', '"',
-          // Control characters 1-8, 11, 12, 14-31
-          '␁', '␂', '␃', '␄', '␅', '␆', '␇', '␈', '␋', '␌', '␎', '␏', '␐', '␑',
-          '␒', '␓', '␔', '␕', '␖', '␗', '␘', '␙', '␚', '␛', '␜', '␝', '␟', '␁'));
+      Arrays.asList('\t', '(', ')', ',', ':', ';', '<', '>', '@', '[', ']', '"'));
 
   // Set of character types that are not allowed in the local-part outside of quotes
   // See all Unicode character categories here: https://www.compart.com/en/unicode/category

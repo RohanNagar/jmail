@@ -126,8 +126,6 @@ foo@[\1.2.3.4] ;                                                                
 first\last@test.org ;                                                                  The \ character is not escaping anything
 first(abc("def".ghi).mno)middle(abc("def".ghi).mno).last@(abc("def".ghi).mno)example(abc("def".ghi).mno).(abc("def".ghi).mno)com(abc("def".ghi).mno) ; The first comment is not dot separated
 first(middle)last@test.org ;                                                           Comments in the middle of the local-part must be dot separated
-"Unicode NULL ␀"@char.com ;                                                            The unicode null character must be escaped within quotes
-Unicode NULL \␀@char.com ;                                                             The escaped unicode null character is only allowed within quotes
 "test"test@test.com ;                                                                  Quotes must be dot separated
 ()@test.com ;                                                                          Empty comment is not allowed
 test@test.com( ;                                                                       An email address cannot end with an opening (

@@ -166,7 +166,7 @@ public final class FailureReason {
       = new FailureReason("MISSING_AT_SYMBOL");
 
   /**
-   * The characters {@code '\r', '␀', '\n'} are allowed within quotes only if they are escaped
+   * The characters {@code '\r', '\u0000', '\n'} are allowed within quotes only if they are escaped
    * with a backslash. This failure reason indicates that the backslash was missing in the address.
    */
   public static final FailureReason MISSING_BACKSLASH_ESCAPE

@@ -1,5 +1,12 @@
 # JMail Changelog
 
+## 2.2.2
+
+- Fix bug where the Unicode control characters like `U+2400 SYMBOL FOR NULL` were incorrectly required to be backslash-escaped
+  within quotes. This was intended to check for the actual control characters like `U+0000 NUL`. This is now enforced
+  correctly for all control characters (0-8, 11, 12, 14-31, and 127).
+
+---
 ## 2.2.1
 
 - Performance improvements up to 77% 🔥 across various types address validation, with most improvements for the standard

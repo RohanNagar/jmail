@@ -1,5 +1,6 @@
 package com.sanctionco.jmail.helpers;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.provider.Arguments;
@@ -20,7 +21,9 @@ public class AdditionalEmailProvider {
         Arguments.of("\"(),:;<>[\\]@example.com", "Opening quote must have a closing quote"),
         Arguments.of("\"\"\"@iana.org", "Each quote must be in a pair"),
         Arguments.of("a@b.com\u0081",
-            "The high octet preset character is not allowed at the end of the domain")
+            "The high octet preset character is not allowed at the end of the domain"),
+        Arguments.of("\"a" + (char) 0 + "\"@b.com",
+            "The unicode null character is not allowed unescaped in quotes")
     );
   }
 
@@ -36,35 +39,12 @@ public class AdditionalEmailProvider {
 
   // Invalid emails with control characters
   public static Stream<Arguments> provideInvalidControlEmails() {
-    return Stream.of(
-        Arguments.of("first.last␁@test.org", "Start of Heading is not allowed (ASCII 1)"),
-        Arguments.of("first.last␂@test.org", "Start of Text is not allowed (ASCII 2)"),
-        Arguments.of("first.last␃@test.org", "End of Text is not allowed (ASCII 3)"),
-        Arguments.of("first.last␄@test.org", "End of Transmission is not allowed (ASCII 4)"),
-        Arguments.of("first.last␅@test.org", "Enquiry is not allowed (ASCII 5)"),
-        Arguments.of("first.last␆@test.org", "Acknowledge is not allowed (ASCII 6)"),
-        Arguments.of("first.last␇@test.org", "Bell is not allowed (ASCII 7)"),
-        Arguments.of("first.last␈@test.org", "Backspace is not allowed (ASCII 8)"),
-        Arguments.of("first.last␋@test.org", "Vertical Tabulation is not allowed (ASCII 11)"),
-        Arguments.of("first.last␌@test.org", "Form Feed is not allowed (ASCII 12)"),
-        Arguments.of("first.last␎@test.org", "Shift Out is not allowed (ASCII 14)"),
-        Arguments.of("first.last␏@test.org", "Shift In is not allowed (ASCII 15)"),
-        Arguments.of("first.last␐@test.org", "Data Link Escape is not allowed (ASCII 16)"),
-        Arguments.of("first.last␑@test.org", "Device Control One is not allowed (ASCII 17)"),
-        Arguments.of("first.last␒@test.org", "Device Control Two is not allowed (ASCII 18)"),
-        Arguments.of("first.last␓@test.org", "Device Control Three is not allowed (ASCII 19)"),
-        Arguments.of("first.last␔@test.org", "Device Control Four is not allowed (ASCII 20)"),
-        Arguments.of("first.last␕@test.org", "Negative Acknowledge is not allowed (ASCII 21)"),
-        Arguments.of("first.last␖@test.org", "Synchronous Idle is not allowed (ASCII 22)"),
-        Arguments.of("first.last␗@test.org", "End of Transmission Block is not allowed (ASCII 23)"),
-        Arguments.of("first.last␘@test.org", "Cancel is not allowed (ASCII 24)"),
-        Arguments.of("first.last␙@test.org", "End of Medium is not allowed (ASCII 25)"),
-        Arguments.of("first.last␚@test.org", "Substitute is not allowed (ASCII 26)"),
-        Arguments.of("first.last␛@test.org", "Escape is not allowed (ASCII 27)"),
-        Arguments.of("first.last␜@test.org", "File Separator is not allowed (ASCII 28)"),
-        Arguments.of("first.last␝@test.org", "Group Separator is not allowed (ASCII 29)"),
-        Arguments.of("first.last␟@test.org", "Record Separator is not allowed (ASCII 30)"),
-        Arguments.of("first.last␁@test.org", "Unit Separator is not allowed (ASCII 31)"));
+    int[] controlChars = {1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+        23, 24, 25, 26, 27, 28, 29, 30, 31, 127};
+    return Arrays.stream(controlChars)
+        .mapToObj(c -> Arguments.of(
+            "first.last" + (char) c + "@test.org",
+            "Control character (ASCII " + c + ") is not allowed unquoted"));
   }
 
   // Valid emails with quotes
@@ -135,7 +115,11 @@ public class AdditionalEmailProvider {
         Arguments.of("\"first..last\"@test.org", "\"first..last\"", "test.org",
             "Multiple dots can appear in a row when quoted"),
         Arguments.of("\"Unicode NULL \\␀\"@char.com", "\"Unicode NULL \\␀\"", "char.com",
-            "The Unicode NULL character can appear within quotes if escaped"),
+            "The Unicode NULL symbol can appear escaped within quotes"),
+        Arguments.of("\"Unicode NULL ␀\"@char.com", "\"Unicode NULL ␀\"", "char.com",
+            "The Unicode NULL symbol can appear unescaped within quotes"),
+        Arguments.of("\"a\\" + (char) 0 + "\"@b.com", "\"a\\" + (char) 0 + "\"", "b.com",
+            "The unicode null character is allowed escaped in quotes"),
         Arguments.of("\"test\\\\blah\"@test.org", "\"test\\\\blah\"", "test.org",
             "Multiple backslashes can appear within quotes"),
         Arguments.of("\"test\\blah\"@test.org", "\"test\\blah\"", "test.org",
