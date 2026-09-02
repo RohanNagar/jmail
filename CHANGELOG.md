@@ -2,14 +2,15 @@
 
 ## 2.2.1
 
+- Performance improvements up to 77%! 🔥 across various types address validation, with most improvements for the standard simple
+  address case. Plus, published performance benchmarking numbers.
 - Fix bug where addresses with whitespace at the beginning or end of the address within angle brackets of quoted identifiers
-  (ex. `John Smith < John@smith.com >`) were incorrectly considered invalid. These now validate properly as expected.
+  (ex. `John Smith < John@smith.com >`) were incorrectly considered invalid.
 - Fix bug where addresses containing an encoded word in the local-part were incorrectly considered valid.
   These addresses (ex. `=?utf-8?q?=40evil.com=00?=@microsoft.com`) are invalid according to RFC 2047. Encoded words are
-  still allowed in identifiers (ex. `=?utf-8?q?=40evil.com=00?= <test@microsoft.com>`).
+  still allowed in identifiers, comments, and quoted parts (ex. `=?utf-8?q?=40evil.com=00?= <test@microsoft.com>`).
 - Fix bug where addresses that started with a comment followed by a quoted local-part (ex. `(comment)"test"@example.com`)
   were incorrectly considered invalid.
-- Performance improvements up to 77% 🔥 in simple address validation, plus published performance benchmarking numbers.
 
 ---
 ## 2.2.0

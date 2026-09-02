@@ -840,11 +840,11 @@ public final class JMail {
 
   private static int updateEncodedWordState(int currentState, char c) {
     switch (currentState) {
-      case 0: // Initial state, looking for '='
-        if (c == '=') {
-          return 1;
-        }
-        break;
+      case 0:
+        // Initial state, looking for '='
+        // The _ONLY_ caller of this method invokes in state 0 only when c == '=',
+        // so no other char reaches here
+        return 1;
 
       case 1: // Saw '=', expecting '?'
         return c == '?' ? 2 : 0;
@@ -935,11 +935,11 @@ public final class JMail {
    * @return true if allowed in a domain, false otherwise
    */
   private static boolean isAllowedDomainChar(char c) {
+    // We do not need to include whitespace chars here since that is handled in the main loop
     return (c >= 'a' && c <= 'z') // a - z
         || (c >= 'A' && c <= 'Z') // A - Z
         || (c >= '0' && c <= '9') // 0 - 9
-        // Hyphen and dot (also allow whitespace between parts)
-        || c == '-' || c == '.' || c == ' ' || c == '\n' || c == '\r';
+        || c == '-' || c == '.';  // Hyphen and dot
   }
 
   private static boolean[] buildAsciiLookup(Set<Character> chars) {

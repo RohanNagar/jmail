@@ -41,6 +41,7 @@ _somename@test.org,_somename,test.org,The local-part can start with an underscor
 dclo@us.ibm.com,dclo,us.ibm.com,A simple valid address
 test@xn--example.com,test,xn--example.com,An address with a punycode domain is valid
 test@example.xn--example,test,example.xn--example,An address whose TLD is a punycode label is valid
+test@xn--example.sub.com,test,xn--example.sub.com,An address with a non-final punycode label is valid
 first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888],first.last,[IPv6:1111:2222:3333:4444:5555:6666:7777:8888],IPv6 domain is valid
 first.last@[IPv6:1111:2222:3333::4444:5555:6666:7777],first.last,[IPv6:1111:2222:3333::4444:5555:6666:7777],IPv6 domain is valid
 first.last@[IPv6:::1111:2222:3333:4444:5555:6666],first.last,[IPv6:::1111:2222:3333:4444:5555:6666],IPv6 domain is valid
