@@ -2,8 +2,8 @@
 
 ## 2.2.1
 
-- Performance improvements up to 77%! 🔥 across various types address validation, with most improvements for the standard simple
-  address case. Plus, published performance benchmarking numbers.
+- Performance improvements up to 77% 🔥 across various types address validation, with most improvements for the standard
+  simple address case. Plus, published performance benchmarking numbers.
 - Fix bug where addresses with whitespace at the beginning or end of the address within angle brackets of quoted identifiers
   (ex. `John Smith < John@smith.com >`) were incorrectly considered invalid.
 - Fix bug where addresses containing an encoded word in the local-part were incorrectly considered valid.
