@@ -279,6 +279,8 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire.version}</version>
         <configuration>
+          <useModulePath>false</useModulePath>
+          <useManifestOnlyJar>false</useManifestOnlyJar>
           <!-- Explicitly attach mockito agent to enable the inline-mock-maker and avoid warnings from Mockito -->
           <argLine>
             ${argLine}

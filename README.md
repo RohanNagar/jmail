@@ -98,13 +98,13 @@ choice for email address parsing and validation.
 
 | Email address                                  | JMail | Jakarta Mail | Google dot-parse | Apache Commons | email-rfc2822 |
 |:-----------------------------------------------|------:|-------------:|-----------------:|---------------:|--------------:|
-| `email@example.com`                            |    97 |           71 |              167 |            678 |          2034 |
-| `first.middle.last@sub.division.example.co.uk` |   239 |          175 |              297 |           1573 |          5129 |
+| `email@example.com`                            |    98 |           71 |              167 |            678 |          2034 |
+| `first.middle.last@sub.division.example.co.uk` |   258 |          175 |              297 |           1573 |          5129 |
 | `user@münchen.de`                              |   647 |           63 |              663 |           1331 |          2229 |
-| `user@12345.example.com`                       |   137 |           86 |              215 |            776 |          1821 |
+| `user@12345.example.com`                       |   168 |           86 |              215 |            776 |          1821 |
 | `first@last@example.org` (Invalid)             |    35 |          815 |             1393 |            411 |          2867 |
-| `valid.local@exam_ple.com` (Invalid)           |    61 |          835 |             1421 |            881 |          3384 |
-| `"john doe"(a comment)@example.com` (Invalid)  |   387 |          501 |             1508 |            719 |          8433 |
+| `valid.local@exam_ple.com` (Invalid)           |    59 |          835 |             1421 |            881 |          3384 |
+| `"john doe"(a comment)@example.com` (Invalid)  |   348 |          501 |             1508 |            719 |          8433 |
 
 ## Usage
 
