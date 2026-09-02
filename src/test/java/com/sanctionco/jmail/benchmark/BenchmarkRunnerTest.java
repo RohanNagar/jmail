@@ -33,6 +33,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BenchmarkRunnerTest {
   private static final Map<String, Double> MAX_NS_PER_OP = new HashMap<>();
 
+  // These thresholds are about 4x that of what normal runs on a local Macbook result in
+  // The CI in GitHub runs about twice as slow as local, and then we have additional buffer
+  // top of that in case of more slowdowns in the shared runner environment.
+  // This test running automatically is meant to catch significant slowdowns.
   static {
     MAX_NS_PER_OP.put("email@example.com", 400.0);
     MAX_NS_PER_OP.put("first.middle.last@sub.division.example.co.uk", 1000.0);
