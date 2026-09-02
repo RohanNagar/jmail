@@ -167,7 +167,9 @@ public class AdditionalEmailProvider {
         Arguments.of("first.\"\".last@test.org", "first.\"\".last", "test.org",
             "Empty quoted parts are valid"),
         Arguments.of("\"\"@test.org", "\"\"", "test.org",
-            "A local-part entirely consisting of an empty quoted string is valid")
+            "A local-part entirely consisting of an empty quoted string is valid"),
+        Arguments.of("\"=?utf-8?q?text?=\"@example.com", "\"=?utf-8?q?text?=\"", "example.com",
+            "Encoded-word pattern inside quotes should be allowed")
     );
   }
 

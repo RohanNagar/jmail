@@ -416,8 +416,8 @@ public final class JMail {
 
       if (!atFound) {
         // No @ found, we're in the local-part
-        // If we are at a new quote: it must be preceded by a dot or at the beginning
-        if (c == '"' && i > 0 && !previousDot && !inQuotes) {
+        // If we are at a new quote: it must be preceded by a dot/comment or at the beginning
+        if (c == '"' && i > 0 && !previousDot && !previousComment && !inQuotes) {
           return EmailValidationResult.failure(FailureReason.INVALID_QUOTE_LOCATION);
         }
 
@@ -623,6 +623,10 @@ public final class JMail {
 
       if (!whitespace) {
         previousDot = c == '.';
+
+        // safe to reset previousComment here because the comment branch above
+        // used 'continue'
+        previousComment = false;
       }
 
       if (!quotedWhitespace) {

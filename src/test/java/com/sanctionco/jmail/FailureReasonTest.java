@@ -29,6 +29,7 @@ class FailureReasonTest {
             + "x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789."
             + "x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789.x23456789."
             + "x23456789.x23456789.x23456", FailureReason.DOMAIN_TOO_LONG),
+        Arguments.of("=?utf-8?q?hello?=@example.com", FailureReason.ENCODED_WORD_IN_LOCAL_PART),
         Arguments.of("test@test.", FailureReason.ENDS_WITH_DOT),
         Arguments.of("test@test.com(i", FailureReason.INVALID_COMMENT),
         Arguments.of("test(comment)hey@test.com", FailureReason.INVALID_COMMENT_LOCATION),

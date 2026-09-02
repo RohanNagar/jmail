@@ -158,3 +158,7 @@ euro€@eu.com ;                                                                
 mod¨@modifier.edu ;                                                                    Unicode modifier symbols are not allowed in the local-part
 other©copyright@copy.org ;                                                             Other Unicode symbols like the copyright symbol are not allowed in the local-part
 =?utf-8?q?=40evil.com=00?=@microsoft.com ;                                             Encoded words are not allowed in the local-part
+=?ISO-8859-1?B?SjRybg==?=@example.com ;                                                Any word encoding is not allowed in the local-part
+test.=?utf-8?q?text?=@example.com ;                                                    Dot-separated encoded words are not allowed in the local-part
+=?utf-8?b?dGV4dA==?=@example.com ;                                                     Byte encoded words are not allowed in the local-part
+prefix=?utf-8?q?text?=@example.com ;                                                   Prefixed encoded words are not allowed in the local-part

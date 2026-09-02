@@ -40,6 +40,7 @@ $A12345@test.org,$A12345,test.org,Unusual character $ is allowed in the local-pa
 _somename@test.org,_somename,test.org,The local-part can start with an underscore
 dclo@us.ibm.com,dclo,us.ibm.com,A simple valid address
 test@xn--example.com,test,xn--example.com,An address with a punycode domain is valid
+test@example.xn--example,test,example.xn--example,An address whose TLD is a punycode label is valid
 first.last@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888],first.last,[IPv6:1111:2222:3333:4444:5555:6666:7777:8888],IPv6 domain is valid
 first.last@[IPv6:1111:2222:3333::4444:5555:6666:7777],first.last,[IPv6:1111:2222:3333::4444:5555:6666:7777],IPv6 domain is valid
 first.last@[IPv6:::1111:2222:3333:4444:5555:6666],first.last,[IPv6:::1111:2222:3333:4444:5555:6666],IPv6 domain is valid
@@ -109,6 +110,8 @@ cal@iamcal(woo).(yay)com,cal,iamcal(woo).(yay)com,Comments are allowed between d
 first(abc.def).last@test.org,first(abc.def).last,test.org,Comments are allowed inside the local-part if dot-separated
 first(a"bc.def).last@test.org,first(a"bc.def).last,test.org,The " character is allowed within comments
 first.(")middle.last(")@test.org,first.(")middle.last("),test.org,The " character is allowed within dot-separated comments
+(comment)john."1"@example.com,(comment)john."1",example.com,A comment preceding a dot-separated quoted local-part is valid
+(comment)"john"@example.com,(comment)"john",example.com,A comment preceding a fully quoted local-part is valid
 first.last@x(1234567890123456789012345678901234567890123456789012345678901234567890).com,first.last,x(1234567890123456789012345678901234567890123456789012345678901234567890).com,Comments do not count against the length of the domain
 user%uucp!path@berkeley.edu,user%uucp!path,berkeley.edu,The % and ! symbols are valid in the local-part
 first().last@test.org,first().last,test.org,Empty comments are valid
@@ -124,6 +127,9 @@ Joe A Smith <email@example.com>,email,example.com,Quoted identifier address
 "John Michael" <tester@test.net>,tester,test.net,Quoted identifier address
 A <apple@pie.com>,apple,pie.com,Quoted identifier address
 .utkarsh <utkarsh@gmail.com>,utkarsh,gmail.com,An identifier can start with a dot
+=?utf-8?q?=40evil.com=00?= <test@example.com>,test,example.com,An identifier can be an encoded word
+=?utf-8?q?te?xt?= <test@example.com>,test,example.com,An identifier can have an extra '?' in an encoded word
+test(=?utf-8?q?comment?=)@example.com,test(=?utf-8?q?comment?=),example.com,The local-part can contain an encoded word in a comment
 ABC.DEF@GHI.JKL (MNO),ABC.DEF,GHI.JKL (MNO),Trailing comment with prior whitespace
 xyz@🚀.kz,xyz,🚀.kz,Emoji domains are valid
 test@😉.tld,test,😉.tld,Emoji domains are valid

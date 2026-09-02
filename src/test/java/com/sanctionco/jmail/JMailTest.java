@@ -247,25 +247,6 @@ class JMailTest {
 
   @ParameterizedTest(name = "{0}")
   @ValueSource(strings = {
-      "=?utf-8?q?=40evil.com=00?=@microsoft.com",
-      "=?ISO-8859-1?B?SjRybg==?=@example.com",
-      "test.=?utf-8?q?text?=@example.com",
-      "=?utf-8?q?hello?=@example.com",
-      "prefix=?utf-8?q?text?=@example.com",
-      "=?utf-8?b?dGV4dA==?=@example.com"
-  })
-  void ensureEncodedWordsInLocalPartFail(String email) {
-    assertThat(JMail.tryParse(email)).isNotPresent();
-    assertThat(email).is(invalid);
-
-    EmailValidationResult result = JMail.validate(email);
-    assertThat(result.isFailure()).isTrue();
-    assertThat(result.getFailureReason())
-        .isEqualTo(FailureReason.ENCODED_WORD_IN_LOCAL_PART);
-  }
-
-  @ParameterizedTest(name = "{0}")
-  @ValueSource(strings = {
       "test@example.com",
       "a=b@example.com",          // Single '=' is valid
       "c?d@example.com",          // Single '?' is valid
@@ -280,26 +261,13 @@ class JMailTest {
     assertThat(email).is(valid);
   }
 
-  @ParameterizedTest(name = "{0}")
-  @ValueSource(strings = {
-      "=?utf-8?q?=40evil.com=00?= <test@example.com>"
-  })
-  void ensureEncodedWordsInIdentiferPass(String email) {
-    assertThat(JMail.tryParse(email)).isPresent();
-    assertThat(email).is(valid);
-  }
-
   @Test
-  void ensureEncodedWordDetectionRespectQuotes() {
-    // Encoded-word pattern inside quotes should be allowed
-    String email = "\"=?utf-8?q?text?=\"@example.com";
-    assertThat(JMail.tryParse(email)).isPresent();
-  }
+  void ensureCommentBeforeIpLiteralDomainPasses() {
+    String email = "aaa@(comment)[123.123.123.123]";
 
-  @Test
-  void ensureEncodedWordDetectionRespectComments() {
-    // Encoded-word pattern inside comments should be allowed
-    String email = "test(=?utf-8?q?comment?=)@example.com";
-    assertThat(JMail.tryParse(email)).isPresent();
+    assertThat(JMail.tryParse(email))
+        .isPresent().get()
+        .returns(true, Email::isIpAddress)
+        .returns("123.123.123.123", Email::domainWithoutComments);
   }
 }
