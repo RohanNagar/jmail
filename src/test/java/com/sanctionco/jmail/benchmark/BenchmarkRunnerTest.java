@@ -89,4 +89,15 @@ class BenchmarkRunnerTest {
 
     new Runner(options).run();
   }
+
+  @Test
+  @EnabledIfSystemProperty(named = "jmail.benchmark.lists", matches = "true")
+  void benchmarkListParsing() throws RunnerException {
+    Options options = new OptionsBuilder()
+        .include(AddressListBenchmark.class.getSimpleName())
+        .jvmArgs("-Xms1g", "-Xmx1g")
+        .build();
+
+    new Runner(options).run();
+  }
 }

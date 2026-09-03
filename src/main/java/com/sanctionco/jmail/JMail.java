@@ -142,6 +142,64 @@ public final class JMail {
   }
 
   /**
+   * Parse a comma-delimited list of email addresses, returning only the addresses that
+   * pass validation. Invalid addresses are skipped and omitted from the resulting list.
+   * See {@link #tryParse(String)} for details on what is required of an email address within
+   * basic validation.
+   *
+   * <p>Commas inside quotes, comments, angle brackets, domain literals, and explicit source
+   * routes are not treated as list delimiters. Empty or whitespace-only entries are skipped.
+   * Surrounding whitespace on each address is trimmed.
+   *
+   * @param addressList the comma-delimited list of email addresses to parse
+   * @return an unmodifiable list of successfully parsed {@link Email} objects; empty if
+   *         {@code addressList} is {@code null} or contains no valid addresses
+   * @see #validateAddressList(String)
+   */
+  public static List<Email> tryParseAddressList(String addressList) {
+    if (addressList == null) return Collections.emptyList();
+
+    List<Email> emails = new ArrayList<>();
+
+    for (String token : splitAddressList(addressList, ',')) {
+      tryParse(token).ifPresent(emails::add);
+    }
+
+    return Collections.unmodifiableList(emails);
+  }
+
+  /**
+   * Validate a comma-delimited list of email addresses, returning a
+   * {@link EmailValidationResult} for each parsed address. Unlike
+   * {@link #tryParseAddressList(String)}, this method includes failures so that
+   * {@link FailureReason} can be inspected per address.
+   *
+   * <p>Commas inside quotes, comments, angle brackets, domain literals, and explicit source
+   * routes are not treated as list delimiters. Empty or whitespace-only entries are skipped.
+   * Surrounding whitespace on each address is trimmed.
+   *
+   * @param addressList the comma-delimited list of email addresses to validate
+   * @return an unmodifiable list of {@link EmailValidationResult} objects, one per address;
+   *         if {@code addressList} is {@code null}, a single failure result with
+   *         {@link FailureReason#NULL_ADDRESS}
+   * @see #tryParseAddressList(String)
+   */
+  public static List<EmailValidationResult> validateAddressList(String addressList) {
+    if (addressList == null) {
+      return Collections.singletonList(
+          EmailValidationResult.failure(FailureReason.NULL_ADDRESS));
+    }
+
+    List<EmailValidationResult> results = new ArrayList<>();
+
+    for (String token : splitAddressList(addressList, ',')) {
+      results.add(validate(token));
+    }
+
+    return Collections.unmodifiableList(results);
+  }
+
+  /**
    * Internal parsing method.
    *
    * @param email the email address to parse
@@ -961,6 +1019,101 @@ public final class JMail {
     table[127] = true;
 
     return table;
+  }
+
+  /**
+   * Split an address-list into individual address strings using the given delimiter.
+   * The delimiter is ignored when nested in quotes, comments, angle brackets, domain
+   * literals, or an explicit source route. Empty or whitespace-only tokens are omitted.
+   *
+   * @param addressList the raw address-list string, must not be {@code null}
+   * @param delimiter the character that separates addresses, typically {@code ','}
+   * @return the trimmed, non-empty address tokens in encounter order
+   */
+  static List<String> splitAddressList(String addressList, char delimiter) {
+    List<String> tokens = new ArrayList<>();
+
+    int start = 0;
+    boolean inQuotes = false;
+    boolean escaped = false;
+    boolean inSourceRoute = false;
+    boolean seenTokenContent = false;
+    int commentDepth = 0;
+    int angleDepth = 0;
+    int bracketDepth = 0;
+
+    for (int i = 0, size = addressList.length(); i < size; i++) {
+      char c = addressList.charAt(i);
+
+      if (escaped) {
+        escaped = false;
+        seenTokenContent = true;
+        continue;
+      }
+
+      if (c == '\\') {
+        escaped = true;
+        seenTokenContent = true;
+        continue;
+      }
+
+      // Match Java 8 String.trim() so leading whitespace is not token content
+      if (!seenTokenContent && c <= ' ') {
+        continue;
+      }
+
+      if (!seenTokenContent) {
+        seenTokenContent = true;
+        inSourceRoute = c == '@';
+      }
+
+      if (c == '"' && commentDepth == 0) {
+        inQuotes = !inQuotes;
+      } else if (!inQuotes) {
+        if (c == '(') {
+          commentDepth++;
+        } else if (c == ')' && commentDepth > 0) {
+          commentDepth--;
+        } else if (c == '<' && commentDepth == 0) {
+          angleDepth++;
+        } else if (c == '>' && commentDepth == 0 && angleDepth > 0) {
+          angleDepth--;
+        } else if (c == '[' && commentDepth == 0) {
+          bracketDepth++;
+        } else if (c == ']' && commentDepth == 0 && bracketDepth > 0) {
+          bracketDepth--;
+        } else if (c == ':' && inSourceRoute && commentDepth == 0 && angleDepth == 0) {
+          inSourceRoute = false;
+        }
+      }
+
+      if (c == delimiter
+          && !inQuotes
+          && commentDepth == 0
+          && angleDepth == 0
+          && bracketDepth == 0
+          && !inSourceRoute) {
+        addAddressListToken(tokens, addressList, start, i);
+        start = i + 1;
+        inSourceRoute = false;
+        seenTokenContent = false;
+      }
+    }
+
+    addAddressListToken(tokens, addressList, start, addressList.length());
+
+    return tokens;
+  }
+
+  private static void addAddressListToken(List<String> tokens,
+                                          String addressList,
+                                          int start,
+                                          int end) {
+    String token = addressList.substring(start, end).trim();
+
+    if (!token.isEmpty()) {
+      tokens.add(token);
+    }
   }
 
   private static final class SourceRouteDetail {

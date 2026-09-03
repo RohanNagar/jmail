@@ -270,4 +270,192 @@ class JMailTest {
         .returns(true, Email::isIpAddress)
         .returns("123.123.123.123", Email::domainWithoutComments);
   }
+
+  @Nested
+  class AddressList {
+    @Test
+    void parsesSimpleCommaSeparatedAddresses() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "first@example.com, second@example.org");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("first@example.com", "second@example.org");
+    }
+
+    @Test
+    void trimsWhitespaceAroundAddresses() {
+      List<Email> emails = JMail.tryParseAddressList(
+          " first@example.com ,  second@example.org ");
+
+      assertThat(emails)
+          .hasSize(2)
+          .extracting(Email::normalized)
+          .containsExactly("first@example.com", "second@example.org");
+    }
+
+    @Test
+    void skipsEmptyTokens() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "first@example.com,, ,second@example.org,");
+
+      assertThat(emails)
+          .hasSize(2)
+          .extracting(Email::normalized)
+          .containsExactly("first@example.com", "second@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnQuotedComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "\"Smith, John\"@example.com, jane@example.org");
+
+      assertThat(emails).hasSize(2);
+      assertThat(emails.get(0).localPart()).isEqualTo("\"Smith, John\"");
+      assertThat(emails.get(1).normalized()).isEqualTo("jane@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnQuotedIdentifierComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "\"Smith, John\" <my@example.com>, jane@example.org");
+
+      assertThat(emails).hasSize(2);
+      assertThat(emails.get(0))
+          .returns(true, Email::hasIdentifier)
+          .returns("my@example.com", Email::normalized);
+      assertThat(emails.get(1).normalized()).isEqualTo("jane@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnCommentComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "test(hello, world)@example.com, other@example.org");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("test@example.com", "other@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnNestedCommentComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "test((inner, comma)outer)@example.com, other@example.org");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("test@example.com", "other@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnSourceRouteComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "@1st.relay,@2nd.relay:user@final.domain, next@example.com");
+
+      assertThat(emails).hasSize(2);
+      assertThat(emails.get(0))
+          .returns("user@final.domain", Email::normalized)
+          .returns(Arrays.asList("1st.relay", "2nd.relay"), Email::explicitSourceRoutes);
+      assertThat(emails.get(1).normalized()).isEqualTo("next@example.com");
+    }
+
+    @Test
+    void doesNotSplitOnAngleBracketSourceRouteComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "Admin <@1st.relay,@2nd.relay:user@final.domain>, next@example.com");
+
+      assertThat(emails).hasSize(2);
+      assertThat(emails.get(0))
+          .returns(true, Email::hasIdentifier)
+          .returns("user@final.domain", Email::normalized);
+      assertThat(emails.get(1).normalized()).isEqualTo("next@example.com");
+    }
+
+    @Test
+    void doesNotSplitOnEscapedComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "user\\,name@example.com, other@example.org");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("user\\,name@example.com", "other@example.org");
+    }
+
+    @Test
+    void splitsUnquotedDisplayNameComma() {
+      List<EmailValidationResult> results = JMail.validateAddressList(
+          "Smith, John <john@example.com>");
+
+      assertThat(results).hasSize(2);
+      assertThat(results.get(0).isFailure()).isTrue();
+      assertThat(results.get(1).isSuccess()).isTrue();
+      assertThat(results.get(1).getEmail().get().normalized())
+          .isEqualTo("john@example.com");
+    }
+
+    @Test
+    void validateIncludesFailuresAndSuccesses() {
+      List<EmailValidationResult> results = JMail.validateAddressList(
+          "good@example.com, not-an-email, also@example.org");
+
+      assertThat(results).hasSize(3);
+      assertThat(results.get(0).isSuccess()).isTrue();
+      assertThat(results.get(1).isFailure()).isTrue();
+      assertThat(results.get(1).getFailureReason()).isEqualTo(FailureReason.MISSING_AT_SYMBOL);
+      assertThat(results.get(2).isSuccess()).isTrue();
+    }
+
+
+    @Test
+    void tryParseSkipsInvalidAddresses() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "good@example.com, not-an-email, also@example.org");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("good@example.com", "also@example.org");
+    }
+
+    @Test
+    void handlesSingleAddressWithNoDelimiter() {
+      assertThat(JMail.tryParseAddressList("only@example.com"))
+          .extracting(Email::normalized)
+          .containsExactly("only@example.com");
+    }
+
+    @Test
+    void emptyAndWhitespaceListsAreEmpty() {
+      assertThat(JMail.tryParseAddressList("")).isEmpty();
+      assertThat(JMail.tryParseAddressList("   ")).isEmpty();
+      assertThat(JMail.tryParseAddressList(",,")).isEmpty();
+      assertThat(JMail.validateAddressList("")).isEmpty();
+    }
+
+    @Test
+    void nullListHandling() {
+      assertThat(JMail.tryParseAddressList(null)).isEmpty();
+
+      List<EmailValidationResult> results = JMail.validateAddressList(null);
+
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).isFailure()).isTrue();
+      assertThat(results.get(0).getFailureReason())
+          .isEqualTo(FailureReason.NULL_ADDRESS);
+    }
+
+    @Test
+    void identifierListWithoutQuotedCommas() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "John Smith <john@example.com>, Jane Doe <jane@example.org>");
+
+      assertThat(emails).hasSize(2);
+      assertThat(emails.get(0))
+          .returns(true, Email::hasIdentifier)
+          .returns("john@example.com", Email::normalized);
+      assertThat(emails.get(1))
+          .returns(true, Email::hasIdentifier)
+          .returns("jane@example.org", Email::normalized);
+    }
+  }
+
 }

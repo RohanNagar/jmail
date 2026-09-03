@@ -10,7 +10,7 @@
   <img src="https://codecov.io/gh/RohanNagar/jmail/branch/master/graph/badge.svg" alt="Coverage Status">
 </a>
 <a href="https://search.maven.org/artifact/com.sanctionco.jmail/jmail">
-  <img src="https://img.shields.io/badge/monthly_downloads-110%2C503-green" alt="Monthly Downloads">
+  <img src="https://img.shields.io/badge/monthly_downloads-1.1M-green" alt="Monthly Downloads">
 </a>
 
 A modern, fast, zero-dependency library for parsing, validating,
@@ -20,8 +20,8 @@ Built for Java 8 and up.
 
 [Try out the algorithm online!](https://www.rohannagar.com/jmail/)
 
-[Why JMail?](#why-jmail) • [Installation](#installation) • [Usage](#usage) •
-[IP Validation](#bonus-ip-address-validation) • [Contributing](#contributing)
+[Why JMail?](#why-jmail) • [Installation](#installation) • [Performance](#performance) •
+[Usage](#usage) • [IP Validation](#bonus-ip-address-validation) • [Contributing](#contributing)
 
 ## Why JMail?
 
@@ -70,14 +70,14 @@ Add this library as a dependency in your `pom.xml`:
 <dependency>
   <groupId>com.sanctionco.jmail</groupId>
   <artifactId>jmail</artifactId>
-  <version>2.2.1</version>
+  <version>2.2.2</version>
 </dependency>
 ```
 
 Or in your `build.gradle`:
 
 ```groovy
-implementation 'com.sanctionco.jmail:jmail:2.2.1'
+implementation 'com.sanctionco.jmail:jmail:2.2.2'
 ```
 
 ## Performance
@@ -92,6 +92,10 @@ invalid addresses complete much quicker than Jakarta Mail. Despite all the extra
 numbers across the board, beating all other implementations, and doesn't give up anything in correctness. No matter what 
 address you give JMail, time only increases based on the length or complexity of the address, making it truly an `O(n)` solution.
 
+> Note that some implementations throw exceptions on invalid addresses, which does impact their
+> performance results since exception handling is expensive in Java. This is still an accurate
+> representation since these implementations do not provide an API to validate without exceptions.
+
 This consistent performance, combined with **much** better [correctness](https://www.rohannagar.com/jmail/),
 a richer API set, and more out-of-the-box customization and canonicalization options, makes JMail the best
 choice for email address parsing and validation.
@@ -105,6 +109,17 @@ choice for email address parsing and validation.
 | `first@last@example.org` (Invalid)             |    35 |          815 |             1393 |            411 |          2867 |
 | `valid.local@exam_ple.com` (Invalid)           |    59 |          835 |             1421 |            881 |          3384 |
 | `"john doe"(a comment)@example.com` (Invalid)  |   348 |          501 |             1508 |            719 |          8433 |
+
+### List Parsing
+
+JMail address list parsing (parsing addresses from a comma-separated String) is also faster than
+the competition.
+
+| Address list                                                                                       | JMail | Google dot-parse |
+|:---------------------------------------------------------------------------------------------------|------:|-----------------:|
+| 3 valid addresses `email@example.com,test@gmail.com,my-addr@test.org`                              |   450 |              786 |
+| 2 addresses, one with identifier `Joe A Smith <email@example.com>,testmail@t.co`                   |   512 |              545 |
+| 3 addresses, 2 of them invalid `e＿mail@hello.net,gatsby@f.sc.ot.t.f.i.tzg.era.l.d.,testmail@t.co`  |   389 |             1706 |
 
 ## Usage
 
@@ -268,6 +283,34 @@ Optional<String> redacted = JMail.tryParse("test@gmail.com")
         .map(Email::munged);
 
 // redacted == Optional.of("te*****@gm*****");
+```
+
+### Parsing Lists of Addresses
+
+JMail is capable of parsing a string that contains a list of email addresses delimited by commas.
+
+The address list parsing is intelligent enough to handle commas that appear in one of the addresses
+in the list in an RFC-valid location, such as quoted in the local-part or within a comment. It does
+this very efficiently by iterating once through each character in the given list of addresses, avoiding
+whitespace, and intelligently pulling out each token that should be validated as an address.
+
+Two methods are provided: `tryParseAddressList` which discards invalid addresses in the list
+and just returns the valid parsed `Email` objects, and `validateAddressList` which returns a list
+of `EmailValidationResults` from each possible address in the list that can be inspected for various
+failures.
+
+```java
+List<Email> emails = JMail.tryParseAddressList(
+    "good@example.com,not-an-email,also@example.org");
+// emails == [Email{"good@example.com"}, Email{"also@example.org"}]
+
+List<Email> emails = JMail.validateAddressList(
+    "good@example.com,not-an-email,also@example.org");
+// emails == [
+//   EmailValidationResult{success=true, emailAddress="good@example.com"},
+//   EmailValidationResult{success=false, failureReason="MISSING_AT_SYMBOL"},
+//   EmailValidationResult{success=true, emailAddress="also@example.org"}
+// ]
 ```
 
 ### Additional Validation Rules

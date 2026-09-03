@@ -2,11 +2,13 @@ package com.sanctionco.jmail;
 
 import com.sanctionco.jmail.disposable.DisposableDomainSource;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -467,6 +469,61 @@ public final class EmailValidator {
   public Optional<Email> tryParse(String email) {
     return JMail.validate(email, allowNonstandardDots).getEmail()
         .filter(e -> !testPredicates(e).isPresent());
+  }
+
+  /**
+   * Validate a comma-delimited list of email addresses against this validator's rules,
+   * returning a {@link EmailValidationResult} for each parsed address. Unlike
+   * {@link #tryParseAddressList(String)}, the result of this method includes failures so that
+   * {@link FailureReason} can be inspected per address.
+   *
+   * <p>The given string is split intelligently to ensure that commas that show up as part
+   * of an address (such as in a quoted local-part) do not split the list at an unexpected index.
+   *
+   * @param addressList the comma-delimited list of email addresses to validate
+   * @return an unmodifiable list of {@link EmailValidationResult} objects, one per address;
+   *         if {@code addressList} is {@code null}, a single failure result with
+   *         {@link FailureReason#NULL_ADDRESS}
+   * @see #tryParseAddressList(String)
+   */
+  public List<EmailValidationResult> validateAddressList(String addressList) {
+    if (addressList == null) {
+      return Collections.singletonList(
+          EmailValidationResult.failure(FailureReason.NULL_ADDRESS));
+    }
+
+    List<EmailValidationResult> results = new ArrayList<>();
+
+    for (String token : JMail.splitAddressList(addressList, ',')) {
+      results.add(validate(token));
+    }
+
+    return Collections.unmodifiableList(results);
+  }
+
+  /**
+   * Parse a comma-delimited list of email addresses, returning only the addresses that
+   * are valid according to all registered validation rules. Invalid addresses are skipped and
+   * omitted from the resulting list.
+   *
+   * <p>The given string is split intelligently to ensure that commas that show up as part
+   * of an address (such as in a quoted local-part) do not split the list at an unexpected index.
+   *
+   * @param addressList the comma-delimited list of email addresses to parse
+   * @return an unmodifiable list of parsed {@link Email} objects; empty if {@code addressList}
+   *         is {@code null} or contains no valid addresses
+   * @see #validateAddressList(String)
+   */
+  public List<Email> tryParseAddressList(String addressList) {
+    if (addressList == null) return Collections.emptyList();
+
+    List<Email> emails = new ArrayList<>();
+
+    for (String token : JMail.splitAddressList(addressList, ',')) {
+      tryParse(token).ifPresent(emails::add);
+    }
+
+    return Collections.unmodifiableList(emails);
   }
 
   /**

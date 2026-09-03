@@ -1,5 +1,12 @@
 # JMail Changelog
 
+## 2.3.0
+
+- Add ability to parse a string of comma-delimited email addresses into a `List`. This feature intelligently parses the list and avoids splitting on commas that are valid as part of an address (such as quoted within the local-part).
+  - To parse a list, discarding invalid addresses and returning a list of valid parsed `Email` objects, use `JMail.tryParseAddressList(String addressList)` or `EmailValidator.tryParseAddressList(String addressList)`.
+  - To parse a list, returning full success/failure details for each possible address, use `JMail.validateAddressList(String addressList)` or `EmailValidator.validateAddressList(String addressList)`.
+
+---
 ## 2.2.2
 
 - Fix bug where the Unicode character `U+2400 SYMBOL FOR NULL` was incorrectly required to be backslash-escaped

@@ -5,6 +5,7 @@ import com.sanctionco.jmail.disposable.DisposableDomainSource;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -406,6 +407,48 @@ class EmailValidatorTest {
         ".test@domain.test.org", "test.@domain.exmple.com", ".my.email.@gmail.com"})
     void allows(String email) {
       runValidTest(JMail.validator().allowNonstandardDots().disallowIpDomain(), email);
+    }
+  }
+
+  @Nested
+  class AddressList {
+    @Test
+    void appliesCustomRulesToEachAddress() {
+      EmailValidator validator = JMail.strictValidator();
+
+      List<Email> emails = validator.tryParseAddressList(
+          "@1st.relay,@2nd.relay:user@final.domain, test@example.com, test@[1.2.3.4]");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("test@example.com");
+    }
+
+    @Test
+    void validateReportsCustomRuleFailures() {
+      EmailValidator validator = JMail.validator().disallowIpDomain();
+
+      List<EmailValidationResult> results = validator.validateAddressList(
+          "good@example.com, test@[1.2.3.4]");
+
+      assertThat(results).hasSize(2);
+      assertThat(results.get(0).isSuccess()).isTrue();
+      assertThat(results.get(1).isFailure()).isTrue();
+      assertThat(results.get(1).getFailureReason())
+          .isEqualTo(FailureReason.CONTAINS_IP_DOMAIN);
+    }
+
+    @Test
+    void nullListHandling() {
+      EmailValidator validator = JMail.validator();
+
+      assertThat(validator.tryParseAddressList(null)).isEmpty();
+
+      List<EmailValidationResult> results = validator.validateAddressList(null);
+
+      assertThat(results).hasSize(1);
+      assertThat(results.get(0).getFailureReason())
+          .isEqualTo(FailureReason.NULL_ADDRESS);
     }
   }
 
