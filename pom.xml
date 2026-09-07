@@ -308,7 +308,7 @@
     <dependency>
       <groupId>com.google.mug</groupId>
       <artifactId>dot-parse</artifactId>
-      <version>10.9</version>
+      <version>11.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
