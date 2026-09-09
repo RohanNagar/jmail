@@ -5,6 +5,7 @@
 - Add ability to parse a string of comma-delimited email addresses into a `List`. This feature intelligently parses the list and avoids splitting on commas that are valid as part of an address (such as quoted within the local-part).
   - To parse a list, discarding invalid addresses and returning a list of valid parsed `Email` objects, use `JMail.tryParseAddressList(String addressList)` or `EmailValidator.tryParseAddressList(String addressList)`.
   - To parse a list, returning full success/failure details for each possible address, use `JMail.validateAddressList(String addressList)` or `EmailValidator.validateAddressList(String addressList)`.
+- Add ability to get a fully decoded version of the identifier of an email address. Identifiers are allowed to be encoded words according to RFC 2047 (like `=?utf-8?q?te?xt?= <test@server.com>`), and the convenience method `decodedIdentifier()` on an `Email` object will decode such words for you.
 
 ---
 ## 2.2.2

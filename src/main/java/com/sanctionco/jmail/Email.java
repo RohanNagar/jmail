@@ -1,5 +1,6 @@
 package com.sanctionco.jmail;
 
+import com.sanctionco.jmail.mime.EncodedWord;
 import com.sanctionco.jmail.normalization.CaseOption;
 import com.sanctionco.jmail.normalization.IDNConverter;
 import com.sanctionco.jmail.normalization.NormalizationOptions;
@@ -141,6 +142,18 @@ public final class Email {
    */
   public String identifier() {
     return identifier;
+  }
+
+  /**
+   * Returns a decoded version of the identifier of the email address, if it has one. For example,
+   * the decoded identifier of the email
+   * {@code "=?utf-8?Q?Andreas_Birkeb=C3=A6k?= <test@server.com>"} is {@code "Andreas Birkebæk"}.
+   *
+   * @return an {@link Optional} holding the decoded identifier of the email, or empty if it
+   *         does not have one
+   */
+  public Optional<String> decodedIdentifier() {
+    return Optional.ofNullable(EncodedWord.decodeText(identifier));
   }
 
   /**

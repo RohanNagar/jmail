@@ -57,6 +57,21 @@ class EmailTest {
   }
 
   @Test
+  void ensureDecodedIdentifierDecodes() {
+    assertThat(Email.of("=?utf-8?Q?Andreas_Birkeb=C3=A6k?= <test@server.com>"))
+        .isPresent().get()
+        .returns(Optional.of("Andreas Birkebæk "), Email::decodedIdentifier);
+
+    assertThat(Email.of("Test User <test@server.com>"))
+        .isPresent().get()
+        .returns(Optional.of("Test User "), Email::decodedIdentifier);
+
+    assertThat(Email.of("test@server.com"))
+        .isPresent().get()
+        .returns(Optional.empty(), Email::decodedIdentifier);
+  }
+
+  @Test
   void ensureNormalizedIsCorrectForIpAddressEmail() {
     String address = "aaa@[123.123.123.123]";
 

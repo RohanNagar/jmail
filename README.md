@@ -201,11 +201,12 @@ email addresses easier. The `Email` object has the following properties:
 | domainWithoutComments()    | The domain of the email address without comments                                      | `example.one.com`                                                                              |
 | domainParts()              | A list of the parts of the domain                                                     | `[example, one, com]`                                                                          |
 | identifier()               | The identifier of the email address, if it has one.                                   | `null`<br/>(For `Admin <test@server.com>`, it would be `Admin`)                                |
+| decodedIdentifier()        | A fully MIME-decoded version of the identifier of the email address, if it has one.   | `Optional.empty`<br/>(For `=?utf-8?q?te?xt?= <test@server.com>`, it would be `te?xt`)          |
 | comments()                 | A list of the comments in the email address                                           | `[hello, world]`                                                                               |
 | explicitSourceRoutes()     | A list of explicit source routes in the address, if present                           | `[]`<br/>(For `@1st.relay,@2nd.relay:user@final.domain`, it would be `[1st.relay, 2nd.relay]`) |
 | isIpAddress()              | Whether the domain is an IP address                                                   | `false`                                                                                        |
 | containsWhitespace()       | Whether the address contains obsolete whitespace                                      | `false`                                                                                        |
-| isAscii()                  | Whether the address contains **only** ASCII characters                                    | `true`                                                                                         |
+| isAscii()                  | Whether the address contains **only** ASCII characters                                | `true`                                                                                         |
 | hasIdentifier()            | Whether the address has an identifier                                                 | `false`                                                                                        |
 | topLevelDomain()           | The `TopLevelDomain` of the email address, or `TopLevelDomain.OTHER` if it is unknown | `TopLevelDomain.DOT_COM`                                                                       |
 
