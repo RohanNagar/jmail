@@ -382,6 +382,175 @@ class JMailTest {
     }
 
     @Test
+    void handlesEscapedBackslash() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "user\\\\name@example.com, other@example.org");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("user\\\\name@example.com", "other@example.org");
+    }
+
+    @Test
+    void handlesIpDomains() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "username@[1.2.3.4], other@[IPv6:::]");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("username@[1.2.3.4]", "other@[IPv6:::]");
+    }
+
+    @Test
+    void handlesMismatchedComments() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "usernametest)@test.org, other@example.com, username(test@tester.net");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("other@example.com");
+    }
+
+    @Test
+    void handlesMismatchedAngleBrackets() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "Joan test@gmail.com>, other@example.com, Joan <test@gmail.org, mark@domain.co");
+
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("other@example.com", "mark@domain.co");
+    }
+
+    @Test
+    void doesNotSplitOnSourceRouteAfterAngleWithWhitespace() {
+      assertThat(JMail.splitAddressList(
+          "Admin < @1st.relay,@2nd.relay:user@final.domain>, next@example.com",
+          ','))
+          .containsExactly(
+              "Admin < @1st.relay,@2nd.relay:user@final.domain>",
+              "next@example.com");
+    }
+
+    @Test
+    void doesNotSplitOnSourceRouteAfterAngleWithComment() {
+      assertThat(JMail.splitAddressList(
+          "Admin <(route)@1st.relay,@2nd.relay:user@final.domain>, next@example.com",
+          ','))
+          .containsExactly(
+              "Admin <(route)@1st.relay,@2nd.relay:user@final.domain>",
+              "next@example.com");
+    }
+
+    @Test
+    void recoversAfterUnclosedAngleBracket() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "test@gmail.com, Bob <test@gmail.com, Alice <test@gmail.com>");
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("test@gmail.com", "test@gmail.com");
+      assertThat(emails.get(1))
+          .returns(true, Email::hasIdentifier)
+          .returns("Alice ", Email::identifier);
+    }
+
+    @Test
+    void validateReportsUnclosedAngleBracketSeparately() {
+      List<EmailValidationResult> results = JMail.validateAddressList(
+          "test@gmail.com, Bob <test@gmail.com, Alice <test@gmail.com>");
+      assertThat(results).hasSize(3);
+      assertThat(results.get(0).isSuccess()).isTrue();
+      assertThat(results.get(1).isFailure()).isTrue();
+      assertThat(results.get(1).getFailureReason())
+          .isEqualTo(FailureReason.UNQUOTED_ANGLED_BRACKET);
+      assertThat(results.get(2).isSuccess()).isTrue();
+      assertThat(results.get(2).getEmail().get().normalized())
+          .isEqualTo("test@gmail.com");
+    }
+
+    @Test
+    void recoversAfterUnclosedAngleBracketWithNoAtInMalformedAddr() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "Bob <not-an-email, Alice <alice@example.com>");
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("alice@example.com");
+    }
+
+    @Test
+    void doesNotSplitOnQuotedCommaInsideAngleBrackets() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "Name <\"Smith, John\"@example.com>, jane@example.org");
+      assertThat(emails).hasSize(2);
+      assertThat(emails.get(0).localPart()).isEqualTo("\"Smith, John\"");
+      assertThat(emails.get(1).normalized()).isEqualTo("jane@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnCommentCommaInsideAngleBrackets() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "Name <test(hello, world)@example.com>, other@example.org");
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("test@example.com", "other@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnDomainCommentComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "test@gmail.com(hello, world), other@example.org");
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("test@gmail.com", "other@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnTrailingDomainCommentComma() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "email@example.com (Joe, Smith), other@example.org");
+      assertThat(emails).hasSize(2);
+      assertThat(emails.get(0).localPart()).isEqualTo("email");
+      assertThat(emails.get(1).normalized()).isEqualTo("other@example.org");
+    }
+
+    @Test
+    void doesNotSplitOnClosedIpDomain() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "user@[123.123.123.123], other@example.com");
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("user@[123.123.123.123]", "other@example.com");
+    }
+
+    @Test
+    void doesNotSplitOnClosedIpv6Domain() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "user@[IPv6:1111:2222:3333:4444:5555:6666:7777:8888], other@example.com");
+      assertThat(emails).hasSize(2);
+      assertThat(emails.get(0).isIpAddress()).isTrue();
+      assertThat(emails.get(1).normalized()).isEqualTo("other@example.com");
+    }
+
+    @Test
+    void recoversAfterUnclosedIpDomain() {
+      List<Email> emails = JMail.tryParseAddressList(
+          "user@[192.168.1.1, other@example.com");
+      assertThat(emails)
+          .extracting(Email::normalized)
+          .containsExactly("other@example.com");
+    }
+
+    @Test
+    void validateReportsUnclosedIpDomainSeparately() {
+      List<EmailValidationResult> results = JMail.validateAddressList(
+          "user@[192.168.1.1, other@example.com");
+      assertThat(results).hasSize(2);
+      assertThat(results.get(0).isFailure()).isTrue();
+      assertThat(results.get(1).isSuccess()).isTrue();
+      assertThat(results.get(1).getEmail().get().normalized())
+          .isEqualTo("other@example.com");
+    }
+
+    @Test
     void splitsUnquotedDisplayNameComma() {
       List<EmailValidationResult> results = JMail.validateAddressList(
           "Smith, John <john@example.com>");

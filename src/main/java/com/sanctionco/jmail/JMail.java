@@ -1038,9 +1038,8 @@ public final class JMail {
     boolean escaped = false;
     boolean inSourceRoute = false;
     boolean seenTokenContent = false;
+    boolean expectSourceRoute = false;
     int commentDepth = 0;
-    int angleDepth = 0;
-    int bracketDepth = 0;
 
     for (int i = 0, size = addressList.length(); i < size; i++) {
       char c = addressList.charAt(i);
@@ -1054,6 +1053,9 @@ public final class JMail {
       if (c == '\\') {
         escaped = true;
         seenTokenContent = true;
+        if (!inQuotes && commentDepth == 0) {
+          expectSourceRoute = false;
+        }
         continue;
       }
 
@@ -1075,28 +1077,27 @@ public final class JMail {
         } else if (c == ')' && commentDepth > 0) {
           commentDepth--;
         } else if (c == '<' && commentDepth == 0) {
-          angleDepth++;
-        } else if (c == '>' && commentDepth == 0 && angleDepth > 0) {
-          angleDepth--;
-        } else if (c == '[' && commentDepth == 0) {
-          bracketDepth++;
-        } else if (c == ']' && commentDepth == 0 && bracketDepth > 0) {
-          bracketDepth--;
-        } else if (c == ':' && inSourceRoute && commentDepth == 0 && angleDepth == 0) {
+          expectSourceRoute = true;
+        } else if (c == ':' && inSourceRoute && commentDepth == 0) {
           inSourceRoute = false;
         }
       }
 
+      if (expectSourceRoute && !inQuotes && commentDepth == 0 && c > ' ' && c != '<' && c != ')') {
+        inSourceRoute = c == '@';
+        expectSourceRoute = false;
+      }
+
+
       if (c == delimiter
           && !inQuotes
           && commentDepth == 0
-          && angleDepth == 0
-          && bracketDepth == 0
           && !inSourceRoute) {
         addAddressListToken(tokens, addressList, start, i);
         start = i + 1;
         inSourceRoute = false;
         seenTokenContent = false;
+        expectSourceRoute = false;
       }
     }
 
