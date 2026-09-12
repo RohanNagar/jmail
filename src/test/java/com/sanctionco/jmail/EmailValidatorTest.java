@@ -142,11 +142,18 @@ class EmailValidatorTest {
 
   @Nested
   class DisallowQuotedIdentifiers {
+    // Keep until removal of deprecated methods
+
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {"John Smith <test@server.com>", "ABC <123t@abc.net>"})
     void rejectsAddressesWithQuotedIdentifiers(String email) {
       runInvalidTest(JMail.validator()
           .disallowQuotedIdentifiers(), email, FailureReason.CONTAINS_QUOTED_IDENTIFIER);
+
+      runInvalidTest(JMail.validator().withRule(
+          ValidationRules::disallowQuotedIdentifiers),
+          email,
+          FailureReason.FAILED_CUSTOM_VALIDATION);
     }
 
     @ParameterizedTest(name = "{0}")
