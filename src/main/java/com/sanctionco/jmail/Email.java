@@ -155,7 +155,7 @@ public final class Email {
    *         have one
    */
   public Optional<String> displayName() {
-    return Optional.ofNullable(displayName);
+    return Optional.ofNullable(displayName).map(String::trim);
   }
 
   /**

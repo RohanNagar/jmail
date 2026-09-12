@@ -187,7 +187,7 @@ class JMailTest {
     assertThat(JMail.tryParse(one)).isPresent().get()
         .hasToString(one)
         .returns(true, Email::hasDisplayName)
-        .returns(Optional.of("John Smith "), Email::displayName)
+        .returns(Optional.of("John Smith"), Email::displayName)
         .returns("test@te.ex", Email::normalized)
         .returns(false, Email::containsWhitespace);
 
@@ -451,7 +451,7 @@ class JMailTest {
           .containsExactly("test@gmail.com", "test@gmail.com");
       assertThat(emails.get(1))
           .returns(true, Email::hasDisplayName)
-          .returns(Optional.of("Alice "), Email::displayName);
+          .returns(Optional.of("Alice"), Email::displayName);
     }
 
     @Test

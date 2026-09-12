@@ -17,7 +17,7 @@ public final class EncodedWord {
 
   /**
    * Decode the given string according to MIME encoded word decoding rules
-   * specified in <a href ="https://datatracker.ietf.org/doc/html/rfc2047">RFC 2047</a>.
+   * specified in <a href="https://datatracker.ietf.org/doc/html/rfc2047">RFC 2047</a>.
    *
    * <p>Any plaintext or malformed encoded words in the input string are passed through unchanged.
    *
