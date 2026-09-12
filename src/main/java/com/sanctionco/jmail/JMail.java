@@ -147,9 +147,9 @@ public final class JMail {
    * See {@link #tryParse(String)} for details on what is required of an email address within
    * basic validation.
    *
-   * <p>Commas inside quotes, comments, angle brackets, domain literals, and explicit source
-   * routes are not treated as list delimiters. Empty or whitespace-only entries are skipped.
-   * Surrounding whitespace on each address is trimmed.
+   * <p>Commas inside quotes, comments, and explicit source routes are not treated as list
+   * delimiters. Empty or whitespace-only entries are skipped. Surrounding whitespace on each
+   * address is trimmed.
    *
    * @param addressList the comma-delimited list of email addresses to parse
    * @return an unmodifiable list of successfully parsed {@link Email} objects; empty if
@@ -174,9 +174,9 @@ public final class JMail {
    * {@link #tryParseAddressList(String)}, this method includes failures so that
    * {@link FailureReason} can be inspected per address.
    *
-   * <p>Commas inside quotes, comments, angle brackets, domain literals, and explicit source
-   * routes are not treated as list delimiters. Empty or whitespace-only entries are skipped.
-   * Surrounding whitespace on each address is trimmed.
+   * <p>Commas inside quotes, comments, and explicit source routes are not treated as list
+   * delimiters. Empty or whitespace-only entries are skipped. Surrounding whitespace on each
+   * address is trimmed.
    *
    * @param addressList the comma-delimited list of email addresses to validate
    * @return an unmodifiable list of {@link EmailValidationResult} objects, one per address;
@@ -277,7 +277,7 @@ public final class JMail {
 
     // set to true if the last character was the end comment
     // initialize to value of allowStartingWhitespace to make it act like we had a prev comment
-    // in the case of "Identifier < test@t.com >" to allow for the whitespace after the '<'
+    // in the case of "Display-Name < test@t.com >" to allow for the whitespace after the '<'
     boolean previousComment = allowStartingWhitespace;
 
     boolean removableQuotePair = true;     // set to false if the current quote could not be removed
@@ -323,7 +323,7 @@ public final class JMail {
         // email cannot start with '.'
         // unless we are configured to allow it (GMail doesn't care about a starting dot)
         // we set a flag instead of immediately invalidating the address since it could
-        // start with a dot as part of the identifier
+        // start with a dot as part of the display-name
         startsWithDot = true;
       }
 
@@ -336,12 +336,12 @@ public final class JMail {
         EmailValidationResult innerResult
             = validateInternal(email.substring(i + 1, size - 1), allowNonstandardDots, true);
 
-        String identifier = email.substring(0, i);
+        String displayName = email.substring(0, i);
 
-        // If the address passed validation, return success with the identifier included.
+        // If the address passed validation, return success with the display name included.
         // Otherwise, just return the failed internal result
         return innerResult.getEmail()
-            .map(e -> EmailValidationResult.success(new Email(e, identifier)))
+            .map(e -> EmailValidationResult.success(new Email(e, displayName)))
             .orElse(innerResult);
       }
 

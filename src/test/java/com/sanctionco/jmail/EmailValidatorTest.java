@@ -157,6 +157,22 @@ class EmailValidatorTest {
   }
 
   @Nested
+  class DisallowDisplayNames {
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"John Smith <test@server.com>", "ABC <123t@abc.net>"})
+    void rejectsAddressesWithQuotedIdentifiers(String email) {
+      runInvalidTest(JMail.validator()
+          .disallowDisplayNames(), email, FailureReason.CONTAINS_DISPLAY_NAME);
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @ValueSource(strings = {"test@123.123.123.com", "first.last@example.com"})
+    void allowsOtherAddresses(String email) {
+      runValidTest(JMail.validator().disallowDisplayNames(), email);
+    }
+  }
+
+  @Nested
   class DisallowReservedDomains {
     @ParameterizedTest(name = "{0}")
     @ValueSource(strings = {

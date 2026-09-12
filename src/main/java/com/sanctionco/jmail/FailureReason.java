@@ -136,7 +136,7 @@ public final class FailureReason {
 
   /**
    * Whitespace is only allowed in an email address if it is between parts or the address has
-   * an identifier.
+   * a display name.
    */
   public static final FailureReason INVALID_WHITESPACE
       = new FailureReason("INVALID_WHITESPACE");
@@ -225,7 +225,7 @@ public final class FailureReason {
 
   /**
    * An email address cannot contain the {@code '<'} character outside of quotes,
-   * unless the address has an identifier.
+   * unless the address has a display name.
    */
   public static final FailureReason UNQUOTED_ANGLED_BRACKET
       = new FailureReason("UNQUOTED_ANGLED_BRACKET");
@@ -238,6 +238,14 @@ public final class FailureReason {
       = new FailureReason("UNUSED_BACKSLASH_ESCAPE");
 
   /* Additional FailureReasons for ValidationRules */
+
+  /**
+   * If the rule {@link EmailValidator#disallowDisplayNames()} is added to your
+   * {@code EmailValidator}, then this failure indicates the email address contained
+   * a display name.
+   */
+  public static final FailureReason CONTAINS_DISPLAY_NAME
+      = new FailureReason("CONTAINS_DISPLAY_NAME");
 
   /**
    * If the rule {@link EmailValidator#disallowDisposableDomains(DisposableDomainSource)} is
@@ -274,8 +282,13 @@ public final class FailureReason {
   /**
    * If the rule {@link EmailValidator#disallowQuotedIdentifiers()} is added to your
    * {@code EmailValidator}, then this failure indicates the email address contained
-   * a quoted identifier.
+   * a display name.
+   *
+   * @deprecated as of v2.3.0, replaced by {@link #CONTAINS_DISPLAY_NAME}. "identifier" was an
+   *             ambiguous term that is not used in any Email RFC. "Display name" is the proper
+   *             term.
    */
+  @Deprecated
   public static final FailureReason CONTAINS_QUOTED_IDENTIFIER
       = new FailureReason("CONTAINS_QUOTED_IDENTIFIER");
 

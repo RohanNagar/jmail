@@ -33,17 +33,28 @@ class EmailTest {
   }
 
   @Test
-  void ensureEmptyIdentifierStringReportsCorrectly() {
+  void ensureEmptyDisplayNameStringReportsCorrectly() {
     Optional<Email> email = Email.of("test@test.com");
 
     assertThat(email)
         .isPresent().get()
-        .returns(false, Email::hasIdentifier);
+        .returns(false, Email::hasDisplayName);
 
     assertThat(new Email(email.get(), null))
-        .returns(false, Email::hasIdentifier);
+        .returns(false, Email::hasDisplayName);
     assertThat(new Email(email.get(), ""))
-        .returns(false, Email::hasIdentifier);
+        .returns(false, Email::hasDisplayName);
+  }
+
+  @Test
+  void ensureDeprecatedIdentifierMethods() {
+    // Keep until removal of deprecated methods
+    Optional<Email> email = Email.of("Tester <test@test.com>");
+
+    assertThat(email)
+        .isPresent().get()
+        .returns(true, Email::hasIdentifier)
+        .returns("Tester ", Email::identifier);
   }
 
   @Test
@@ -57,18 +68,18 @@ class EmailTest {
   }
 
   @Test
-  void ensureDecodedIdentifierDecodes() {
+  void ensureDecodedDisplayNameDecodes() {
     assertThat(Email.of("=?utf-8?Q?Andreas_Birkeb=C3=A6k?= <test@server.com>"))
         .isPresent().get()
-        .returns(Optional.of("Andreas Birkebæk "), Email::decodedIdentifier);
+        .returns(Optional.of("Andreas Birkebæk "), Email::decodedDisplayName);
 
     assertThat(Email.of("Test User <test@server.com>"))
         .isPresent().get()
-        .returns(Optional.of("Test User "), Email::decodedIdentifier);
+        .returns(Optional.of("Test User "), Email::decodedDisplayName);
 
     assertThat(Email.of("test@server.com"))
         .isPresent().get()
-        .returns(Optional.empty(), Email::decodedIdentifier);
+        .returns(Optional.empty(), Email::decodedDisplayName);
   }
 
   @Test

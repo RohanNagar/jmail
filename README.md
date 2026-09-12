@@ -115,11 +115,11 @@ choice for email address parsing and validation.
 JMail address list parsing (parsing addresses from a comma-separated String) is also faster than
 the competition.
 
-| Address list                                                                                       | JMail | Google dot-parse |
-|:---------------------------------------------------------------------------------------------------|------:|-----------------:|
-| 3 valid addresses `email@example.com,test@gmail.com,my-addr@test.org`                              |   450 |              786 |
-| 2 addresses, one with identifier `Joe A Smith <email@example.com>,testmail@t.co`                   |   512 |              545 |
-| 3 addresses, 2 of them invalid `e＿mail@hello.net,gatsby@f.sc.ot.t.f.i.tzg.era.l.d.,testmail@t.co`  |   389 |             1706 |
+| Address list                                                                                      | JMail | Google dot-parse |
+|:--------------------------------------------------------------------------------------------------|------:|-----------------:|
+| 3 valid addresses `email@example.com,test@gmail.com,my-addr@test.org`                             |   450 |              786 |
+| 2 addresses, one with display name `Joe A Smith <email@example.com>,testmail@t.co`                |   512 |              545 |
+| 3 addresses, 2 of them invalid `e＿mail@hello.net,gatsby@f.sc.ot.t.f.i.tzg.era.l.d.,testmail@t.co` |   389 |             1706 |
 
 ## Usage
 
@@ -200,14 +200,14 @@ email addresses easier. The `Email` object has the following properties:
 | domain()                   | The domain of the email address                                                       | `(world)example.one.com`                                                                       |
 | domainWithoutComments()    | The domain of the email address without comments                                      | `example.one.com`                                                                              |
 | domainParts()              | A list of the parts of the domain                                                     | `[example, one, com]`                                                                          |
-| identifier()               | The identifier of the email address, if it has one.                                   | `null`<br/>(For `Admin <test@server.com>`, it would be `Admin`)                                |
-| decodedIdentifier()        | A fully MIME-decoded version of the identifier of the email address, if it has one.   | `Optional.empty`<br/>(For `=?utf-8?q?te?xt?= <test@server.com>`, it would be `te?xt`)          |
+| displayName()              | The display name of the email address, if it has one.                                 | `Optional.empty`<br/>(For `Admin <test@server.com>`, it would be `Admin`)                      |
+| decodedDisplayName()       | A fully MIME-decoded version of the display name of the email address, if it has one. | `Optional.empty`<br/>(For `=?utf-8?q?te?xt?= <test@server.com>`, it would be `te?xt`)          |
 | comments()                 | A list of the comments in the email address                                           | `[hello, world]`                                                                               |
 | explicitSourceRoutes()     | A list of explicit source routes in the address, if present                           | `[]`<br/>(For `@1st.relay,@2nd.relay:user@final.domain`, it would be `[1st.relay, 2nd.relay]`) |
 | isIpAddress()              | Whether the domain is an IP address                                                   | `false`                                                                                        |
 | containsWhitespace()       | Whether the address contains obsolete whitespace                                      | `false`                                                                                        |
 | isAscii()                  | Whether the address contains **only** ASCII characters                                | `true`                                                                                         |
-| hasIdentifier()            | Whether the address has an identifier                                                 | `false`                                                                                        |
+| hasDisplayName()           | Whether the address has an display name                                               | `false`                                                                                        |
 | topLevelDomain()           | The `TopLevelDomain` of the email address, or `TopLevelDomain.OTHER` if it is unknown | `TopLevelDomain.DOT_COM`                                                                       |
 
 To create a new instance of `Email` from a string, use the `tryParse(String email)`
@@ -377,13 +377,13 @@ all emails that have a reserved domain:
 JMail.validator().disallowReservedDomains();
 ```
 
-#### Disallow Quoted Identifiers
+#### Disallow Display Names
 
 If you want email addresses to only be the raw email address, use this rule.
 Adding this will invalidate addresses of the form `John Smith <john@smith.com>`.
 
 ```java
-JMail.validator().disallowQuotedIdentifiers();
+JMail.validator().disallowDisplayNames();
 ```
 
 #### Require a specific common Top Level Domain

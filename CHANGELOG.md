@@ -6,6 +6,15 @@
   - To parse a list, discarding invalid addresses and returning a list of valid parsed `Email` objects, use `JMail.tryParseAddressList(String addressList)` or `EmailValidator.tryParseAddressList(String addressList)`.
   - To parse a list, returning full success/failure details for each possible address, use `JMail.validateAddressList(String addressList)` or `EmailValidator.validateAddressList(String addressList)`.
 - Add ability to get a fully decoded version of the identifier of an email address. Identifiers are allowed to be encoded words according to RFC 2047 (like `=?utf-8?q?te?xt?= <test@server.com>`), and the convenience method `decodedIdentifier()` on an `Email` object will decode such words for you.
+- Deprecate the following methods and add replacements. The term "identifier" was ambiguous and so methods that referenced "identifiers" are being replaced by methods referencing "display names", which is the correct RFC term.
+  
+  | Deprecated Method                           | Replacement                            | Notes                                                                                     |
+  |---------------------------------------------|----------------------------------------|-------------------------------------------------------------------------------------------|
+  | `Email#hasIdentifier`                       | `Email#hasDisplayName`                 |                                                                                           |
+  | `Email#identifier`                          | `Email#displayName`                    | Return type for the new method is `Optional<String>` instead of a plain nullable `String` |
+  | `EmailValidator#disallowQuotedIdentifiers`  | `EmailValidator#disallowDisplayNames`  |                                                                                           |
+  | `ValidationRules#disallowQuotedIdentifiers` | `ValidationRules#disallowDisplayNames` |                                                                                           |
+  | `FailureReason#CONTAINS_QUOTED_IDENTIFIER`  | `FailureReason#CONTAINS_DISPLAY_NAME`  |                                                                                           |
 
 ---
 ## 2.2.2

@@ -124,12 +124,12 @@ test\<angled@mytest.edu,test\<angled,mytest.edu,Angled bracket is allowed when q
 {^c\@**Dog^}@cartoon.com,{^c\@**Dog^},cartoon.com,A simple valid address with unusual characters
 phil.h\@\@ck@haacked.com,phil.h\@\@ck,haacked.com,Escaped @ symbols are allowed
 abc\\@test.org,abc\\,test.org,Escaped backslash is allowed
-Joe A Smith <email@example.com>,email,example.com,Quoted identifier address
-"John Michael" <tester@test.net>,tester,test.net,Quoted identifier address
-A <apple@pie.com>,apple,pie.com,Quoted identifier address
-.utkarsh <utkarsh@gmail.com>,utkarsh,gmail.com,An identifier can start with a dot
-=?utf-8?q?=40evil.com=00?= <test@example.com>,test,example.com,An identifier can be an encoded word
-=?utf-8?q?te?xt?= <test@example.com>,test,example.com,An identifier can have an extra '?' in an encoded word
+Joe A Smith <email@example.com>,email,example.com,Addresses with display names are allowed
+"John Michael" <tester@test.net>,tester,test.net,Addresses with quoted display names are allowed
+A <apple@pie.com>,apple,pie.com,Addresses with single character display names are allowed
+.utkarsh <utkarsh@gmail.com>,utkarsh,gmail.com,A display name can start with a dot
+=?utf-8?q?=40evil.com=00?= <test@example.com>,test,example.com,A display name can be an encoded word
+=?utf-8?q?te?xt?= <test@example.com>,test,example.com,A display name can have an extra '?' in an encoded word
 test(=?utf-8?q?comment?=)@example.com,test(=?utf-8?q?comment?=),example.com,The local-part can contain an encoded word in a comment
 ABC.DEF@GHI.JKL (MNO),ABC.DEF,GHI.JKL (MNO),Trailing comment with prior whitespace
 xyz@🚀.kz,xyz,🚀.kz,Emoji domains are valid

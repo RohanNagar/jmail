@@ -24,14 +24,14 @@ public final class Email {
   private final String domain;
   private final String domainWithoutComments;
   private final String fullSourceRoute;
-  private final String identifier;
+  private final String displayName;
   private final List<String> domainParts;
   private final List<String> comments;
   private final List<String> sourceRoutes;
   private final boolean isIpAddress;
   private final boolean containsWhitespace;
   private final boolean isAscii;
-  private final boolean hasIdentifier;
+  private final boolean hasDisplayName;
   private final TopLevelDomain tld;
 
   Email(String localPart, String localPartWithoutComments, String localPartWithoutQuotes,
@@ -51,29 +51,29 @@ public final class Email {
     this.isIpAddress = isIpAddress;
     this.containsWhitespace = containsWhitespace;
     this.isAscii = isAscii;
-    this.identifier = null;
-    this.hasIdentifier = false;
+    this.displayName = null;
+    this.hasDisplayName = false;
 
     this.tld = domainParts.size() > 1
         ? TopLevelDomain.fromString(domainParts.get(domainParts.size() - 1))
         : TopLevelDomain.NONE;
   }
 
-  Email(Email other, String identifier) {
+  Email(Email other, String displayName) {
     this.localPart = other.localPart;
     this.localPartWithoutComments = other.localPartWithoutComments;
     this.localPartWithoutQuotes = other.localPartWithoutQuotes;
     this.domain = other.domain;
     this.domainWithoutComments = other.domainWithoutComments;
     this.fullSourceRoute = other.fullSourceRoute;
-    this.identifier = identifier;
+    this.displayName = displayName;
     this.domainParts = other.domainParts;
     this.comments = other.comments;
     this.sourceRoutes = other.sourceRoutes;
     this.isIpAddress = other.isIpAddress;
     this.containsWhitespace = other.containsWhitespace;
     this.isAscii = other.isAscii;
-    this.hasIdentifier = identifier != null && !identifier.isEmpty();
+    this.hasDisplayName = displayName != null && !displayName.isEmpty();
     this.tld = other.tld;
   }
 
@@ -135,25 +135,39 @@ public final class Email {
   }
 
   /**
-   * Returns the identifier of the email address, if it has one. For example, the identifier
+   * Returns the display name of the email address, if it has one. For example, the display name
    * of the email {@code "John Smith <test@server.com>"} is {@code "John Smith "}.
    *
-   * @return the identifier of the email or {@code null} if it does not have one
+   * @return the display name of the email or {@code null} if it does not have one
+   * @deprecated as of v2.3.0, replaced by {@link #displayName()}. "identifier" was an ambiguous
+   *             term that is not used in any Email RFC. "Display name" is the proper term.
    */
+  @Deprecated
   public String identifier() {
-    return identifier;
+    return displayName;
   }
 
   /**
-   * Returns a decoded version of the identifier of the email address, if it has one. For example,
-   * the decoded identifier of the email
+   * Returns the display name of the email address, if it has one. For example, the display name
+   * of the email {@code "John Smith <test@server.com>"} is {@code "John Smith "}.
+   *
+   * @return an {@link Optional} holding the display name of the email, or empty if it does not
+   *         have one
+   */
+  public Optional<String> displayName() {
+    return Optional.ofNullable(displayName);
+  }
+
+  /**
+   * Returns a decoded version of the display name of the email address, if it has one. For example,
+   * the decoded display name of the email
    * {@code "=?utf-8?Q?Andreas_Birkeb=C3=A6k?= <test@server.com>"} is {@code "Andreas Birkebæk"}.
    *
-   * @return an {@link Optional} holding the decoded identifier of the email, or empty if it
+   * @return an {@link Optional} holding the decoded display name of the email, or empty if it
    *         does not have one
    */
-  public Optional<String> decodedIdentifier() {
-    return Optional.ofNullable(EncodedWord.decodeText(identifier));
+  public Optional<String> decodedDisplayName() {
+    return Optional.ofNullable(EncodedWord.decodeText(displayName));
   }
 
   /**
@@ -229,14 +243,28 @@ public final class Email {
   }
 
   /**
-   * Get whether this email address has an identifier. For example, the address
+   * Get whether this email address has a display name. For example, the address
    * {@code "John Smith <test@server.com>"} will return {@code true}, but the address
    * {@code "test@example.com"} will return {@code false}.
    *
-   * @return true if this email has en identifier, false otherwise
+   * @return true if this email has a display name, false otherwise
+   * @deprecated as of v2.3.0, replaced by {@link #hasDisplayName()}. "identifier" was an ambiguous
+   *             term that is not used in any Email RFC. "Display name" is the proper term.
    */
+  @Deprecated
   public boolean hasIdentifier() {
-    return hasIdentifier;
+    return hasDisplayName;
+  }
+
+  /**
+   * Get whether this email address has a display name. For example, the address
+   * {@code "John Smith <test@server.com>"} will return {@code true}, but the address
+   * {@code "test@example.com"} will return {@code false}.
+   *
+   * @return true if this email has a display name, false otherwise
+   */
+  public boolean hasDisplayName() {
+    return hasDisplayName;
   }
 
   /**
@@ -256,7 +284,7 @@ public final class Email {
    *
    * <ul>
    *   <li>All comments are removed</li>
-   *   <li>All identifiers or source routing are removed</li>
+   *   <li>All display names or source routing are removed</li>
    *   <li>Any unnecessary quotes within the local-part are removed</li>
    *   <li>The entire address is lowercased</li>
    * </ul>
@@ -281,7 +309,7 @@ public final class Email {
    *
    * <ul>
    *   <li>All comments are removed</li>
-   *   <li>All identifiers or source routing are removed</li>
+   *   <li>All display names or source routing are removed</li>
    *   <li>Any unnecessary quotes within the local-part are removed</li>
    *   <li>The entire address is lowercased</li>
    * </ul>
@@ -489,8 +517,8 @@ public final class Email {
 
     String address = fixedLocalPart + "@" + fixedDomain;
 
-    return hasIdentifier
-        ? identifier + "<" + address + ">"
+    return hasDisplayName
+        ? displayName + "<" + address + ">"
         : address;
   }
 
@@ -505,14 +533,14 @@ public final class Email {
         && Objects.equals(domain, email.domain)
         && Objects.equals(domainWithoutComments, email.domainWithoutComments)
         && Objects.equals(fullSourceRoute, email.fullSourceRoute)
-        && Objects.equals(identifier, email.identifier)
+        && Objects.equals(displayName, email.displayName)
         && Objects.equals(domainParts, email.domainParts)
         && Objects.equals(sourceRoutes, email.sourceRoutes)
         && Objects.equals(comments, email.comments)
         && Objects.equals(isIpAddress, email.isIpAddress)
         && Objects.equals(containsWhitespace, email.containsWhitespace)
         && Objects.equals(isAscii, email.isAscii)
-        && Objects.equals(hasIdentifier, email.hasIdentifier)
+        && Objects.equals(hasDisplayName, email.hasDisplayName)
         && Objects.equals(tld, email.tld);
   }
 
@@ -520,7 +548,7 @@ public final class Email {
   public int hashCode() {
     return Objects.hash(
         localPart, localPartWithoutComments, localPartWithoutQuotes, domain, domainWithoutComments,
-        fullSourceRoute, identifier, domainParts, sourceRoutes, comments, isIpAddress,
-        containsWhitespace, isAscii, hasIdentifier, tld);
+        fullSourceRoute, displayName, domainParts, sourceRoutes, comments, isIpAddress,
+        containsWhitespace, isAscii, hasDisplayName, tld);
   }
 }

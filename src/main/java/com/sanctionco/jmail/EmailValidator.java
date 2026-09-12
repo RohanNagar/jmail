@@ -43,8 +43,8 @@ public final class EmailValidator {
       = ValidationRules::disallowSingleCharacterTopLevelDomains;
   private static final Predicate<Email> DISALLOW_EXPLICIT_SOURCE_ROUTING_PREDICATE
       = ValidationRules::disallowExplicitSourceRouting;
-  private static final Predicate<Email> DISALLOW_QUOTED_IDENTIFIERS_PREDICATE
-      = ValidationRules::disallowQuotedIdentifiers;
+  private static final Predicate<Email> DISALLOW_DISPLAY_NAMES_PREDICATE
+      = ValidationRules::disallowDisplayNames;
   private static final Predicate<Email> DISALLOW_RESERVED_DOMAINS_PREDICATE
       = ValidationRules::disallowReservedDomains;
   private static final Predicate<Email> DISALLOW_OBSOLETE_WHITESPACE_PREDICATE
@@ -254,18 +254,38 @@ public final class EmailValidator {
 
   /**
    * Create a new {@code EmailValidator} with all rules from the current instance and the
-   * {@link ValidationRules#disallowQuotedIdentifiers(Email)} rule.
-   * Email addresses that have quoted identifiers will fail validation with
+   * {@link ValidationRules#disallowDisplayNames(Email)} rule.
+   * Email addresses that have display names will fail validation with
    * {@link FailureReason#CONTAINS_QUOTED_IDENTIFIER}.
    *
    * <p>For example, {@code "John Smith <test@server.com>"} would be invalid.
    *
    * @return the new {@code EmailValidator} instance
+   * @deprecated as of v2.3.0, replaced by {@link #disallowDisplayNames()}. "identifier" was an
+   *             ambiguous term that is not used in any Email RFC. "Display name" is the proper
+   *             term.
    */
+  @Deprecated
   public EmailValidator disallowQuotedIdentifiers() {
     return withRule(
-        DISALLOW_QUOTED_IDENTIFIERS_PREDICATE,
+        DISALLOW_DISPLAY_NAMES_PREDICATE,
         FailureReason.CONTAINS_QUOTED_IDENTIFIER);
+  }
+
+  /**
+   * Create a new {@code EmailValidator} with all rules from the current instance and the
+   * {@link ValidationRules#disallowDisplayNames(Email)} rule.
+   * Email addresses that have display names will fail validation with
+   * {@link FailureReason#CONTAINS_DISPLAY_NAME}.
+   *
+   * <p>For example, {@code "John Smith <test@server.com>"} would be invalid.
+   *
+   * @return the new {@code EmailValidator} instance
+   */
+  public EmailValidator disallowDisplayNames() {
+    return withRule(
+        DISALLOW_DISPLAY_NAMES_PREDICATE,
+        FailureReason.CONTAINS_DISPLAY_NAME);
   }
 
   /**

@@ -82,14 +82,29 @@ public final class ValidationRules {
   }
 
   /**
-   * Rejects an email address that has quoted identifiers. For example, the address
+   * Rejects an email address that has display names. For example, the address
    * {@code "John Smith <test@server.com>"} would be rejected.
    *
    * @param email the email address to validate
-   * @return true if this email address does not have a quoted identifier, or false if it does
+   * @return true if this email address does not have a display name, or false if it does
+   * @deprecated as of v2.3.0, replaced by {@link #disallowDisplayNames(Email)}. "identifier"
+   *             was an ambiguous term that is not used in any Email RFC. "Display name" is the
+   *             proper term.
    */
+  @Deprecated
   public static boolean disallowQuotedIdentifiers(Email email) {
-    return !email.hasIdentifier();
+    return disallowDisplayNames(email);
+  }
+
+  /**
+   * Rejects an email address that has display names. For example, the address
+   * {@code "John Smith <test@server.com>"} would be rejected.
+   *
+   * @param email the email address to validate
+   * @return true if this email address does not have a display name, or false if it does
+   */
+  public static boolean disallowDisplayNames(Email email) {
+    return !email.hasDisplayName();
   }
 
   /**

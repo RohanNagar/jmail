@@ -135,7 +135,7 @@ invalid@[1] ;                                                                   
 ä📧@-foo ;                                                                             A dotless domain cannot start with the - character
 ä📧@foo- ;                                                                             A dotless domain cannot end with the - character
 first(comment(inner@comment.com ;                                                      Comments must have closing parenthesis
-Joe A Smith <email@example.com ;                                                       A quoted identifier address must have a closing angled bracket
+Joe A Smith <email@example.com ;                                                       An address with a display name must have a closing angled bracket
 Joe A Smith email@example.com ;                                                        The address part must be in angled brackets
 Joe A Smith <email@example.com-> ;                                                     The address part must be valid (cannot end with a dash)
 Joe A Smith <email@-example.com-> ;                                                    The address part must be valid (domain cannot start with a dash)

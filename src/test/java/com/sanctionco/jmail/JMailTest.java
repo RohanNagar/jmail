@@ -3,6 +3,7 @@ package com.sanctionco.jmail;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import net.andreinc.mockneat.MockNeat;
@@ -180,13 +181,13 @@ class JMailTest {
   }
 
   @Test
-  void ensureIdentifiersAreParsed() {
+  void ensureDisplayNamesAreParsed() {
     String one = "John Smith <test@te.ex>";
 
     assertThat(JMail.tryParse(one)).isPresent().get()
         .hasToString(one)
-        .returns(true, Email::hasIdentifier)
-        .returns("John Smith ", Email::identifier)
+        .returns(true, Email::hasDisplayName)
+        .returns(Optional.of("John Smith "), Email::displayName)
         .returns("test@te.ex", Email::normalized)
         .returns(false, Email::containsWhitespace);
 
@@ -194,8 +195,8 @@ class JMailTest {
 
     assertThat(JMail.tryParse(two)).isPresent().get()
         .hasToString(two)
-        .returns(true, Email::hasIdentifier)
-        .returns("Admin", Email::identifier)
+        .returns(true, Email::hasDisplayName)
+        .returns(Optional.of("Admin"), Email::displayName)
         .returns("admin@te.ex", Email::normalized);
 
     String none = "user@te.ex";
@@ -203,8 +204,8 @@ class JMailTest {
     assertThat(JMail.tryParse(none)).isPresent().get()
         .hasToString(none)
         .returns(none, Email::normalized)
-        .returns(false, Email::hasIdentifier)
-        .extracting("identifier")
+        .returns(false, Email::hasDisplayName)
+        .extracting("displayName")
         .isNull();
   }
 
@@ -316,13 +317,13 @@ class JMailTest {
     }
 
     @Test
-    void doesNotSplitOnQuotedIdentifierComma() {
+    void doesNotSplitOnQuotedDisplayNameComma() {
       List<Email> emails = JMail.tryParseAddressList(
           "\"Smith, John\" <my@example.com>, jane@example.org");
 
       assertThat(emails).hasSize(2);
       assertThat(emails.get(0))
-          .returns(true, Email::hasIdentifier)
+          .returns(true, Email::hasDisplayName)
           .returns("my@example.com", Email::normalized);
       assertThat(emails.get(1).normalized()).isEqualTo("jane@example.org");
     }
@@ -366,7 +367,7 @@ class JMailTest {
 
       assertThat(emails).hasSize(2);
       assertThat(emails.get(0))
-          .returns(true, Email::hasIdentifier)
+          .returns(true, Email::hasDisplayName)
           .returns("user@final.domain", Email::normalized);
       assertThat(emails.get(1).normalized()).isEqualTo("next@example.com");
     }
@@ -449,8 +450,8 @@ class JMailTest {
           .extracting(Email::normalized)
           .containsExactly("test@gmail.com", "test@gmail.com");
       assertThat(emails.get(1))
-          .returns(true, Email::hasIdentifier)
-          .returns("Alice ", Email::identifier);
+          .returns(true, Email::hasDisplayName)
+          .returns(Optional.of("Alice "), Email::displayName);
     }
 
     @Test
@@ -613,16 +614,16 @@ class JMailTest {
     }
 
     @Test
-    void identifierListWithoutQuotedCommas() {
+    void displayNameListWithoutQuotedCommas() {
       List<Email> emails = JMail.tryParseAddressList(
           "John Smith <john@example.com>, Jane Doe <jane@example.org>");
 
       assertThat(emails).hasSize(2);
       assertThat(emails.get(0))
-          .returns(true, Email::hasIdentifier)
+          .returns(true, Email::hasDisplayName)
           .returns("john@example.com", Email::normalized);
       assertThat(emails.get(1))
-          .returns(true, Email::hasIdentifier)
+          .returns(true, Email::hasDisplayName)
           .returns("jane@example.org", Email::normalized);
     }
   }
